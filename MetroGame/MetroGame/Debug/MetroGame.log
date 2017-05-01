@@ -1,5 +1,0 @@
-﻿  Main.cpp
-c:\users\kevin\documents\opencv-metrogame\metrogame\metrogame\main.cpp(221): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\kevin\documents\opencv-metrogame\metrogame\metrogame\main.cpp(243): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-  MetroGame.vcxproj -> C:\Users\kevin\Documents\OpenCV-MetroGame\MetroGame\Debug\MetroGame.exe
-  MetroGame.vcxproj -> C:\Users\kevin\Documents\OpenCV-MetroGame\MetroGame\Debug\MetroGame.pdb (Partial PDB)
