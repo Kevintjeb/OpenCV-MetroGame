@@ -27,3 +27,7 @@
 *.exe
 *.out
 *.app
+
+#Debug folder
+Debug/
+MetroGame/MetroGame/Debug/
