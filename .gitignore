@@ -28,7 +28,10 @@
 *.out
 *.app
 
+
 #Debug folder
 Debug/
 MetroGame/MetroGame/Debug/
 MetroGame/MetroGame/Debug/MetroGame.tlog/
+.vs/
+MetroGame/.vs/
