@@ -3,8 +3,8 @@
 #include <iostream>
 using namespace std; //Lets not do this
 
-int width = 1920;
-int height = 1080;
+int width = 800;
+int height = 600;
 
 /*
 *	Display function, Do the main rendering here.
