@@ -37,7 +37,9 @@ Vec2f::Vec2f()
 	this->x = 0;
 	this->y = 0;
 }
-Vec2f::Vec2f(Vec2f &other)
+
+
+Vec2f::Vec2f(const Vec2f & other)
 {
 	this->x = other.x;
 	this->y = other.y;
