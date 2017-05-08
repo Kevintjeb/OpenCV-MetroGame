@@ -32,4 +32,6 @@ public:
 	Vec2f(float x, float y);
 	Vec2f(Vec2f &other);
 	float& operator [](int);
+
+	inline float distance(const Vec2f &other);
 };
