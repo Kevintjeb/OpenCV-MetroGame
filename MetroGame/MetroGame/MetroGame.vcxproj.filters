@@ -3,5 +3,12 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Main_old.cpp" />
+    <ClCompile Include="system.cpp" />
+    <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="gameLogic.cpp" />
+    <ClCompile Include="errors.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="system.h" />
   </ItemGroup>
 </Project>

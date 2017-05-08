@@ -145,8 +145,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="errors.cpp" />
+    <ClCompile Include="gameLogic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Main_old.cpp" />
+    <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="system.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="system.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
