@@ -145,17 +145,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Downloads\wk2_modelloader\wk2_modelloader\Vec.cpp" />
     <ClCompile Include="errors.cpp" />
     <ClCompile Include="gameLogic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Main_old.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="system.cpp" />
+    <ClCompile Include="Vect.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Downloads\wk2_modelloader\wk2_modelloader\Vec.h" />
     <ClInclude Include="system.h" />
+    <ClInclude Include="Vect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

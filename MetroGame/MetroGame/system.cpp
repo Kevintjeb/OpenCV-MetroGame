@@ -1,5 +1,4 @@
 #include "system.h"
-
 #include <GL/freeglut.h>
 
 void mg_system::init(int &argc, char **argv)
