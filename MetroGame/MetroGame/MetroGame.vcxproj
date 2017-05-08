@@ -154,13 +154,16 @@
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="system.cpp" />
+    <ClCompile Include="Test.cpp" />
     <ClCompile Include="Vect.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Main.h" />
     <ClInclude Include="MetroLine.h" />
     <ClInclude Include="MetroTrain.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="system.h" />
+    <ClInclude Include="Test.h" />
     <ClInclude Include="Vect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

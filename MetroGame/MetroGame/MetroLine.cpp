@@ -8,24 +8,20 @@ mg_gameLogic::MetroLine::MetroLine(std::list<Vec2f> openCV)
 
 mg_gameLogic::MetroLine::~MetroLine() {}
 
-
-
-
-
-
 std::list<Vec2f> mg_gameLogic::MetroLine::filterData(std::list<Vec2f> data)
 {
 	std::list<Vec2f >  filtered;
-	Vec2f previousVector;
+	
+	Vec2f previousVector = Vec2f(-1,-1);
+	
 	for (Vec2f vector : data)
 	{
 		if (compareVector(vector, previousVector)) {
 			filtered.push_back(vector);
-			//filtered.push_back(vector);
 			previousVector = vector;
 		}
 	}
-	return std::list<Vec2f>();
+	return filtered;
 }
 
 bool mg_gameLogic::MetroLine::compareVector(Vec2f v1, Vec2f v2)
