@@ -30,6 +30,7 @@ public:
 	};
 	Vec2f();
 	Vec2f(float x, float y);
-	Vec2f(Vec2f &other);
+	//Vec2f(Vec2f &other);
+	Vec2f(const Vec2f &other);
 	float& operator [](int);
 };
