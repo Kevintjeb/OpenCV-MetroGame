@@ -149,11 +149,17 @@
     <ClCompile Include="gameLogic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Main_old.cpp" />
+    <ClCompile Include="MetroLine.cpp" />
+    <ClCompile Include="MetroTrain.cpp" />
+    <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="Vect.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MetroLine.h" />
+    <ClInclude Include="MetroTrain.h" />
+    <ClInclude Include="Renderable.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="Vect.h" />
   </ItemGroup>

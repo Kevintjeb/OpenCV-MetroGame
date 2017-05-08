@@ -8,9 +8,15 @@
     <ClCompile Include="gameLogic.cpp" />
     <ClCompile Include="errors.cpp" />
     <ClCompile Include="Vect.cpp" />
+    <ClCompile Include="Renderable.cpp" />
+    <ClCompile Include="MetroTrain.cpp" />
+    <ClCompile Include="MetroLine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system.h" />
     <ClInclude Include="Vect.h" />
+    <ClInclude Include="Renderable.h" />
+    <ClInclude Include="MetroTrain.h" />
+    <ClInclude Include="MetroLine.h" />
   </ItemGroup>
 </Project>
