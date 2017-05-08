@@ -3,7 +3,7 @@
 
 mg_gameLogic::MetroLine::MetroLine(std::list<Vec2f> openCV)
 {
-		
+	line = filterData(openCV);
 }
 
 mg_gameLogic::MetroLine::~MetroLine() {}
