@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdarg>
+#include <string>
+#include <GL\freeglut.h>
 
 namespace mg_system
 {
@@ -8,6 +10,8 @@ namespace mg_system
 	void start();
 
 	void redraw();
+
+	GLuint initWindow(std::string name, int width, int height, void(* renderer)());
 
 	namespace _internal
 	{

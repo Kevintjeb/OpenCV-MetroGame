@@ -11,13 +11,22 @@ void mg_system::init(int &argc, char **argv)
 
 void mg_system::_internal::freeglutInit(int& argc, char **argv)
 {
-	glutInit(&argc, argv);
+	glutInit(&argc, argv);	
+}
+
+GLuint mg_system::initWindow(std::string name, int width, int height, void (*renderer)())
+{
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+	glutInitWindowSize(800, 800);
+	GLuint window_id = glutCreateWindow(name.c_str());
 
 	glutInitErrorFunc(mg_system::_internal::OnGlutError);
 	glutInitWarningFunc(mg_system::_internal::OnGlutWarning);
-	glutDisplayFunc(mg_system::_internal::OnDisplay);
+	glutDisplayFunc(renderer);
 	glutIdleFunc(mg_system::_internal::OnIdle);
 	glutKeyboardFunc([](unsigned char key, int, int) {mg_system::_internal::OnKey(key); });
+
+	return window_id;
 }
 
 void mg_system::start()
