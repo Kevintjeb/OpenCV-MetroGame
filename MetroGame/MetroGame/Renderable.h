@@ -1,4 +1,5 @@
 #pragma once
+<<<<<<< HEAD
 
 #include "Vect.h"
 #include <string>
@@ -18,3 +19,20 @@ namespace mg_gameLogic
 		~Redenderable();
 	};
 }
+=======
+#include "Vec.h"
+#include "Model.h"
+class Renderable
+{
+public:
+	Vec3f position;
+	Vec3f rotation;
+	Vec3f scale;
+	Model model;
+	float angle;
+	Renderable(Vec3f position, Vec3f rotation, float angle, Vec3f scale, Model model);
+	~Renderable();
+
+private:
+};
+>>>>>>> 27830eb840d123bee5127e7ed837595c6b3aaecc
