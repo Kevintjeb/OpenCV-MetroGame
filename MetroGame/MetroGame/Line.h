@@ -3,8 +3,8 @@
 #include "Vect.h"
 #include <list>
 #include <memory>
-#define MARGINX 5
-#define MARGINY 5
+#define MARGINX 0.8
+#define MARGINY 0.8
 #include <valarray>
 
 namespace mg_gameLogic
