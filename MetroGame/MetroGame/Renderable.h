@@ -15,7 +15,7 @@ namespace mg_gameLogic
 
 		Renderable();
 		Renderable(const Renderable&);
-		Renderable(Model model, Vec3f pos, float angle, Vec3f rot = Vec3f(0, 0, 0) , Vec3f scale = Vec3f(1, 1, 1));
+		Renderable(Model model, Vec3f pos, float angle, Vec3f rot, Vec3f scale = Vec3f(1, 1, 1));
 		~Renderable();
 	};
 }
