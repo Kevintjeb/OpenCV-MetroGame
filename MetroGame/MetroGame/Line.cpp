@@ -23,6 +23,33 @@ Line::Line(list<Vec2f> line) : positions(new Vec2f[line.size()]), distances(new 
 	}
 }
 
+list<Vec2f> mg_gameLogic::Line::filterData(list<Vec2f> data)
+{
+	std::list<Vec2f >  filtered;
+
+	Vec2f previousVector = Vec2f(-1, -1);
+
+	for (Vec2f vector : data)
+	{
+		if (compareVector(vector, previousVector)) {
+			filtered.push_back(vector);
+			previousVector = vector;
+		}
+	}
+	return filtered;
+}
+
+bool mg_gameLogic::Line::compareVector(Vec2f v1, Vec2f v2)
+{
+	
+	if (abs(v1.x - v2.x) > MARGINX || abs(v1.y - v2.y) > MARGINY)
+	{
+		return true;
+	}
+	return false;
+}
+
+
 int Line::getIndexByPosition(const float position)
 {
 	// standard binary tree with interpolation
@@ -50,3 +77,6 @@ int Line::getIndexByPosition(const float position)
 		else return m;
 	}
 }
+
+
+	

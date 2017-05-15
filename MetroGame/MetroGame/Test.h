@@ -1,5 +1,7 @@
 #include <list>
 #include "Vect.h"
+#include "Line.h"
+#include <iostream>
 
 namespace mg_gameLogic
 {
@@ -7,7 +9,7 @@ namespace mg_gameLogic
 	public: 
 		Test();
 		~Test();
-		Line metro;
+	
 
 		void testMetroLine();
 	};
