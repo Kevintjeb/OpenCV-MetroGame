@@ -13,7 +13,7 @@ Vec3f::Vec3f()
 	this->y = 0;
 	this->z = 0;
 }
-Vec3f::Vec3f(Vec3f &other)
+Vec3f::Vec3f(const Vec3f &other)
 {
 	this->x = other.x;
 	this->y = other.y;

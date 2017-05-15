@@ -12,6 +12,7 @@
     <ClCompile Include="MetroTrain.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Test.cpp" />
+    <ClCompile Include="RenderableOutput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system.h" />
@@ -20,5 +21,6 @@
     <ClInclude Include="MetroTrain.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="Test.h" />
+    <ClInclude Include="RenderableOutput.h" />
   </ItemGroup>
 </Project>

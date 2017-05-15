@@ -12,7 +12,7 @@ public:
 		float v[3];
 	};
 	Vec3f();
-	Vec3f(Vec3f &other);
+	Vec3f(const Vec3f &other);
 	Vec3f(float x, float y, float z);
 	float& operator [](int);
 };

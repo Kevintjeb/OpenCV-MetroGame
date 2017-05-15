@@ -1,22 +1,29 @@
 #pragma once
 
 #include "Renderable.h"
+#include "Line.h"
+#include "RenderableOutput.h"
+
 #include <vector>
 
 namespace mg_gameLogic
 {
 	class MetroTrain
 	{
-	public:
+	private:
+		const Line& line;
 		float line_pos;
 
+		std::vector<RedenderablePointer> trains;
+		int size;
+	public:
+		static constexpr float speed = 1.0f;
+		static constexpr int max_size = 16;
+		
+		explicit MetroTrain(const Line& line, float init_pos = 0.0f, int size = 1);
 
 		void Recalculate(float elapsedTime);
-
-		int getsize();
+		int get_size() const;
 		void resize(int nsize);
-	private:
-		/// std::vector<Redenderable redenderables;
-		int size;
 	};
 }
