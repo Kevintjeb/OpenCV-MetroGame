@@ -1,6 +1,6 @@
 #include <list>
 #include "Vect.h"
-
+/*
 namespace mg_gameLogic
 {
 	class Test {
@@ -12,3 +12,4 @@ namespace mg_gameLogic
 		void testMetroLine();
 	};
 }
+*/

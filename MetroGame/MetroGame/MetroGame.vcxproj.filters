@@ -10,16 +10,13 @@
     <ClCompile Include="Vect.cpp" />
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="MetroTrain.cpp" />
-    <ClCompile Include="MetroLine.cpp" />
-    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="Line.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system.h" />
     <ClInclude Include="Vect.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="MetroTrain.h" />
-    <ClInclude Include="MetroLine.h" />
-    <ClInclude Include="Test.h" />
-    <ClInclude Include="Main.h" />
+    <ClInclude Include="Line.h" />
   </ItemGroup>
 </Project>

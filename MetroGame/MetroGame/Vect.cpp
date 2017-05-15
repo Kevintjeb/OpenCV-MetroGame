@@ -1,4 +1,5 @@
 #include "Vect.h"
+#include <math.h>
 
 Vec3f::Vec3f(float x, float y, float z)
 {
@@ -24,8 +25,6 @@ float& Vec3f::operator [](int index)
 	return v[index];
 }
 
-
-
 Vec2f::Vec2f(float x, float y)
 {
 	this->x = x;
@@ -37,7 +36,6 @@ Vec2f::Vec2f()
 	this->y = 0;
 }
 
-
 Vec2f::Vec2f(const Vec2f & other)
 {
 	this->x = other.x;
@@ -47,4 +45,9 @@ Vec2f::Vec2f(const Vec2f & other)
 float& Vec2f::operator [](int index)
 {
 	return v[index];
+}
+
+float Vec2f::distance(const Vec2f & other)
+{
+	return sqrtf(powf(other.x - this->x, 2) + powf(other.y - this->y, 2));
 }
