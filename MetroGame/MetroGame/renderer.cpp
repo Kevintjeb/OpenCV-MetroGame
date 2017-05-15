@@ -183,7 +183,7 @@ void drawCube()
 }
 
 
-void mg_system::_internal::OnDisplay3D()
+void mg_system::_internal::OnDisplay2D()
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -217,7 +217,7 @@ void move(float angle, float fac)
 }
 
 
-void mg_system::_internal::OnDisplay2D()
+void mg_system::_internal::OnDisplay3D()
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

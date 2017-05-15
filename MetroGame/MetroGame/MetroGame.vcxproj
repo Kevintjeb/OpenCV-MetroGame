@@ -164,11 +164,7 @@
     <ClInclude Include="ObjModel.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Vec.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="system.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="MetroGame.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
