@@ -154,17 +154,21 @@
     <ClCompile Include="Vec.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="system.cpp" />
+    <ClCompile Include="VertexClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="freeglut\include\GL\freeglut.h" />
     <ClInclude Include="freeglut\include\GL\freeglut_ext.h" />
     <ClInclude Include="freeglut\include\GL\freeglut_std.h" />
     <ClInclude Include="freeglut\include\GL\glut.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ObjModel.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Vec.h" />
     <ClInclude Include="system.h" />
+    <ClInclude Include="VertexClass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
