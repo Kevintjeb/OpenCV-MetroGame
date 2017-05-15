@@ -38,8 +38,8 @@ void drawRail(Vec2f v1, Vec2f vold)
 	glEnd();
 }
 
-void drawRenderable(Redenderable redenderable) 
-{
+void drawRenderable(Redenderable redenderable)		//Draws and Rotates a renderable
+{	
 	
 
 	glPushMatrix();
@@ -70,6 +70,7 @@ void drawLine(Line &line)
 	}
 }
 int i = 0;
+int timePassed = 10000;
 void debug()
 {
 
@@ -87,7 +88,11 @@ void debug()
 	drawRenderable(testTrain);
 	testTrain.position.x = test.line[i].x;
 	testTrain.position.y = test.line[i].y;
-	i++;
+	timePassed--;
+	if (i < test.line.size()-1 && timePassed<0) {
+		i++;
+		timePassed = 10000;
+	}
 	glutSwapBuffers();
 }
 void mg_system::_internal::OnDisplay()
