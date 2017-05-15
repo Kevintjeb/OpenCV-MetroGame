@@ -44,21 +44,21 @@ std::vector<Renderable> renderables;
 
 void createDummyRenderableList()
 {
-	Vec3f pos = Vec3f(0.0f, 3.0f, 0.0f);
+	Vec3f pos = Vec3f(0.0f, 4.0f, 100.0f);
 	Vec3f rot = Vec3f(0.0f, 1.0f, 0.0f);
-	float angle = 0;
-	Vec3f scale = Vec3f(2.0f, 2.0f, 2.0f);
-	Model model = STEVE;
+	float angle = 45;
+	Vec3f scale = Vec3f(0.79f, 0.79f, 0.79f);
+	Model model = CITY;
 	renderables.push_back(Renderable(pos, rot, angle, scale, model));
 
-	Vec3f pos2 = Vec3f(10.0f, -50.0f + 4.0f, 10.0f);
+	Vec3f pos2 = Vec3f(10.0f, -92.0f, 10.0f);
 	Vec3f rot2 = Vec3f(0.0f, 1.0f, 0.0f);
 	float angle2 = 0;
 	Vec3f scale2 = Vec3f(2.0f, 2.0f, 2.0f);
 	Model model2 = METRO;
 	renderables.push_back(Renderable(pos2, rot2, angle2, scale2, model2));
 
-	Vec3f pos3 = Vec3f(-10.0f, -50.0f + 4.0f, -10.0f);
+	Vec3f pos3 = Vec3f(-10.0f, -92.0f, -10.0f);
 	Vec3f rot3 = Vec3f(0.0f, 1.0f, 0.0f);
 	float angle3 = 270;
 	Vec3f scale3 = Vec3f(2.0f, 2.0f, 2.0f);
@@ -210,6 +210,7 @@ void mg_system::_internal::RenderInit()
 	//load models
 	modelLoader.insertModel("models/steve/steve.obj");
 	modelLoader.insertModel("models/Metro/metro.obj");
+	modelLoader.insertModel("models/city/city.obj");
 
 	//createdummyRenderable
 	createDummyRenderableList();
@@ -401,13 +402,14 @@ void drawRenderables()
 	for (Renderable &renderable : renderables)
 	{
 		glPushMatrix();
-		glScalef(renderable.scale.x, renderable.scale.y, renderable.scale.z);
-
+		
 		//zorgen dat het object met de wereld mee draait
 		glRotatef(rotation, 0, 1, 0);
 
 		glTranslatef(renderable.position.x, renderable.position.y, renderable.position.z);
 		glRotatef(renderable.angle, renderable.rotation.x, renderable.rotation.y, renderable.rotation.z);
+		glScalef(renderable.scale.x, renderable.scale.y, renderable.scale.z);
+
 		modelLoader.getModel(renderable.model)->draw();
 		glPopMatrix();
 	}
@@ -442,7 +444,7 @@ void mg_system::_internal::OnDisplay3D()
 	glRotatef(rotation, 0, 1, 0);
 	glTranslatef(0, 0, -50);
 
-	drawVertexArray(TopPlane);
+	//drawVertexArray(TopPlane);
 
 	glBindTexture(GL_TEXTURE_2D, textureIDs.at(DIRT));
 	glEnable(GL_TEXTURE_2D);

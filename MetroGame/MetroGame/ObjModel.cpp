@@ -170,6 +170,50 @@ ObjModel::ObjModel(const std::string &fileName)
 		}
 	}
 	groups.push_back(currentGroup);
+
+	for (auto &g : groups)
+	{
+		g->beginIndex = verts.size();
+		for (auto &f : g->faces)
+		{
+			for (auto &v : f.vertices)
+			{
+				if (v.normal < normals.size())
+				{
+					verts.push_back(VertexClass(vertices[v.position].x,
+						vertices[v.position].y,
+						vertices[v.position].z,
+						normals[v.normal].x,
+						normals[v.normal].y,
+						normals[v.normal].z,
+						texcoords[v.texcoord].x,
+						texcoords[v.texcoord].y,
+						1.0f,
+						1.0f,
+						1.0f,
+						1.0f));
+				}
+				else
+				{
+					verts.push_back(VertexClass(vertices[v.position].x,
+						vertices[v.position].y,
+						vertices[v.position].z,
+						0.0f,
+						0.0f,
+						0.0f,
+						texcoords[v.texcoord].x,
+						texcoords[v.texcoord].y,
+						1.0f,
+						1.0f,
+						1.0f,
+						1.0f));
+				}
+			}
+		}
+		g->eindIndex = verts.size() - 1;
+	}
+
+	createDisplayList();
 }
 
 
@@ -177,26 +221,47 @@ ObjModel::~ObjModel(void)
 {
 }
 
-
-void ObjModel::draw()
+void ObjModel::createDisplayList()
 {
+	listID = glGenLists(1);
+
+	glNewList(listID, GL_COMPILE);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	glColorPointer(4, GL_FLOAT, sizeof(VertexClass), ((float*)verts.data()) + 8);
+	glTexCoordPointer(2, GL_FLOAT, sizeof(VertexClass), ((float*)verts.data()) + 6);
+	glNormalPointer(GL_FLOAT, sizeof(VertexClass), ((float*)verts.data()) + 3);
+	glVertexPointer(3, GL_FLOAT, sizeof(VertexClass), ((float*)verts.data()) + 0);
+
+	//foreach group in groups
+	//  set material
+	//  foreach face in group
+	//    foreach vertex in face
+	//      emit vertex
 	for (auto &g : groups)
 	{
+		//set material
+
 		auto material = materials[g->materialIndex];
 		material->texture->bind();
 		glEnable(GL_TEXTURE_2D);
-		glBegin(GL_TRIANGLES);
-
-		for (auto &f : g->faces)
-		{
-			for (auto &v : f.vertices)
-			{
-				glTexCoord2fv(texcoords[v.texcoord].v);
-				glVertex3fv(vertices[v.position].v);
-			}
-		}
-		glEnd();
+		glDrawArrays(GL_TRIANGLES, g->beginIndex, g->eindIndex);
 	}
+
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glEndList();
+}
+
+
+void ObjModel::draw()
+{
+	glCallList(listID);
 }
 
 void ObjModel::loadMaterialFile( const std::string &fileName, const std::string &dirName )
