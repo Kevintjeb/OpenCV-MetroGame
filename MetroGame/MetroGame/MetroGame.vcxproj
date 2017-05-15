@@ -151,6 +151,7 @@
     <ClCompile Include="Main_old.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="ObjModel.cpp" />
+    <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="Vec.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="system.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ObjModel.h" />
+    <ClInclude Include="Renderable.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vec.h" />

@@ -7,6 +7,7 @@
 #include <cstdio>
 
 #include "VertexClass.h"
+#include "Renderable.h"
 
 #include "Model.h"
 #include "Texture.h"
@@ -23,7 +24,7 @@ int lastTime;
 float rotation;
 using std::cout;
 using std::endl;
-int speed = 5;
+int speed = 25;
 bool keys[255];
 bool shiftActive = false;
 
@@ -39,6 +40,31 @@ struct Camera
 std::vector < VertexClass> TopPlane;
 std::vector < VertexClass> GroundPlane;
 std::vector<GLuint> textureIDs;
+std::vector<Renderable> renderables;
+
+void createDummyRenderableList()
+{
+	Vec3f pos = Vec3f(0.0f, 3.0f, 0.0f);
+	Vec3f rot = Vec3f(0.0f, 1.0f, 0.0f);
+	float angle = 0;
+	Vec3f scale = Vec3f(2.0f, 2.0f, 2.0f);
+	Model model = STEVE;
+	renderables.push_back(Renderable(pos, rot, angle, scale, model));
+
+	Vec3f pos2 = Vec3f(10.0f, -50.0f + 4.0f, 10.0f);
+	Vec3f rot2 = Vec3f(0.0f, 1.0f, 0.0f);
+	float angle2 = 0;
+	Vec3f scale2 = Vec3f(2.0f, 2.0f, 2.0f);
+	Model model2 = METRO;
+	renderables.push_back(Renderable(pos2, rot2, angle2, scale2, model2));
+
+	Vec3f pos3 = Vec3f(-10.0f, -50.0f + 4.0f, -10.0f);
+	Vec3f rot3 = Vec3f(0.0f, 1.0f, 0.0f);
+	float angle3 = 270;
+	Vec3f scale3 = Vec3f(2.0f, 2.0f, 2.0f);
+	Model model3 = METRO;
+	renderables.push_back(Renderable(pos3, rot3, angle3,  scale3, model3));
+}
 
 void loadTexture(std::string filepath)
 {
@@ -184,6 +210,9 @@ void mg_system::_internal::RenderInit()
 	//load models
 	modelLoader.insertModel("models/steve/steve.obj");
 	modelLoader.insertModel("models/Metro/metro.obj");
+
+	//createdummyRenderable
+	createDummyRenderableList();
 
 	glClearColor(0, 0, 0, 1);
 }
@@ -367,6 +396,23 @@ void move(float angle, float fac)
 	camera.posY += (float)sin((camera.rotY + angle) / 180 * M_PI) * fac;
 }
 
+void drawRenderables()
+{
+	for (Renderable &renderable : renderables)
+	{
+		glPushMatrix();
+		glScalef(renderable.scale.x, renderable.scale.y, renderable.scale.z);
+
+		//zorgen dat het object met de wereld mee draait
+		glRotatef(rotation, 0, 1, 0);
+
+		glTranslatef(renderable.position.x, renderable.position.y, renderable.position.z);
+		glRotatef(renderable.angle, renderable.rotation.x, renderable.rotation.y, renderable.rotation.z);
+		modelLoader.getModel(renderable.model)->draw();
+		glPopMatrix();
+	}
+}
+
 
 void mg_system::_internal::OnDisplay3D()
 {
@@ -406,13 +452,8 @@ void mg_system::_internal::OnDisplay3D()
 
 	glPopMatrix();
 
-	glPushMatrix();
-	glScalef(2, 2, 2);
-	glRotatef(rotation, 0, 1, 0);
-	glTranslatef(0, -50+4, 0);
-	//draw Metro
-	modelLoader.getModel(METRO)->draw();
-	glPopMatrix();
+	//drawRenderable
+	drawRenderables();
 
 	glutSwapBuffers(); 
 }
