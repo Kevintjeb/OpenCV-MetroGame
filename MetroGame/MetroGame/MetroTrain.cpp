@@ -1,4 +1,5 @@
 #include "MetroTrain.h"
+#include <cmath>
 
 using namespace mg_gameLogic;
 using namespace std;
@@ -9,16 +10,16 @@ inline Vec2f mg_gameLogic::MetroTrain::pos2d_from_pos(float pos)
 
 	Vec2f far = line[index+1], close = line[index];
 
-	float slope = (far.y - close.y) / (far.x - close.x);
+	Vec2f normal(close.x - far.x, close.y - far.y);
+	float mag = sqrt(normal.x*normal.x + normal.y*normal.y);
+	normal.x /= mag;
+	normal.y /= mag;
 
-	float x = close.x;
-	float b = close.y - (x*slope);
-	float val = (pos - line.getDistance(index)) / (line.getDistance(index+1) - line.getDistance(index));
-	x += val;
-	float y = x*slope + b;	 
+	float dist = line.getDistance(index) - pos;
+	normal.x *= dist;
+	normal.y *= dist;
 
-	Vec2f pos2d(x, y);
-
+	Vec2f pos2d(close.x + normal.x, close.y + normal.y);
 	return pos2d;
 }
 
