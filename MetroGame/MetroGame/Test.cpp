@@ -1,5 +1,9 @@
 #include "Test.h"
-#include "MetroLine.h"
+#include "Line.h"
+
+using namespace mg_gameLogic;
+
+
 mg_gameLogic::Test::Test()
 {
 }
@@ -19,5 +23,5 @@ void mg_gameLogic::Test::testMetroLine()
 		Vec2f vector = Vec2f(rand()/RAND_MAX, rand()/RAND_MAX);
 		dummy.push_back(vector);
 	}
-	MetroLine metro = MetroLine(dummy);
+	Line metro = Line(dummy);
 }
