@@ -9,7 +9,6 @@ namespace mg_gameLogic
 	{
 	public:
 		float line_pos;
-		std::vector<
 
 
 		void Recalculate(float elapsedTime);
@@ -17,7 +16,7 @@ namespace mg_gameLogic
 		int getsize();
 		void resize(int nsize);
 	private:
-		std::vector<Redenderable*> redenderables;
+		/// std::vector<Redenderable redenderables;
 		int size;
 	};
 }
