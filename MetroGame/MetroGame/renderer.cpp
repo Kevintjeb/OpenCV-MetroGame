@@ -5,7 +5,9 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <cstdio>
+
 #include "VertexClass.h"
+
 #include "Model.h"
 #include "Texture.h"
 
