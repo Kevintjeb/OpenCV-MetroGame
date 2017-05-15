@@ -11,6 +11,7 @@
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="MetroTrain.cpp" />
     <ClCompile Include="Line.cpp" />
+    <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system.h" />
@@ -18,5 +19,6 @@
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="MetroTrain.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="Test.h" />
   </ItemGroup>
 </Project>
