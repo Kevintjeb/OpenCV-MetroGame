@@ -12,11 +12,11 @@ void mg_gameLogic::Test::testMetroLine()
 {
 	std::list<Vec2f> dummy;
 	
-	dummy.push_front(Vec2f(5, 5));
-	dummy.push_front(Vec2f(5, 5));
+	dummy.push_front(Vec2f(0.0f, 0.0f));
+	dummy.push_front(Vec2f(0.0f, 0.0f));
 	for (int i = 0; i < 100; i++)
 	{
-		Vec2f vector = Vec2f(rand(), rand());
+		Vec2f vector = Vec2f(rand()/RAND_MAX, rand()/RAND_MAX);
 		dummy.push_back(vector);
 	}
 	MetroLine metro = MetroLine(dummy);
