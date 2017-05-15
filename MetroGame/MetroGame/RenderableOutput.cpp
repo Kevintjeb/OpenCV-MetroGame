@@ -3,9 +3,9 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-list<Redenderable> renderables(0);
+list<Renderable> renderables(0);
 
-RedenderablePointer mg_gameLogic::allocate_renderable(Redenderable& renderable)
+RedenderablePointer mg_gameLogic::allocate_renderable(Renderable& renderable)
 {
 	renderables.push_back(renderable);
 	return std::prev(renderables.end());
@@ -16,7 +16,7 @@ void mg_gameLogic::deallocate_renderable(RedenderablePointer renderable)
 	renderables.erase(renderable);
 }
 
-list<Redenderable>& mg_gameLogic::get_renderables()
+list<Renderable>& mg_gameLogic::get_renderables()
 {
 	return renderables;
 }

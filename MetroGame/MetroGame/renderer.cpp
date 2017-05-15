@@ -1,5 +1,5 @@
 #include "system.h"
-<<<<<<< HEAD
+
 #include <GL\freeglut.h>
 #include "Vect.h"
 #include "Renderable.h"
@@ -10,8 +10,8 @@ using namespace mg_system;
 using namespace mg_gameLogic;
 GLuint window_db;
 Test test{};
-Redenderable testTrain;
-=======
+Renderable testTrain;
+
 #include "iostream"
 #include <GL\freeglut.h>
 #include "ModelLoader.h"
@@ -62,21 +62,21 @@ void createDummyRenderableList()
 	float angle = 45;
 	Vec3f scale = Vec3f(0.79f, 0.79f, 0.79f);
 	Model model = CITY;
-	renderables.push_back(Renderable(pos, rot, angle, scale, model));
+	renderables.push_back(Renderable(model, pos, angle, rot, scale));
 
 	Vec3f pos2 = Vec3f(10.0f, -92.0f, 10.0f);
 	Vec3f rot2 = Vec3f(0.0f, 1.0f, 0.0f);
 	float angle2 = 0;
 	Vec3f scale2 = Vec3f(2.0f, 2.0f, 2.0f);
 	Model model2 = METRO;
-	renderables.push_back(Renderable(pos2, rot2, angle2, scale2, model2));
+	renderables.push_back(Renderable(model2, pos2, angle2, rot2, scale2));
 
 	Vec3f pos3 = Vec3f(-10.0f, -92.0f, -10.0f);
 	Vec3f rot3 = Vec3f(0.0f, 1.0f, 0.0f);
 	float angle3 = 270;
 	Vec3f scale3 = Vec3f(2.0f, 2.0f, 2.0f);
 	Model model3 = METRO;
-	renderables.push_back(Renderable(pos3, rot3, angle3,  scale3, model3));
+	renderables.push_back(Renderable(model3, pos3, angle3, rot3,  scale3));
 }
 
 void loadTexture(std::string filepath)
@@ -206,25 +206,23 @@ void drawVertexArray(std::vector<VertexClass> verts)
 	glDisableClientState(GL_NORMAL_ARRAY);
 
 }
->>>>>>> 27830eb840d123bee5127e7ed837595c6b3aaecc
-
+/*
 void initDebug()
 {
 	Vec3f pos(0, 0, 0);
 	Vec3f rot(0, 0.0, 1.0);
 	Vec3f scale(0.225f,0.225f,0.225f);
 	testTrain = Redenderable(pos,45, rot, scale);
-}
+}*/
 void mg_system::_internal::RenderInit()
 {
-<<<<<<< HEAD
-	GLuint window_id = initWindow("hans", 600, 600, OnDisplay);
-	GLuint window_it = initWindow("jollie", 600, 600, OnDisplay);
-	window_db = initWindow("Debug", 400, 400, OnDisplay);
-	glClearColor(1.0f, 1.0f, 1.0f, 1);
-	initDebug();
-}
-=======
+	/*
+		GLuint window_id = initWindow("hans", 600, 600, OnDisplay);
+		GLuint window_it = initWindow("jollie", 600, 600, OnDisplay);
+		window_db = initWindow("Debug", 400, 400, OnDisplay);
+		glClearColor(1.0f, 1.0f, 1.0f, 1);
+		initDebug();*/
+
 	ZeroMemory(keys, sizeof(keys));
 	WindowID2 = initWindow("2D Panel", WIDTH, HEIGHT, OnDisplay2D);
 	WindowID1 = initWindow("3D Panel", WIDTH, HEIGHT, OnDisplay3D);
@@ -243,7 +241,7 @@ void mg_system::_internal::RenderInit()
 
 	//createdummyRenderable
 	createDummyRenderableList();
->>>>>>> 27830eb840d123bee5127e7ed837595c6b3aaecc
+}
 
 
 void drawRail(Vec2f v1, Vec2f vold) 
@@ -255,7 +253,7 @@ void drawRail(Vec2f v1, Vec2f vold)
 	glEnd();
 }
 
-<<<<<<< HEAD
+/*
 void drawRenderable(Redenderable& redenderable)		//Draws and Rotates a renderable
 {	
 	
@@ -274,12 +272,12 @@ void drawRenderable(Redenderable& redenderable)		//Draws and Rotates a renderabl
 	glPopMatrix();
 	
 
-}
+}*/
 
 
 
 
-
+/*
 void drawLine(Line &line) 
 {
 	for (int i = 1; i < line.size(); i++) 
@@ -314,17 +312,18 @@ void debug()
 	if (i < test.line.size()-1 && timePassed<0) {
 		i++;
 		timePassed = 10000;
-	}*/
-	test.train.Recalculate(static_cast<float>(/*deltaTime) / 1000*/ 0.00001f));
+	}
+	test.train.Recalculate(static_cast<float>(/*deltaTime) / 1000 0.00001f));
 	for (auto& r : get_renderables())
 		drawRenderable(r);
 	glutSwapBuffers();
 }
+*/
+/*
 void mg_system::_internal::OnDisplay()
 {
-	debug();
 }
-=======
+*/
 void drawTopPlane() {
 	glBegin(GL_QUADS);
 	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
@@ -591,4 +590,3 @@ void mg_system::redraw() {
 	glutSetWindow(WindowID2);
 	glutPostRedisplay();
 }
->>>>>>> 27830eb840d123bee5127e7ed837595c6b3aaecc

@@ -6,7 +6,7 @@
 
 #include <windows.h>
 #include <gl/GL.h>
-#include "Vec.h"
+#include "Vect.h"
 #include "VertexClass.h"
 
 class Texture
