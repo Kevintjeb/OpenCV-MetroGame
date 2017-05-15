@@ -4,6 +4,8 @@
 #include <string>
 #include <GL\freeglut.h>
 
+
+
 namespace mg_system
 {
 	void init(int &argc, char **argv);
@@ -23,12 +25,14 @@ namespace mg_system
 
 		// OpenGL
 		void RenderInit();
-		void OnDisplay();
+		void OnDisplay3D();
+		void OnDisplay2D();
 
 		// Game logic
 		void GameInit();
 		void OnIdle();
 		void OnKey(unsigned char key);
+		void OnKeyUp(unsigned char key);
 
 		// OpenCV
 	}
