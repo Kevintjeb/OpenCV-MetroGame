@@ -33,34 +33,7 @@ size_t Line::size() const
 	return distances.size();
 }
 
-list<Vec2f> mg_gameLogic::Line::filterData(list<Vec2f> data)
-{
-	std::list<Vec2f >  filtered;
-
-	Vec2f previousVector = Vec2f(-1, -1);
-
-	for (Vec2f vector : data)
-	{
-		if (compareVector(vector, previousVector)) {
-			filtered.push_back(vector);
-			previousVector = vector;
-		}
-	}
-	return filtered;
-}
-
-bool mg_gameLogic::Line::compareVector(Vec2f v1, Vec2f v2)
-{
-	
-	if (abs(v1.x - v2.x) > MARGINX || abs(v1.y - v2.y) > MARGINY)
-	{
-		return true;
-	}
-	return false;
-}
-
-
-int Line::getIndexByPosition(const float position)
+int Line::getIndexByPosition(const float position) const
 {
 	// standard binary tree with interpolation
 	// if the position is not in the list we get the point to the 'left' of it
@@ -91,4 +64,30 @@ int Line::getIndexByPosition(const float position)
 const Vec2f& Line::operator[](int index) const
 {
 	return positions[index];
+}
+
+list<Vec2f> mg_gameLogic::filterData(list<Vec2f> data)
+{
+	std::list<Vec2f >  filtered;
+
+	Vec2f previousVector = Vec2f(-1, -1);
+
+	for (Vec2f vector : data)
+	{
+		if (compareVector(vector, previousVector)) {
+			filtered.push_back(vector);
+			previousVector = vector;
+		}
+	}
+	return filtered;
+}
+
+bool mg_gameLogic::compareVector(Vec2f v1, Vec2f v2)
+{
+
+	if (abs(v1.x - v2.x) > MARGINX || abs(v1.y - v2.y) > MARGINY)
+	{
+		return true;
+	}
+	return false;
 }
