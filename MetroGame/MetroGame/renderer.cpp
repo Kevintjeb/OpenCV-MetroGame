@@ -8,12 +8,11 @@
 using namespace mg_system;
 using namespace mg_gameLogic;
 GLuint window_db;
-Test test;
+Test test{};
 Redenderable testTrain;
 
 void initDebug()
 {
-	test = Test();
 	Vec3f pos(0, 0, 0);
 	Vec3f rot(0, 0.0, 1.0);
 	Vec3f scale(0.225f,0.225f,0.225f);
@@ -38,7 +37,7 @@ void drawRail(Vec2f v1, Vec2f vold)
 	glEnd();
 }
 
-void drawRenderable(Redenderable redenderable)		//Draws and Rotates a renderable
+void drawRenderable(Redenderable& redenderable)		//Draws and Rotates a renderable
 {	
 	
 
@@ -71,8 +70,14 @@ void drawLine(Line &line)
 }
 int i = 0;
 int timePassed = 10000;
+
+int oldTime = 0;
+
 void debug()
 {
+	int newTime = glutGet(GLUT_ELAPSED_TIME);
+	int deltaTime = newTime - oldTime;
+	oldTime = newTime;
 
 	glutSetWindow(window_db);
 	glClearColor(0.6f, 0.6f, 1, 1);
@@ -81,18 +86,19 @@ void debug()
 	glLoadIdentity();
 	glColor3f(0.1f, 1.0f, 0.2f);
 
-
-
 	drawLine(test.line);
 	glColor3f(1.0f, 0.0f, 0.2f);
-	drawRenderable(testTrain);
-	testTrain.position.x = test.line[i].x;
-	testTrain.position.y = test.line[i].y;
-	timePassed--;
+	//drawRenderable(testTrain);
+	//testTrain.position.x = test.line[i].x;
+	//testTrain.position.y = test.line[i].y;
+	/*timePassed--;
 	if (i < test.line.size()-1 && timePassed<0) {
 		i++;
 		timePassed = 10000;
-	}
+	}*/
+	test.train.Recalculate(static_cast<float>(/*deltaTime) / 1000*/ 0.00001f));
+	for (auto& r : get_renderables())
+		drawRenderable(r);
 	glutSwapBuffers();
 }
 void mg_system::_internal::OnDisplay()

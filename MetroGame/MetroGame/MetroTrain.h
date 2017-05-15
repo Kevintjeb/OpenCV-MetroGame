@@ -16,6 +16,8 @@ namespace mg_gameLogic
 
 		std::vector<RedenderablePointer> trains;
 		int size;
+
+		inline Vec2f pos2d_from_pos(float pos);
 	public:
 		static constexpr float speed = 1.0f;
 		static constexpr int max_size = 16;

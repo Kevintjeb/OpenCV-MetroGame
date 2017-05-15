@@ -3,8 +3,27 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-MetroTrain::MetroTrain(const Line& line, float init_pos, int size) : 
-	line(line), line_pos(init_pos), size(size), trains(max_size)
+inline Vec2f mg_gameLogic::MetroTrain::pos2d_from_pos(float pos)
+{
+	int index = line.getIndexByPosition(pos);
+
+	Vec2f far = line[index+1], close = line[index];
+
+	float slope = (far.y - close.y) / (far.x - close.x);
+
+	float x = close.x;
+	float b = close.y - (x*slope);
+	float val = (pos - line.getDistance(index)) / (line.getDistance(index+1) - line.getDistance(index));
+	x += val;
+	float y = x*slope + b;	 
+
+	Vec2f pos2d(x, y);
+
+	return pos2d;
+}
+
+MetroTrain::MetroTrain(const Line& line, float init_pos, int size) :
+	line(line), line_pos(init_pos), size(size), trains(0)
 {
 
 }
@@ -29,10 +48,9 @@ void MetroTrain::Recalculate(float elapsedTime)
 
 	line_pos += elapsedTime*speed;
 
-	int index = line.getIndexByPosition(line_pos);
-	Vec2f pos = line[index];
-	trains[0]->position.x = pos.x;
-	trains[0]->position.y = pos.y;
+	auto npos = pos2d_from_pos(line_pos);
+	trains[0]->position.x = npos.x;
+	trains[0]->position.y = npos.y;
 }
 
 int MetroTrain::get_size() const

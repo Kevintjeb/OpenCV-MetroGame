@@ -27,5 +27,6 @@ namespace mg_gameLogic
 		std::size_t size() const;
 		int getIndexByPosition(float position) const;
 		const Vec2f& operator[](int i) const;
+		float getDistance(int i) const;
 	};
 }

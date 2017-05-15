@@ -3,7 +3,7 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-list<Redenderable> renderables(32);
+list<Redenderable> renderables(0);
 
 RedenderablePointer mg_gameLogic::allocate_renderable(Redenderable& renderable)
 {
