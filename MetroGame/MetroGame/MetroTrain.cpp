@@ -16,7 +16,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 	{
 		int diff = size - trains.size(); // we need 'diff' new trains
 		for (int i = 0; i < diff; ++i) // we allocate new Renderables 
-			trains.push_back(allocate_renderable(Redenderable(Vec3f(0, 0, 0))));
+			trains.push_back(allocate_renderable(Redenderable(Vec3f(0, 0, 0), 0.0f)));
 	}
 	else if (trains.size() > size) // if we have to many trains
 	{

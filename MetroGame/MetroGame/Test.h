@@ -9,8 +9,7 @@ namespace mg_gameLogic
 	public: 
 		Test();
 		~Test();
-	
-
-		void testMetroLine();
+		Line line;
+		std::list<Vec2f> testMetroLine();
 	};
 }
