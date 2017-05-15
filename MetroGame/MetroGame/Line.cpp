@@ -3,7 +3,7 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-Line::Line(list<Vec2f> line) : positions(new Vec2f[line.size()]), distances(new float[line.size()])
+Line::Line(list<Vec2f> line) : positions(line.size()), distances(line.size())
 {
 	int index = 0;
 
@@ -23,21 +23,31 @@ Line::Line(list<Vec2f> line) : positions(new Vec2f[line.size()]), distances(new 
 	}
 }
 
-int Line::getIndexByPosition(const float position)
+Line::~Line()
+{
+	
+}
+
+size_t Line::size() const
+{
+	return distances.size();
+}
+
+int Line::getIndexByPosition(const float position) const
 {
 	// standard binary tree with interpolation
 	// if the position is not in the list we get the point to the 'left' of it
 
 	int l, r;
 	l = 0;
-	r = length - 1;
+	r = size() - 1;
 	while (true)
 	{
 		int m = (l + r) / 2;
 		if (distances[m] < position) // we are lower than our position
 		{
 			// if the point to our right is higher, position is inbetween our points, and we return the leftmost point
-			if (m < length - 1 && distances[m + 1] > position) return m;
+			if (m < size() - 1 && distances[m + 1] > position) return m;
 			l = m + 1;
 		}
 		else if (distances[m] > position) // we are higher than our position
@@ -49,4 +59,9 @@ int Line::getIndexByPosition(const float position)
 		// position matches exactly we return
 		else return m;
 	}
+}
+
+const Vec2f& Line::operator[](int index) const
+{
+	return positions[index];
 }

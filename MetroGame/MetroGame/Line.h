@@ -3,17 +3,23 @@
 #include "Vect.h"
 #include <list>
 #include <memory>
+#include <valarray>
 
 namespace mg_gameLogic
 {
 	class Line
 	{
+	private:
+		std::valarray<float> distances;
+		std::valarray<Vec2f> positions;
 	public:
-		float *distances;
-		Vec2f *positions;
-		int length;
+		Line() = delete;
+		Line(const Line&) = delete;
+		explicit Line(std::list<Vec2f> line);
+		~Line();
 
-		Line(std::list<Vec2f> line);
-		int getIndexByPosition(float position);
+		std::size_t size() const;
+		int getIndexByPosition(float position) const;
+		const Vec2f& operator[](int i) const;
 	};
 }
