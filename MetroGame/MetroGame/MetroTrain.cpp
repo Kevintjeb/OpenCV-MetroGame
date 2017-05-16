@@ -36,7 +36,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 	{
 		int diff = size - trains.size(); // we need 'diff' new trains
 		for (int i = 0; i < diff; ++i) // we allocate new Renderables 
-			trains.push_back(allocate_renderable(Renderable(METRO, Vec3f(0, 0, 0), 0.0f, Vec3f(0, 1, 0))));
+			trains.push_back(allocate_renderable(Renderable(METRO, Vec3f(0, -92.0f, 0), 0.0f, Vec3f(0, 1, 0), Vec3f(2, 2, 2))));
 	}
 	else if (trains.size() > size) // if we have to many trains
 	{
@@ -50,8 +50,8 @@ void MetroTrain::Recalculate(float elapsedTime)
 	line_pos += elapsedTime*speed;
 
 	auto npos = pos2d_from_pos(line_pos);
-	trains[0]->position.x = npos.x;
-	trains[0]->position.y = npos.y;
+	trains[0]->position.x = npos.x*50;
+	trains[0]->position.z = npos.y*50;
 }
 
 int MetroTrain::get_size() const

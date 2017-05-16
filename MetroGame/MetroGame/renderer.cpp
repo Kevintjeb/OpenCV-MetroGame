@@ -63,20 +63,6 @@ void createDummyRenderableList()
 	Vec3f scale = Vec3f(0.79f, 0.79f, 0.79f);
 	Model model = CITY;
 	auto handle = mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
-
-	Vec3f pos2 = Vec3f(10.0f, -92.0f, 10.0f);
-	Vec3f rot2 = Vec3f(0.0f, 1.0f, 0.0f);
-	float angle2 = 0;
-	Vec3f scale2 = Vec3f(2.0f, 2.0f, 2.0f);
-	Model model2 = METRO;
-	auto handle2 = mg_gameLogic::allocate_renderable(Renderable(model2, pos2, angle2, rot2, scale2));
-
-	Vec3f pos3 = Vec3f(-10.0f, -92.0f, -10.0f);
-	Vec3f rot3 = Vec3f(0.0f, 1.0f, 0.0f);
-	float angle3 = 270;
-	Vec3f scale3 = Vec3f(2.0f, 2.0f, 2.0f);
-	Model model3 = METRO;
-	auto handle3 = mg_gameLogic::allocate_renderable(Renderable(model3, pos3, angle3, rot3,  scale3));
 }
 
 void loadTexture(std::string filepath)
