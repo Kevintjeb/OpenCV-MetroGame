@@ -7,7 +7,7 @@ Renderable::Renderable() : model(METRO), position(Vec3f()), rotation(Vec3f()), s
 
 }
 
-Renderable::Renderable(const Renderable& render) : model(render.model), position(render.position), rotation(render.rotation), scale(render.scale)
+Renderable::Renderable(const Renderable& render) : model(render.model), angle(render.angle), position(render.position), rotation(render.rotation), scale(render.scale)
 {
 
 }
