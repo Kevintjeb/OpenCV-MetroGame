@@ -26,6 +26,7 @@ Renderable testTrain;
 #include "Texture.h"
 
 #include "stb_image.h"
+#include "RenderableOutput.h"
 
 #define WIDTH 600
 #define HEIGHT 600
@@ -53,7 +54,6 @@ struct Camera
 std::vector < VertexClass> TopPlane;
 std::vector < VertexClass> GroundPlane;
 std::vector<GLuint> textureIDs;
-std::vector<Renderable> renderables;
 
 void createDummyRenderableList()
 {
@@ -62,21 +62,21 @@ void createDummyRenderableList()
 	float angle = 45;
 	Vec3f scale = Vec3f(0.79f, 0.79f, 0.79f);
 	Model model = CITY;
-	renderables.push_back(Renderable(model, pos, angle, rot, scale));
+	auto handle = mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
 
 	Vec3f pos2 = Vec3f(10.0f, -92.0f, 10.0f);
 	Vec3f rot2 = Vec3f(0.0f, 1.0f, 0.0f);
 	float angle2 = 0;
 	Vec3f scale2 = Vec3f(2.0f, 2.0f, 2.0f);
 	Model model2 = METRO;
-	renderables.push_back(Renderable(model2, pos2, angle2, rot2, scale2));
+	auto handle2 = mg_gameLogic::allocate_renderable(Renderable(model2, pos2, angle2, rot2, scale2));
 
 	Vec3f pos3 = Vec3f(-10.0f, -92.0f, -10.0f);
 	Vec3f rot3 = Vec3f(0.0f, 1.0f, 0.0f);
 	float angle3 = 270;
 	Vec3f scale3 = Vec3f(2.0f, 2.0f, 2.0f);
 	Model model3 = METRO;
-	renderables.push_back(Renderable(model3, pos3, angle3, rot3,  scale3));
+	auto handle3 = mg_gameLogic::allocate_renderable(Renderable(model3, pos3, angle3, rot3,  scale3));
 }
 
 void loadTexture(std::string filepath)
@@ -505,7 +505,7 @@ void move(float angle, float fac)
 
 void drawRenderables()
 {
-	for (Renderable &renderable : renderables)
+	for (Renderable &renderable : mg_gameLogic::get_renderables())
 	{
 		glPushMatrix();
 		
