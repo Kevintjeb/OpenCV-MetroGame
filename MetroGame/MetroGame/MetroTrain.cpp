@@ -4,7 +4,7 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-inline Vec2f mg_gameLogic::MetroTrain::pos2d_from_pos(float pos)
+inline Vec2f MetroTrain::pos2d_from_pos(float pos)
 {
 	int index = line.getIndexByPosition(pos);
 
@@ -23,10 +23,33 @@ inline Vec2f mg_gameLogic::MetroTrain::pos2d_from_pos(float pos)
 	return pos2d;
 }
 
-MetroTrain::MetroTrain(const Line& line, float init_pos, int size) :
-	line(line), line_pos(init_pos), size(size), trains(0)
+inline float MetroTrain::checkAndSetPosRange(float pos)
 {
+	switch (state)
+	{
+	case State::FORWARD:
+		if (pos >= line.getDistance(line.size() - 1))
+		{
+			state = State::BACKWARD;
+			return line.getDistance(line.size() - 1) - (size*train_length);
+		}
+		break;
+	case State::BACKWARD:
+		if (pos <= 0)
+		{
+			state = State::FORWARD;
+			return size*train_length;
+		}
+		break;
+	}
 
+	return pos;
+}
+
+MetroTrain::MetroTrain(const Line& line, float init_pos, State state, int size) :
+	line(line), line_pos(init_pos), state(state), size(size), trains(0)
+{
+	
 }
 
 void MetroTrain::Recalculate(float elapsedTime)
@@ -47,7 +70,9 @@ void MetroTrain::Recalculate(float elapsedTime)
 		}
 	}
 
-	line_pos += elapsedTime*speed;
+	line_pos += elapsedTime*speed * (state == State::FORWARD ? 1 : -1);
+
+	line_pos = checkAndSetPosRange(line_pos);
 
 	auto npos = pos2d_from_pos(line_pos);
 	trains[0]->position.x = npos.x*50;
