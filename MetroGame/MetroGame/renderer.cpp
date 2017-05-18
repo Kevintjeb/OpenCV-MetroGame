@@ -5,6 +5,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <cstdio>
+#include <map>
 
 #include "VertexClass.h"
 #include "Renderable.h"
@@ -19,6 +20,9 @@
 
 GLuint WindowID1, WindowID2;
 ModelLoader modelLoader;
+
+std::map<std::string, int> modelsMap;
+std::map<std::string, int>::iterator it;
 
 int lastTime;
 float rotation;
@@ -48,21 +52,21 @@ void createDummyRenderableList()
 	Vec3f rot = Vec3f(0.0f, 1.0f, 0.0f);
 	float angle = 45;
 	Vec3f scale = Vec3f(0.79f, 0.79f, 0.79f);
-	Model model = CITY;
+	std::string model = "models/city/city.obj";
 	renderables.push_back(Renderable(pos, rot, angle, scale, model));
 
 	Vec3f pos2 = Vec3f(10.0f, -92.0f, 10.0f);
 	Vec3f rot2 = Vec3f(0.0f, 1.0f, 0.0f);
 	float angle2 = 0;
 	Vec3f scale2 = Vec3f(2.0f, 2.0f, 2.0f);
-	Model model2 = METRO;
+	std::string model2 = "models/Metro/metro.obj";
 	renderables.push_back(Renderable(pos2, rot2, angle2, scale2, model2));
 
 	Vec3f pos3 = Vec3f(-10.0f, -92.0f, -10.0f);
 	Vec3f rot3 = Vec3f(0.0f, 1.0f, 0.0f);
 	float angle3 = 270;
 	Vec3f scale3 = Vec3f(2.0f, 2.0f, 2.0f);
-	Model model3 = METRO;
+	std::string model3 = "models/Metro/metro.obj";
 	renderables.push_back(Renderable(pos3, rot3, angle3,  scale3, model3));
 }
 
@@ -194,6 +198,12 @@ void drawVertexArray(std::vector<VertexClass> verts)
 
 }
 
+void prepareModel(std::string modelPath)
+{
+	modelLoader.insertModel(modelPath);
+	modelsMap.insert(std::pair<std::string, int>(modelPath, modelsMap.size()));
+}
+
 void mg_system::_internal::RenderInit()
 {
 	ZeroMemory(keys, sizeof(keys));
@@ -208,9 +218,9 @@ void mg_system::_internal::RenderInit()
 	loadTexture("textures/dirt.png");
 
 	//load models
-	modelLoader.insertModel("models/steve/steve.obj");
-	modelLoader.insertModel("models/Metro/metro.obj");
-	modelLoader.insertModel("models/city/city.obj");
+	prepareModel("models/steve/steve.obj");
+	prepareModel("models/Metro/metro.obj");
+	prepareModel("models/city/city.obj");
 
 	//createdummyRenderable
 	createDummyRenderableList();
@@ -410,7 +420,9 @@ void drawRenderables()
 		glRotatef(renderable.angle, renderable.rotation.x, renderable.rotation.y, renderable.rotation.z);
 		glScalef(renderable.scale.x, renderable.scale.y, renderable.scale.z);
 
-		modelLoader.getModel(renderable.model)->draw();
+		it = modelsMap.find(renderable.model);
+
+		modelLoader.getModel(it->second)->draw();
 		glPopMatrix();
 	}
 }
