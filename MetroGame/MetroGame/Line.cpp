@@ -71,7 +71,7 @@ float mg_gameLogic::Line::getDistance(int i) const
 	return distances[i];
 }
 
-list<Vec2f> mg_gameLogic::filterData(list<Vec2f> data)
+list<Vec2f> mg_gameLogic::filterData(const list<Vec2f> &data)
 {
 	std::list<Vec2f >  filtered;
 
@@ -87,7 +87,7 @@ list<Vec2f> mg_gameLogic::filterData(list<Vec2f> data)
 	return filtered;
 }
 
-bool mg_gameLogic::compareVector(Vec2f v1, Vec2f v2)
+bool mg_gameLogic::compareVector(Vec2f &v1,Vec2f &v2)
 {
 
 	if (abs(v1.x - v2.x) > MARGINX || abs(v1.y - v2.y) > MARGINY)

@@ -9,8 +9,8 @@
 
 namespace mg_gameLogic
 {
-	std::list<Vec2f> filterData(std::list<Vec2f> data);
-	bool compareVector(Vec2f v1, Vec2f v2);
+	std::list<Vec2f> filterData(const std::list<Vec2f> &data);
+	bool compareVector(Vec2f &v1,Vec2f &v2);
 
 	class Line
 	{
