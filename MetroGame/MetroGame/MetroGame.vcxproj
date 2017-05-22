@@ -147,29 +147,33 @@
   <ItemGroup>
     <ClCompile Include="errors.cpp" />
     <ClCompile Include="gameLogic.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Main_old.cpp" />
+    <ClCompile Include="MetroTrain.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="ObjModel.cpp" />
     <ClCompile Include="Renderable.cpp" />
-    <ClCompile Include="Vec.cpp" />
+    <ClCompile Include="RenderableOutput.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="system.cpp" />
+    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="Vect.cpp" />
     <ClCompile Include="VertexClass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="freeglut\include\GL\freeglut.h" />
-    <ClInclude Include="freeglut\include\GL\freeglut_ext.h" />
-    <ClInclude Include="freeglut\include\GL\freeglut_std.h" />
-    <ClInclude Include="freeglut\include\GL\glut.h" />
+    <ClInclude Include="Line.h" />
+    <ClInclude Include="MetroTrain.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ObjModel.h" />
     <ClInclude Include="Renderable.h" />
+    <ClInclude Include="RenderableOutput.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Vec.h" />
     <ClInclude Include="system.h" />
+    <ClInclude Include="Test.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Vect.h" />
     <ClInclude Include="VertexClass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
