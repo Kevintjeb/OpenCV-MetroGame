@@ -57,6 +57,12 @@ MetroTrain::MetroTrain(const Line& line, float init_pos, State state, int size) 
 	
 }
 
+float mg_gameLogic::MetroTrain::getSpeed()
+{
+	
+	return 0.0f;
+}
+
 void MetroTrain::Recalculate(float elapsedTime)
 {
 	// ensuring we have the correct size
@@ -75,7 +81,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 		}
 	}
 
-	line_pos += elapsedTime*speed * (state == State::FORWARD ? 1 : -1);
+	line_pos += elapsedTime*getSpeed() * (state == State::FORWARD ? 1 : -1);
 
 	line_pos = checkAndSetPosRange(line_pos);
 
@@ -83,6 +89,8 @@ void MetroTrain::Recalculate(float elapsedTime)
 	trains[0]->position.x = npos.x*50;
 	trains[0]->position.z = npos.y*50;
 }
+
+
 
 int MetroTrain::get_size() const
 {

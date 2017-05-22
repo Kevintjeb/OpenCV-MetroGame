@@ -6,6 +6,7 @@
 #define MARGINX 0.8
 #define MARGINY 0.8
 #include <valarray>
+#include "MetroStation.h"
 
 namespace mg_gameLogic
 {
@@ -17,11 +18,12 @@ namespace mg_gameLogic
 	private:
 		std::valarray<float> distances;
 		std::valarray<Vec2f> positions;
+		std::list<MetroStation> metroStations;
 	public:
 		
 		Line() = delete;
 		Line(const Line&) = delete;
-		explicit Line(std::list<Vec2f> line);
+		explicit Line(std::list<Vec2f> line, std::list<MetroStation> stations);
 		~Line();
 		
 		std::size_t size() const;

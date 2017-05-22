@@ -1,12 +1,13 @@
 #include "Line.h"
+#include "Renderable.h"
+#include "MetroStation.h"
 
 using namespace mg_gameLogic;
 using namespace std;
 
-Line::Line(list<Vec2f> line) : positions(line.size()), distances(line.size())
+mg_gameLogic::Line::Line(std::list<Vec2f> line, std::list<MetroStation> stations): positions(line.size()), distances(line.size()), metroStations(stations)
 {
 	int index = 0;
-
 	// we itterate over all points in the line
 	for (Vec2f &v : line)
 	{

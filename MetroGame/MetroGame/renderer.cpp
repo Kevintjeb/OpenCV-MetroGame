@@ -207,8 +207,8 @@ void mg_system::_internal::RenderInit()
 		GLuint window_it = initWindow("jollie", 600, 600, OnDisplay);
 	
 		glClearColor(1.0f, 1.0f, 1.0f, 1);*/
-	window_db = initWindow("Debug", 400, 400, debug);
-	initDebug();
+	//window_db = initWindow("Debug", 400, 400, debug);
+	//initDebug();
 	ZeroMemory(keys, sizeof(keys));
 	WindowID2 = initWindow("2D Panel", WIDTH, HEIGHT, OnDisplay2D);
 	WindowID1 = initWindow("3D Panel", WIDTH, HEIGHT, OnDisplay3D);
@@ -224,7 +224,7 @@ void mg_system::_internal::RenderInit()
 	modelLoader.insertModel("models/steve/steve.obj");
 	modelLoader.insertModel("models/Metro/metro.obj");
 	modelLoader.insertModel("models/city/city.obj");
-
+	modelLoader.insertModel("models/Metro/metro.obj");
 	//createdummyRenderable
 	createDummyRenderableList();
 }
