@@ -17,6 +17,10 @@ Renderable::Renderable(Model model, Vec3f pos ,float angle, Vec3f rot, Vec3f sca
 {
 }
 
+Renderable::Renderable(Vec3f pos, float angle, Vec3f rot, Vec3f scale) : position(pos), rotation(rot), scale(scale), angle(angle)
+{
+}
+
 Renderable::~Renderable()
 {
 }
