@@ -422,7 +422,7 @@ void drawRenderables()
 
 		it = modelsMap.find(renderable.model);
 
-		modelLoader.getModel(it->second)->draw();
+		modelLoader.getModel(it->second)->draw(); 
 		glPopMatrix();
 	}
 }
