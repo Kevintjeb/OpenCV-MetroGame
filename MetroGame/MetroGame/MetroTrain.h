@@ -4,7 +4,9 @@
 #include "Line.h"
 #include "RenderableOutput.h"
 
+
 #include <vector>
+#include <tuple>
 
 namespace mg_gameLogic
 {
@@ -27,6 +29,7 @@ namespace mg_gameLogic
 
 		inline Vec2f pos2d_from_pos(float pos);
 		inline float checkAndSetPosRange(float pos);
+		inline std::tuple<Vec2f, float> findComplementaryPositionAndDistance(float pos);
 
 	public:
 		static constexpr float speed        = 1.0f;

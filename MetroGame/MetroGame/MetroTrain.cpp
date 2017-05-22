@@ -46,6 +46,11 @@ inline float MetroTrain::checkAndSetPosRange(float pos)
 	return pos;
 }
 
+inline std::tuple<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositionAndDistance(float pos)
+{
+	
+}
+
 MetroTrain::MetroTrain(const Line& line, float init_pos, State state, int size) :
 	line(line), line_pos(init_pos), state(state), size(size), trains(0)
 {
