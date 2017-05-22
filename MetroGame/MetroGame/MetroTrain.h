@@ -24,7 +24,7 @@ namespace mg_gameLogic
 		float line_pos;
 		State state;
 
-		std::vector<RedenderablePointer> trains;
+		std::vector<RenderablePointer> trains;
 		int size;
 
 		inline Vec2f pos2d_from_pos(float pos);

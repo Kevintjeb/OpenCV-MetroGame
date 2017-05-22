@@ -32,6 +32,8 @@ Renderable testTrain;
 #define WIDTH 600
 #define HEIGHT 600
 
+#define STEP 0.5f
+
 GLuint WindowID1, WindowID2;
 ModelLoader modelLoader;
 
@@ -57,6 +59,8 @@ struct Camera
 
 std::vector < VertexClass> TopPlane;
 std::vector < VertexClass> GroundPlane;
+std::vector < VertexClass > metroLines;
+std::vector < std::pair<int, int>> metroLinesPosition;
 std::vector<GLuint> textureIDs;
 
 void createDummyRenderableList()
@@ -176,7 +180,7 @@ void initGroundPlane()
 
 }
 
-void drawVertexArray(std::vector<VertexClass> verts)
+void drawVertexArray(std::vector<VertexClass> verts, GLenum mode, int start, int end)
 {
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -188,7 +192,7 @@ void drawVertexArray(std::vector<VertexClass> verts)
 	glNormalPointer(GL_FLOAT, sizeof(VertexClass), ((float*)verts.data()) + 3);
 	glVertexPointer(3, GL_FLOAT, sizeof(VertexClass), ((float*)verts.data()) + 0);
 
-	glDrawArrays(GL_QUADS, 0, verts.size());
+	glDrawArrays(mode, start, end);
 
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -465,6 +469,75 @@ void drawCube()
 	glEnd();
 }
 
+void drawCube(float x, float y, float z)
+{
+	glPushMatrix();
+
+	glBegin(GL_TRIANGLES);
+	
+	glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+	glVertex3f(x, y, z);
+	glVertex3f(x, y+ 1, z);
+	glVertex3f(x + 1, y, z);
+
+	glVertex3f(x + 1, y, z);
+	glVertex3f(x + 1, y+ 1, z);
+	glVertex3f(x, y + 1, z);
+
+	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+
+	glVertex3f(x, y, z+1);
+	glVertex3f(x, y+1, z+1);
+	glVertex3f(x+1, y, z+1);
+
+	glVertex3f(x+1, y, z+1);
+	glVertex3f(x+1, y+1, z+1);
+	glVertex3f(x, y+1, z+1);
+
+	glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+
+	glVertex3f(x, y, z);
+	glVertex3f(x, y, z+1);
+	glVertex3f(x, y+1, z);
+
+	glVertex3f(x, y, z+1);
+	glVertex3f(x, y+1, z+1);
+	glVertex3f(x, y+1, z);
+
+	glColor4f(1.0f, 0.5f, 0.5f, 1.0f);
+
+	glVertex3f(x+1, y, z);
+	glVertex3f(x+1, y, z+1);
+	glVertex3f(x+1, y+1, z);
+
+	glVertex3f(x+1, y, z+1);
+	glVertex3f(x+1, y+1, z+1);
+	glVertex3f(x+1, y+1, z);
+
+	glColor4f(0.5f, 1.0f, 0.5f, 1.0f);
+
+	glVertex3f(x, y, z);
+	glVertex3f(x, y, z+1);
+	glVertex3f(x+1, y, z+1);
+
+	glVertex3f(x+1, y, z+1);
+	glVertex3f(x+1, y, z);
+	glVertex3f(x, y, z);
+
+	glColor4f(0.5f, 0.5f, 1.0f, 1.0f);
+
+	glVertex3f(x, y+1, z);
+	glVertex3f(x, y+1, z+1);
+	glVertex3f(x+1, y+1, z+1);
+
+	glVertex3f(x+1, y+1, z+1);
+	glVertex3f(x+1, y+1, z);
+	glVertex3f(x+1, y+1, z);
+	glEnd();
+
+	glPopMatrix();
+}
+
 
 void mg_system::_internal::OnDisplay2D()
 {
@@ -519,6 +592,167 @@ void drawRenderables()
 	}
 }
 
+void prepare_lines()
+{
+	int position = 0;
+	metroLines.clear();
+	metroLinesPosition.clear();
+	for (Line* line : mg_gameLogic::get_lines())
+	{
+		int start = position;
+		for (int index = 0; index < line->size(); index++)
+		{
+			if (index > 0 && index < line->size() - 1)
+			{
+				metroLines.push_back(VertexClass(line->operator[](index).x * 25, -50 + 3.1f, line->operator[](index).y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f));
+				position++;
+			}
+			metroLines.push_back(VertexClass(line->operator[](index).x*25, -50 + 3.1f, line->operator[](index).y*25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f));
+			position++;
+		}
+		metroLinesPosition.push_back(std::make_pair(start, position));
+		position++;
+	}
+}
+
+void drawRails()
+{
+	for (int i = 0; i < metroLinesPosition.size(); i++)
+	{
+		for (int b = metroLinesPosition.at(i).first; b < metroLinesPosition.at(i).second - 1; b++)
+		{
+			float deltaX = metroLines.at(b + 1).x - metroLines.at(b).x;
+			float deltaZ = metroLines.at(b + 1).z - metroLines.at(b).z;
+			float rc;
+
+			if (deltaX > 0)
+			{
+				if (deltaZ > 0)
+				{
+					if (deltaX > deltaZ)
+					{
+						rc = deltaX / deltaZ;
+						for (float j = 0; j < deltaZ; j += STEP)
+						{
+							drawCube(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z + j);
+						}
+					}
+					else
+					{
+						rc = deltaZ / deltaX;
+						for (float j = 0; j < deltaX; j += STEP)
+						{
+							drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z + (rc*j));
+						}
+					}
+				}
+				else if (deltaZ < 0)
+				{
+					deltaZ = deltaZ*-1;
+					if (deltaX > deltaZ)
+					{
+						rc = deltaX / deltaZ;
+						for (float j = 0; j < deltaZ; j += STEP)
+						{
+							drawCube(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z - j);
+						}
+					}
+					else
+					{
+						rc = deltaZ / deltaX;
+						for (float j = 0; j < deltaX; j += STEP)
+						{
+							drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z - (rc*j));
+						}
+					}
+				}
+				else
+				{
+					for (float j = 0; j < deltaX; j += STEP)
+					{
+						drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z);
+					}
+				}
+			}
+			else if (deltaX < 0)
+			{
+				deltaX = deltaX * -1;
+				if (deltaZ > 0)
+				{
+					if (deltaX > deltaZ)
+					{
+						rc = deltaX / deltaZ;
+						for (float j = 0; j < deltaZ; j += STEP)
+						{
+							drawCube(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z + j);
+						}
+					}
+					else
+					{
+						rc = deltaZ / deltaX;
+						for (float j = 0; j < deltaX; j += STEP)
+						{
+							drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z + (rc*j));
+						}
+					}
+				}
+				else if (deltaZ < 0)
+				{
+					deltaZ = deltaZ*-1;
+					if (deltaX > deltaZ)
+					{
+						rc = deltaX / deltaZ;
+						for (float j = 0; j < deltaZ; j += STEP)
+						{
+							drawCube(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z - j);
+						}
+					}
+					else
+					{
+						rc = deltaZ / deltaX;
+						for (float j = 0; j < deltaX; j += STEP)
+						{
+							drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z - (rc*j));
+						}
+					}
+				}
+				else
+				{
+					for (float j = 0; j < deltaX; j += STEP)
+					{
+						drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z);
+					}
+				}
+			}
+			else
+			{
+				if (deltaZ > 0)
+				{
+					for (float j = 0; j < deltaZ; j += STEP)
+					{
+						drawCube(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z + j);
+					}
+				}
+				else if (deltaZ < 0)
+				{
+					deltaZ = deltaZ*-1;
+					for (float j = 0; j < deltaZ; j += STEP)
+					{
+						drawCube(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z - j);
+					}
+				}
+				else
+				{
+				}
+			}
+
+
+
+
+
+		}
+	}
+}
 
 void mg_system::_internal::OnDisplay3D()
 {
@@ -554,9 +788,23 @@ void mg_system::_internal::OnDisplay3D()
 	glEnable(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	drawVertexArray(GroundPlane);
+	drawVertexArray(GroundPlane, GL_QUADS, 0, GroundPlane.size());
+
+	//translation for drawing rails correct
+	glTranslatef(0, 0, 50);
+
+	//draw rails
+	glLineWidth(1.5);
+	prepare_lines();
+	for (int i = 0; i < metroLinesPosition.size(); i++)
+	{
+		drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(i).first, metroLinesPosition.at(i).second);
+	}
+	drawRails();
 
 	glPopMatrix();
+
+
 
 	//drawRenderable
 	drawRenderables();

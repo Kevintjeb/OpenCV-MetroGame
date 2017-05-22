@@ -3,6 +3,7 @@
 #include <GL\freeglut.h>
 #include "Line.h"
 #include "MetroTrain.h"
+#include "RenderableOutput.h"
 
 using namespace mg_gameLogic;
 using namespace mg_system;
@@ -14,6 +15,7 @@ MetroTrain *train;
 void mg_system::_internal::GameInit()
 {
 	line = new Line({ {-1.0f, -1.0f}, {0.0, -0.25f}, {0.75f, 0.5f}, {0.0f, 0.90f}, {-0.75f, 0.25f}, {-1.0f, -0.5f}, {-1.0f, 0.0f}, {0.0f, 1.1f}, {0.5f, 0.5f} });
+	auto handle = mg_gameLogic::allocate_line(line);
 	train = new MetroTrain(*line);
 }
 
