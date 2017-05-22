@@ -2,7 +2,7 @@
 
 using namespace mg_gameLogic;
 
-Renderable::Renderable() : model(METRO), position(Vec3f()), rotation(Vec3f()), scale(Vec3f())
+Renderable::Renderable() : model("models/Metro/metro.obj"), position(Vec3f()), rotation(Vec3f()), scale(Vec3f())
 {
 
 }

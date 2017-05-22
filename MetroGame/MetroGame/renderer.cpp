@@ -66,21 +66,7 @@ void createDummyRenderableList()
 	float angle = 45;
 	Vec3f scale = Vec3f(0.79f, 0.79f, 0.79f);
 	std::string model = "models/city/city.obj";
-	renderables.push_back(Renderable(pos, rot, angle, scale, model));
-
-	Vec3f pos2 = Vec3f(10.0f, -92.0f, 10.0f);
-	Vec3f rot2 = Vec3f(0.0f, 1.0f, 0.0f);
-	float angle2 = 0;
-	Vec3f scale2 = Vec3f(2.0f, 2.0f, 2.0f);
-	std::string model2 = "models/Metro/metro.obj";
-	renderables.push_back(Renderable(pos2, rot2, angle2, scale2, model2));
-
-	Vec3f pos3 = Vec3f(-10.0f, -92.0f, -10.0f);
-	Vec3f rot3 = Vec3f(0.0f, 1.0f, 0.0f);
-	float angle3 = 270;
-	Vec3f scale3 = Vec3f(2.0f, 2.0f, 2.0f);
-	std::string model3 = "models/Metro/metro.obj";
-	renderables.push_back(Renderable(pos3, rot3, angle3,  scale3, model3));
+	auto handle = mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
 }
 
 void loadTexture(std::string filepath)
