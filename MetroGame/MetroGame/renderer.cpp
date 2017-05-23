@@ -32,7 +32,7 @@ Renderable testTrain;
 #define WIDTH 600
 #define HEIGHT 600
 
-#define STEP 0.5f
+#define STEP 0.4f
 
 GLuint WindowID1, WindowID2;
 ModelLoader modelLoader;
@@ -238,6 +238,7 @@ void mg_system::_internal::RenderInit()
 	prepareModel("models/steve/steve.obj");
 	prepareModel("models/Metro/metro.obj");
 	prepareModel("models/city/city.obj");
+	prepareModel("models/track/track_2.obj");
 
 	//createdummyRenderable
 	createDummyRenderableList();
@@ -615,6 +616,20 @@ void prepare_lines()
 	}
 }
 
+void drawTrack(float x, float y, float z, Vec2f line)
+{
+	float rot = acosf(line.x);
+
+	rot = rot * 180.0f / M_PI;
+
+	glPushMatrix();
+	glTranslatef(x, y, z);
+	glRotatef(rot, 0, 1, 0);
+	it = modelsMap.find("models/track/track_2.obj");
+	modelLoader.getModel(it->second)->draw();
+	glPopMatrix();
+}
+
 void drawRails()
 {
 	for (int i = 0; i < metroLinesPosition.size(); i++)
@@ -625,6 +640,15 @@ void drawRails()
 			float deltaZ = metroLines.at(b + 1).z - metroLines.at(b).z;
 			float rc;
 
+			float lengthVector = sqrtf(deltaX*deltaX + deltaZ*deltaZ);
+			Vec2f vectorLine = Vec2f(deltaX, deltaZ);
+			if (lengthVector != 0)
+			{
+				float vlX = deltaX / lengthVector;
+				float vlZ = deltaZ / lengthVector;
+				vectorLine = Vec2f(vlX, vlZ);
+			}
+
 			if (deltaX > 0)
 			{
 				if (deltaZ > 0)
@@ -634,7 +658,8 @@ void drawRails()
 						rc = deltaX / deltaZ;
 						for (float j = 0; j < deltaZ; j += STEP)
 						{
-							drawCube(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z + j);
+							//drawCube(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z + j);
+							drawTrack(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z + j, vectorLine);
 						}
 					}
 					else
@@ -642,7 +667,8 @@ void drawRails()
 						rc = deltaZ / deltaX;
 						for (float j = 0; j < deltaX; j += STEP)
 						{
-							drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z + (rc*j));
+							//drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z + (rc*j));
+							drawTrack(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z + (rc*j), vectorLine);
 						}
 					}
 				}
@@ -654,7 +680,8 @@ void drawRails()
 						rc = deltaX / deltaZ;
 						for (float j = 0; j < deltaZ; j += STEP)
 						{
-							drawCube(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z - j);
+							//drawCube(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z - j);
+							drawTrack(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z - j, vectorLine);
 						}
 					}
 					else
@@ -662,7 +689,8 @@ void drawRails()
 						rc = deltaZ / deltaX;
 						for (float j = 0; j < deltaX; j += STEP)
 						{
-							drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z - (rc*j));
+							//drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z - (rc*j));
+							drawTrack(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z - (rc*j), vectorLine);
 						}
 					}
 				}
@@ -670,7 +698,8 @@ void drawRails()
 				{
 					for (float j = 0; j < deltaX; j += STEP)
 					{
-						drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z);
+						//drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z);
+						drawTrack(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z, vectorLine);
 					}
 				}
 			}
@@ -684,7 +713,8 @@ void drawRails()
 						rc = deltaX / deltaZ;
 						for (float j = 0; j < deltaZ; j += STEP)
 						{
-							drawCube(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z + j);
+							//drawCube(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z + j);
+							drawTrack(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z + j, vectorLine);
 						}
 					}
 					else
@@ -692,7 +722,8 @@ void drawRails()
 						rc = deltaZ / deltaX;
 						for (float j = 0; j < deltaX; j += STEP)
 						{
-							drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z + (rc*j));
+							//drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z + (rc*j));
+							drawTrack(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z + (rc*j), vectorLine);
 						}
 					}
 				}
@@ -704,7 +735,8 @@ void drawRails()
 						rc = deltaX / deltaZ;
 						for (float j = 0; j < deltaZ; j += STEP)
 						{
-							drawCube(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z - j);
+							//drawCube(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z - j);
+							drawTrack(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z - j, vectorLine);
 						}
 					}
 					else
@@ -712,7 +744,8 @@ void drawRails()
 						rc = deltaZ / deltaX;
 						for (float j = 0; j < deltaX; j += STEP)
 						{
-							drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z - (rc*j));
+							//drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z - (rc*j));
+							drawTrack(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z - (rc*j), vectorLine);
 						}
 					}
 				}
@@ -720,7 +753,8 @@ void drawRails()
 				{
 					for (float j = 0; j < deltaX; j += STEP)
 					{
-						drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z);
+						//drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z);
+						drawTrack(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z, vectorLine);
 					}
 				}
 			}
@@ -730,7 +764,8 @@ void drawRails()
 				{
 					for (float j = 0; j < deltaZ; j += STEP)
 					{
-						drawCube(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z + j);
+						//drawCube(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z + j);
+						drawTrack(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z + j, vectorLine);
 					}
 				}
 				else if (deltaZ < 0)
@@ -738,18 +773,14 @@ void drawRails()
 					deltaZ = deltaZ*-1;
 					for (float j = 0; j < deltaZ; j += STEP)
 					{
-						drawCube(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z - j);
+						//drawCube(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z - j);
+						drawTrack(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z - j, vectorLine);
 					}
 				}
 				else
 				{
 				}
 			}
-
-
-
-
-
 		}
 	}
 }
