@@ -871,7 +871,7 @@ void mg_system::_internal::OnDisplay3D()
 
 	//drawVertexArray(TopPlane);
 
-	glBindTexture(GL_TEXTURE_2D, textureIDs.at(DIRT));
+	glBindTexture(GL_TEXTURE_2D, textureIDs.at(0));
 	glEnable(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

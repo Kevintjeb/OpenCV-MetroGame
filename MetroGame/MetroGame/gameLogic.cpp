@@ -29,7 +29,7 @@ void mg_system::_internal::OnIdle()
 
 	train->Recalculate(deltaTime / 1000.0f);
 
-	redraw();
+	//redraw();
 }
 
 void mg_system::_internal::OnKey(unsigned char key)

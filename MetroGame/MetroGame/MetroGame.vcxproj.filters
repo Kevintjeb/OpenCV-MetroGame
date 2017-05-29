@@ -13,9 +13,6 @@
     <ClCompile Include="Main_old.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -124,6 +121,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameScene3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="freeglut\include\GL\freeglut.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="freeglut\include\GL\freeglut_ext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="freeglut\include\GL\freeglut_std.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="freeglut\include\GL\glut.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

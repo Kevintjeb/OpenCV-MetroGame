@@ -6,7 +6,7 @@
 void mg_system::init(int &argc, char **argv)
 {
 	mg_system::_internal::freeglutInit(argc, argv);
-	mg_system::_internal::RenderInit();
+	//mg_system::_internal::RenderInit();
 	mg_system::_internal::GameInit();
 	SceneManager::getInstance().init();
 }

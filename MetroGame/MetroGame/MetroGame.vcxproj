@@ -161,9 +161,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="IScene.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Vec.cpp" />
     <ClCompile Include="RenderableOutput.cpp" />
-    <ClCompile Include="renderer.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="Vect.cpp" />
