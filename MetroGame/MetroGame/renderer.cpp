@@ -19,6 +19,7 @@ Renderable testTrain;
 #include <math.h>
 #include <cstdio>
 #include <map>
+#include <time.h>
 
 #include "VertexClass.h"
 #include "Renderable.h"
@@ -32,7 +33,7 @@ Renderable testTrain;
 #define WIDTH 600
 #define HEIGHT 600
 
-#define STEP 0.4f
+#define STEP 0.1f
 
 GLuint WindowID1, WindowID2;
 ModelLoader modelLoader;
@@ -63,14 +64,88 @@ std::vector < VertexClass > metroLines;
 std::vector < std::pair<int, int>> metroLinesPosition;
 std::vector<GLuint> textureIDs;
 
+float randScale(float standScale)
+{
+	standScale += 0.1f;
+
+	float randNum = 0 + (rand() % (int)(10 - 0 + 1));
+	cout << randNum << endl;
+	float scale = (randNum/10.0f) * standScale;
+	return scale;
+}
+
 void createDummyRenderableList()
 {
-	Vec3f pos = Vec3f(0.0f, 4.0f, 100.0f);
+	srand(time(NULL));
 	Vec3f rot = Vec3f(0.0f, 1.0f, 0.0f);
 	float angle = 45;
-	Vec3f scale = Vec3f(0.79f, 0.79f, 0.79f);
 	std::string model = "models/city/city.obj";
-	auto handle = mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+	
+	int layer = 0;
+	float standScale = 0.2f;
+	Vec3f pos, scale;
+
+	for (float z = 100.0f; z > -100.0f; z -= 25.0f)
+	{
+		switch (layer)
+		{
+			case 0:
+				pos = Vec3f(0.0f, 4.0f, 100.0f);
+				scale = Vec3f(standScale, randScale(standScale), standScale);
+				mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				break;
+			case 1:
+				for (float x = 25.0f; x > -26.0f; x -= 50.0f)
+				{
+					pos = Vec3f(x, 4.0f, z);
+					scale = Vec3f(standScale, randScale(standScale), standScale);
+					mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				}
+				break;
+			case 2:
+				for (float x = 50.0f; x > -51.0f; x -= 50.0f)
+				{
+					pos = Vec3f(x, 4.0f, z);
+					scale = Vec3f(standScale, randScale(standScale), standScale);
+					mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				}
+				break;
+			case 3:
+				for (float x = 75.0f; x > -76.0f; x -= 50.0f)
+				{
+					pos = Vec3f(x, 4.0f, z);
+					scale = Vec3f(standScale, randScale(standScale), standScale);
+					mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				}
+				break;
+			case 4:
+				for (float x = 50.0f; x > -51.0f; x -= 50.0f)
+				{
+					pos = Vec3f(x, 4.0f, z);
+					scale = Vec3f(standScale, randScale(standScale), standScale);
+					mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				}
+				break;
+			case 5:
+				for (float x = 25.0f; x > -26.0f; x -= 50.0f)
+				{
+					pos = Vec3f(x, 4.0f, z);
+					scale = Vec3f(standScale, randScale(standScale), standScale);
+					mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				}
+				break;
+			case 6:
+				pos = Vec3f(0.0f, 4.0f, -50.0f);
+				scale = Vec3f(standScale, randScale(standScale), standScale);
+				mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				break;
+
+			default:
+				break;
+		}
+
+		layer++;
+	}
 }
 
 void loadTexture(std::string filepath)
@@ -581,9 +656,10 @@ void drawRenderables()
 		
 		//zorgen dat het object met de wereld mee draait
 		glRotatef(rotation, 0, 1, 0);
-
+				
 		glTranslatef(renderable.position.x, renderable.position.y, renderable.position.z);
 		glRotatef(renderable.angle, renderable.rotation.x, renderable.rotation.y, renderable.rotation.z);
+
 		glScalef(renderable.scale.x, renderable.scale.y, renderable.scale.z);
 
 		it = modelsMap.find(renderable.model);
@@ -618,8 +694,7 @@ void prepare_lines()
 
 void drawTrack(float x, float y, float z, Vec2f line)
 {
-	float rot = acosf(line.x);
-
+	float rot = atan2f(line.x, line.y);
 	rot = rot * 180.0f / M_PI;
 
 	glPushMatrix();
@@ -640,14 +715,7 @@ void drawRails()
 			float deltaZ = metroLines.at(b + 1).z - metroLines.at(b).z;
 			float rc;
 
-			float lengthVector = sqrtf(deltaX*deltaX + deltaZ*deltaZ);
 			Vec2f vectorLine = Vec2f(deltaX, deltaZ);
-			if (lengthVector != 0)
-			{
-				float vlX = deltaX / lengthVector;
-				float vlZ = deltaZ / lengthVector;
-				vectorLine = Vec2f(vlX, vlZ);
-			}
 
 			if (deltaX > 0)
 			{
@@ -658,7 +726,6 @@ void drawRails()
 						rc = deltaX / deltaZ;
 						for (float j = 0; j < deltaZ; j += STEP)
 						{
-							//drawCube(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z + j);
 							drawTrack(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z + j, vectorLine);
 						}
 					}
@@ -667,7 +734,6 @@ void drawRails()
 						rc = deltaZ / deltaX;
 						for (float j = 0; j < deltaX; j += STEP)
 						{
-							//drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z + (rc*j));
 							drawTrack(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z + (rc*j), vectorLine);
 						}
 					}
@@ -680,7 +746,6 @@ void drawRails()
 						rc = deltaX / deltaZ;
 						for (float j = 0; j < deltaZ; j += STEP)
 						{
-							//drawCube(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z - j);
 							drawTrack(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z - j, vectorLine);
 						}
 					}
@@ -689,7 +754,6 @@ void drawRails()
 						rc = deltaZ / deltaX;
 						for (float j = 0; j < deltaX; j += STEP)
 						{
-							//drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z - (rc*j));
 							drawTrack(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z - (rc*j), vectorLine);
 						}
 					}
@@ -698,7 +762,6 @@ void drawRails()
 				{
 					for (float j = 0; j < deltaX; j += STEP)
 					{
-						//drawCube(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z);
 						drawTrack(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z, vectorLine);
 					}
 				}
@@ -713,7 +776,6 @@ void drawRails()
 						rc = deltaX / deltaZ;
 						for (float j = 0; j < deltaZ; j += STEP)
 						{
-							//drawCube(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z + j);
 							drawTrack(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z + j, vectorLine);
 						}
 					}
@@ -722,7 +784,6 @@ void drawRails()
 						rc = deltaZ / deltaX;
 						for (float j = 0; j < deltaX; j += STEP)
 						{
-							//drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z + (rc*j));
 							drawTrack(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z + (rc*j), vectorLine);
 						}
 					}
@@ -735,7 +796,6 @@ void drawRails()
 						rc = deltaX / deltaZ;
 						for (float j = 0; j < deltaZ; j += STEP)
 						{
-							//drawCube(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z - j);
 							drawTrack(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z - j, vectorLine);
 						}
 					}
@@ -744,7 +804,6 @@ void drawRails()
 						rc = deltaZ / deltaX;
 						for (float j = 0; j < deltaX; j += STEP)
 						{
-							//drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z - (rc*j));
 							drawTrack(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z - (rc*j), vectorLine);
 						}
 					}
@@ -753,7 +812,6 @@ void drawRails()
 				{
 					for (float j = 0; j < deltaX; j += STEP)
 					{
-						//drawCube(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z);
 						drawTrack(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z, vectorLine);
 					}
 				}
@@ -764,7 +822,6 @@ void drawRails()
 				{
 					for (float j = 0; j < deltaZ; j += STEP)
 					{
-						//drawCube(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z + j);
 						drawTrack(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z + j, vectorLine);
 					}
 				}
@@ -773,7 +830,6 @@ void drawRails()
 					deltaZ = deltaZ*-1;
 					for (float j = 0; j < deltaZ; j += STEP)
 					{
-						//drawCube(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z - j);
 						drawTrack(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z - j, vectorLine);
 					}
 				}
