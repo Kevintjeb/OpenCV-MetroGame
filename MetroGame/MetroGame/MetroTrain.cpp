@@ -58,8 +58,8 @@ MetroTrain::MetroTrain(const Line& line, float init_pos, State state, int size) 
 }
 float totalTimeSpend = 0;
 float speeddif = 0;
-int stopState = 0;
-int oldIndex = -1;
+int stopState = 0;	//0= normaal rijden // 1 = gestopt // 2 = optrekken 
+int oldIndex = -1;  //zorgt voor de eerste check zodat niet meerdere keren stopt.
 float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 {
 
@@ -67,45 +67,46 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 	totalTimeSpend += elapsedTime;
 	for (pair<int, MetroStation> p : line.getStationPosistion())
 	{
-		int pcompare = p.first - (state == State::FORWARD ? 1 : 2);
-		if ((pcompare == index /*|| (p.first+1)==index*/)&& stopState==0 && oldIndex != index)
+		int pcompare = p.first - (state == State::FORWARD ? 1 : 2);				// -1 voor eerste punt -2 voor achteruit want fuck flobo
+		if ((pcompare == index /*|| (p.first+1)==index*/)&& stopState==0 && oldIndex != index)	//Eerstvolgende punt is het huidige punt
 		{
-			speeddif = 0.01;
-		
+			//snelheid verminderen als groter dan 0
 			if (speed > 0) {
-				speed -= speeddif;
+				speed -= 0.01;
 			}
-			
-			totalTimeSpend = 0;
 		}
+		//bevestigen dat de snelheid niet negatief wordt.
 		if (speed < 0) {
+			//Tijd resetten zodat stilstaan bij 0 begint.
 			totalTimeSpend = 0;
-			stopState = 1;
+			stopState = 1;		//bevesigen dat de trein stil staat.
 			oldIndex = index;
 			speed = 0; }
-		if (totalTimeSpend > 3) 
+		if (totalTimeSpend > 3 && stopState ==1) 
 		{
-			stopState = 2;
+			stopState = 2;		//Toestemming voor optrekken
 		}
+		//Opstrekken
 		if ( stopState ==2)
 		{
-				speeddif = 0.1;
-				if (speed <= 0.5f) 
+			if (speed <= 0.5f) 
 				{
-					speed += speeddif;
+					speed += 0.1;
 				}
-		}
+		}//Voorkomen dat snelheid boven max gaat.
 		if (speed >= 0.5f) 
 		{
 			stopState = 0;
 			speed = 0.5f;
 		}
+		//zorgen dat stop niet meerdere keren per traject gebeurt.
 		if (index != pcompare) 
 		{
 			oldIndex = -1;
 		}
 		
 	}
+	//snelheid keer tijd zodat gelijk blijft.
 	return speed*elapsedTime;
 }
 
