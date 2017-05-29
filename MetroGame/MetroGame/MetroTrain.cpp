@@ -59,8 +59,7 @@ MetroTrain::MetroTrain(const Line& line, float init_pos, State state, int size) 
 
 float mg_gameLogic::MetroTrain::getSpeed()
 {
-	
-	return 0.0f;
+	return speed;
 }
 
 void MetroTrain::Recalculate(float elapsedTime)

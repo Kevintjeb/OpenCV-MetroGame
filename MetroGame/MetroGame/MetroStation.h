@@ -12,6 +12,7 @@ namespace mg_gameLogic
 		MetroStation();
 		MetroStation(Vec2f pos);
 		~MetroStation();
+		Vec2f position;
 	private:
 		RedenderablePointer pointer;
 	};

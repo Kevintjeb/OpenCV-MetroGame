@@ -19,8 +19,8 @@ namespace mg_gameLogic
 		std::valarray<float> distances;
 		std::valarray<Vec2f> positions;
 		std::list<MetroStation> metroStations;
+		std::list<std::pair<float, MetroStation>> stationIndex;
 	public:
-		
 		Line() = delete;
 		Line(const Line&) = delete;
 		explicit Line(std::list<Vec2f> line, std::list<MetroStation> stations);
@@ -28,6 +28,7 @@ namespace mg_gameLogic
 		
 		std::size_t size() const;
 		int getIndexByPosition(float position) const;
+		std::list<std::pair<float, MetroStation>> getStationPosistion();
 		const Vec2f& operator[](int i) const;
 		float getDistance(int i) const;
 	};
