@@ -1,16 +1,21 @@
 #include "Renderable.h"
 
+using namespace mg_gameLogic;
 
-
-Renderable::Renderable(Vec3f position, Vec3f rotation, float angle, Vec3f scale, std::string model)
+Renderable::Renderable() : model("models/Metro/metro.obj"), position(Vec3f()), rotation(Vec3f()), scale(Vec3f())
 {
-	this->position = position;
-	this->rotation = rotation;
-	this->angle = angle;
-	this->scale = scale;
-	this->model = model;
+
 }
 
+Renderable::Renderable(const Renderable& render) : model(render.model), angle(render.angle), position(render.position), rotation(render.rotation), scale(render.scale)
+{
+
+}
+
+
+Renderable::Renderable(std::string model, Vec3f pos ,float angle, Vec3f rot, Vec3f scale) : model(model), position(pos), rotation(rot), scale(scale), angle(angle)
+{
+}
 
 Renderable::~Renderable()
 {

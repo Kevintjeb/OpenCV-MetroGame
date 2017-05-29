@@ -9,7 +9,7 @@ namespace mg_system
 	void init(int &argc, char **argv);
 	void start();
 
-	void redraw();
+	//void redraw();
 
 	//GLuint initWindow(std::string name, int width, int height, void(* renderer)());
 
@@ -22,9 +22,9 @@ namespace mg_system
 		void freeglutInit(int &argc, char **argv);
 
 		// OpenGL
-		void RenderInit();
-		void OnDisplay3D();
-		void OnDisplay2D();
+		//void RenderInit();
+		//void OnDisplay3D();
+		//void OnDisplay2D();
 
 		// Game logic
 		void GameInit();
