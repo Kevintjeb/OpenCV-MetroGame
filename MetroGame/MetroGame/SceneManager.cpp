@@ -22,7 +22,7 @@ void SceneManager::init() {
 		createWindow3D(800, 600, "3D window");
 		this->width = 800;
 		this->height = 600;
-		this->currentScene = new GameScene();
+		this->currentScene = new MainMenuScene();
 		isInit = true;
 	}
 	else {
@@ -40,12 +40,12 @@ Method to load a new Scene.
 The currentScene its onExit will be called, then it will be deleted.
 Afterwards the newScene its onEnter will be called.
 */
-void SceneManager::loadScene(IScene &newScene)
+void SceneManager::loadScene(IScene *newScene)
 {
 	if (isInit) {
 		currentScene->onExit();
 		delete currentScene; //remove it
-		currentScene = &newScene;
+		currentScene = newScene;
 		currentScene->onEnter();
 	}
 	else return;
@@ -61,10 +61,19 @@ IScene& SceneManager::getCurrentScene() {
 	else throw "Scenemanager not initialized";
 }
 
-void SceneManager::render()
+void SceneManager::render3D()
 {
 	if (isInit) {
-		currentScene->render();
+		currentScene->render3D();
+		glutSwapBuffers();
+	}
+	else throw "Scenemanager not initialized";
+}
+
+void SceneManager::render2D()
+{
+	if (isInit) {
+		currentScene->render2D();
 		glutSwapBuffers();
 	}
 	else throw "Scenemanager not initialized";
@@ -89,7 +98,7 @@ void SceneManager::createWindow3D(int width, int height, std::string name)
 
 	glutInitErrorFunc(mg_system::_internal::OnGlutError);
 	glutInitWarningFunc(mg_system::_internal::OnGlutWarning);
-	glutDisplayFunc([]() {SceneManager::getInstance().render(); });
+	glutDisplayFunc([]() {SceneManager::getInstance().render3D(); });
 	glutIdleFunc([]() {SceneManager::getInstance().onIdle(); });
 	glutKeyboardFunc([](unsigned char key, int, int) {SceneManager::getInstance().onKeyDown(key); });
 	glutKeyboardUpFunc([](unsigned char key, int, int) {SceneManager::getInstance().onKeyUp(key); });
@@ -116,7 +125,7 @@ void SceneManager::createWindow2D(int width, int height, std::string name)
 
 	glutInitErrorFunc(mg_system::_internal::OnGlutError);
 	glutInitWarningFunc(mg_system::_internal::OnGlutWarning);
-	glutDisplayFunc([]() {SceneManager::getInstance().render(); });
+	glutDisplayFunc([]() {SceneManager::getInstance().render2D(); });
 	glutIdleFunc([]() {SceneManager::getInstance().onIdle(); });
 	glutKeyboardFunc([](unsigned char key, int, int) {SceneManager::getInstance().onKeyDown(key); });
 	glutKeyboardUpFunc([](unsigned char key, int, int) {SceneManager::getInstance().onKeyUp(key); });

@@ -8,14 +8,14 @@ class MainMenuScene :
 private:
 	static Font* largeFont;// ("font_72.fnt");
 	static Font* smallFont;// ("Font_0.fnt");
-	int width, height;
 
 public:
-	MainMenuScene(int width, int height);
+	MainMenuScene();
 	~MainMenuScene();
 	
 	// Inherited via IScene
-	virtual void render() override;
+	virtual void render3D() override;
+	virtual void render2D() override;
 	virtual void onEnter() override;
 	virtual void onExit() override;
 	virtual void update() override;

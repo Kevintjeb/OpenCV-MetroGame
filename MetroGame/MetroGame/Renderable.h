@@ -4,7 +4,8 @@
 #include "Model.h"
 #include <string>
 
-namespace mg_gameLogic
+namespace mg_
+
 {
 	class Renderable
 	{

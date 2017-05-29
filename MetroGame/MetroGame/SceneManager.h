@@ -7,9 +7,10 @@ class IScene;
 class SceneManager
 {
 public:
-	void loadScene(IScene &);
+	void loadScene(IScene *);
 	IScene& getCurrentScene();
-	void render();
+	void render3D();
+	void render2D();
 	int getWidth();
 	int getHeight();
 	void createWindow3D(int, int, std::string);

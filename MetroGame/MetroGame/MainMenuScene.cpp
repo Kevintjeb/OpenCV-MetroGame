@@ -6,11 +6,8 @@
 Font* MainMenuScene::largeFont = nullptr;
 Font* MainMenuScene::smallFont = nullptr;
 
-MainMenuScene::MainMenuScene(int w, int h)
+MainMenuScene::MainMenuScene()
 {
-	this->width = w;
-	this->height = h;
-
 	if(!largeFont)
 		largeFont = new Font("font_72.fnt");
 	if(!smallFont)
@@ -21,7 +18,7 @@ MainMenuScene::~MainMenuScene()
 {
 }
 
-void MainMenuScene::render() {
+void MainMenuScene::render3D() {
 
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -42,16 +39,33 @@ void MainMenuScene::render() {
 	glEnable(GL_DEPTH_TEST);
 }
 
+void MainMenuScene::render2D()
+{
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, width, height, 0, -100, 100);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glDisable(GL_DEPTH_TEST);
+
+	glColor4f(0, 0, 0, 1);
+	largeFont->drawText("2D view", width / 2 - largeFont->textLength("2D view") / 2, height / 2);
+	glEnable(GL_DEPTH_TEST);
+}
+
 void MainMenuScene::onEnter() {
 	//Do some onEnter stuff, maybe intro animation?
+	this->width = SceneManager::getInstance().getWidth();
+	this->height = SceneManager::getInstance().getHeight();
 	std::cout << "Entered MainMenuScene" << std::endl;
 }
 
 void MainMenuScene::update()
 {
-	this->width = SceneManager::getInstance().getWidth();
-	this->height = SceneManager::getInstance().getHeight();
-
 	std::cout << "Update MainMenuScene" << std::endl;
 }
 
@@ -64,7 +78,7 @@ void MainMenuScene::onKeyUP(unsigned char key)
 {
 	std::cout << "onKeyUp GameScene" << std::endl;
 	if (key == 'q') {
-		SceneManager::getInstance().loadScene(*new GameScene());
+		SceneManager::getInstance().loadScene(new GameScene());
 	}
 	if (key == 27) {
 		exit(0);

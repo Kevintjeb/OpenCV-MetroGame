@@ -11,7 +11,7 @@ GameScene::~GameScene()
 {
 }
 
-void GameScene::render()
+void GameScene::render3D()
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -65,7 +65,44 @@ void GameScene::render()
 	glVertex3f(50, 3, 50);
 	glEnd();
 
-	std::cout << "Rendering" << std::endl;
+	
+}
+
+void GameScene::render2D() {
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(90.0f, 800 / (float)600, 0.1f, 200000);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glMatrixMode(GL_MODELVIEW);
+
+	glLoadIdentity();
+	gluLookAt(100, 100, 100,
+		0, 0, 0,
+		0, 1, 0);
+
+	glBegin(GL_QUADS);
+
+	glColor4f(0.6f, 0.2f, 0.2f, 1.0f);
+
+	glVertex3f(0, 3, 0);
+	glVertex3f(0, 0, 0);
+	glVertex3f(50, 0, 50);
+	glVertex3f(50, 3, 50);
+
+	glVertex3f(0, 3, 100);
+	glVertex3f(0, 0, 100);
+	glVertex3f(-50, 0, 50);
+	glVertex3f(-50, 3, 50);
+
+	glVertex3f(0, 3, 100);
+	glVertex3f(0, 0, 100);
+	glVertex3f(50, 0, 50);
+	glVertex3f(50, 3, 50);
+	glEnd();
+
 }
 
 void GameScene::update()
@@ -87,7 +124,7 @@ void GameScene::onKeyUP(unsigned char key)
 {
 	std::cout << "onKeyUp GameScene" << std::endl;
 	if (key == 'q') {
-		SceneManager::getInstance().loadScene(*new MainMenuScene(800, 600));
+		SceneManager::getInstance().loadScene(new MainMenuScene());
 	}
 }
 

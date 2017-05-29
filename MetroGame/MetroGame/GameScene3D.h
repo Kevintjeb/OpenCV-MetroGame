@@ -8,7 +8,8 @@ public:
 	~GameScene3D();
 
 	// Inherited via IScene
-	virtual void render() override;
+	virtual void render2D() override;
+	virtual void render3D() override;
 	virtual void update() override;
 	virtual void onEnter() override;
 	virtual void onExit() override;
