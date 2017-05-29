@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Renderable.h"
 #include "Line.h"
@@ -29,6 +29,9 @@ namespace mg_gameLogic
 
 		inline Vec2f pos2d_from_pos(float pos);
 		inline float checkAndSetPosRange(float pos);
+
+		// return: position and the position's distance
+		// error : [-∞, -∞], -∞
 		inline std::tuple<Vec2f, float> findComplementaryPositionAndDistance(float pos);
 
 	public:
