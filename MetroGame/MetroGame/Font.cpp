@@ -108,16 +108,16 @@ Font::Font(const string & source)
 			glyphs[glyph.id] = glyph;
 			glNewList(listBase + glyph.id, GL_COMPILE);
 			glBegin(GL_QUADS);
-			glTexCoord2f((glyph.x + 0) / (float)texture->width, (glyph.y + 0) / (float)texture->height);
+			glTexCoord2f((glyph.x + 0) / (float)texture->width, 1-(glyph.y + 0) / (float)texture->height);
 			glVertex2f(glyph.xoffset + 0,				glyph.yoffset + 0);
 
-			glTexCoord2f((glyph.x + glyph.width) / (float)texture->width, (glyph.y + 0) / (float)texture->height);
+			glTexCoord2f((glyph.x + glyph.width) / (float)texture->width, 1 - (glyph.y + 0) / (float)texture->height);
 			glVertex2f(glyph.xoffset + glyph.width,		glyph.yoffset + 0);
 
-			glTexCoord2f((glyph.x + glyph.width) / (float)texture->width, (glyph.y + glyph.height) / (float)texture->height);
+			glTexCoord2f((glyph.x + glyph.width) / (float)texture->width, 1 - (glyph.y + glyph.height) / (float)texture->height);
 			glVertex2f(glyph.xoffset + glyph.width,		glyph.yoffset + glyph.height);
 
-			glTexCoord2f((glyph.x + 0) / (float)texture->width, (glyph.y + glyph.height) / (float)texture->height);
+			glTexCoord2f((glyph.x + 0) / (float)texture->width, 1 - (glyph.y + glyph.height) / (float)texture->height);
 			glVertex2f(glyph.xoffset + 0,				glyph.yoffset + glyph.height);
 
 			glEnd();
@@ -151,6 +151,8 @@ void Font::drawText(const string &text)
 	glListBase(listBase);
 	glCallLists(text.size(), GL_UNSIGNED_BYTE, text.c_str());
 	glListBase(0);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
 }
 
 
@@ -166,6 +168,8 @@ void Font::drawText(const string &text, int x, int y)
 	glCallLists(text.size(), GL_UNSIGNED_BYTE, text.c_str());
 	glListBase(0);
 	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
 }
 
 Font::~Font()

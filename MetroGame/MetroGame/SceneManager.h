@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+#include "GL/freeglut.h"
 
 class IScene;
 
@@ -8,6 +10,10 @@ public:
 	void loadScene(IScene &);
 	IScene& getCurrentScene();
 	void render();
+	int getWidth();
+	int getHeight();
+	void createWindow3D(int, int, std::string);
+	void createWindow2D(int, int, std::string);
 	void tick();
 	void onKeyUp(unsigned char);
 	void onKeyDown(unsigned char);
@@ -19,6 +25,8 @@ public:
 	static SceneManager& getInstance();
 
 private:
+	int width, height;
+	GLuint windowID;
 	bool isInit = false;
 	SceneManager(const SceneManager&);
 	SceneManager();

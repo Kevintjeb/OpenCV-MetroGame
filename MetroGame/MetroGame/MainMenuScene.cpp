@@ -15,9 +15,7 @@ MainMenuScene::MainMenuScene(int w, int h)
 		largeFont = new Font("font_72.fnt");
 	if(!smallFont)
 		smallFont = new Font("font_0.fnt");
-
 }
-
 
 MainMenuScene::~MainMenuScene()
 {
@@ -25,21 +23,23 @@ MainMenuScene::~MainMenuScene()
 
 void MainMenuScene::render() {
 
-	glClearColor(0.6f, 0.6f, 1, 1);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, width, height, 0, -100, 100);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glColor4f(1, 1, 1, 1);
 	glDisable(GL_DEPTH_TEST);
 	
+	glColor4f(0, 0, 0, 1);
 	largeFont->drawText("Main Menu", width / 2 - largeFont->textLength("Main Menu") / 2, height / 3);
 	smallFont->drawText("Play", width / 2 - smallFont->textLength("Play") / 2, height / 2);
 	smallFont->drawText("Exit", width / 2 - smallFont->textLength("Exit") / 2, height / 2 + 50);
-	glutSwapBuffers();
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void MainMenuScene::onEnter() {
@@ -49,6 +49,9 @@ void MainMenuScene::onEnter() {
 
 void MainMenuScene::update()
 {
+	this->width = SceneManager::getInstance().getWidth();
+	this->height = SceneManager::getInstance().getHeight();
+
 	std::cout << "Update MainMenuScene" << std::endl;
 }
 
@@ -86,5 +89,6 @@ void MainMenuScene::onExit() {
 }
 
 void MainMenuScene::reshapeFunc(int w, int h) {
-	glViewport(0, 0, w, h);
+	width = w;
+	height = h;
 }

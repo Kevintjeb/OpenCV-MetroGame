@@ -11,7 +11,7 @@ namespace mg_system
 
 	void redraw();
 
-	GLuint initWindow(std::string name, int width, int height, void(* renderer)());
+	//GLuint initWindow(std::string name, int width, int height, void(* renderer)());
 
 	namespace _internal
 	{

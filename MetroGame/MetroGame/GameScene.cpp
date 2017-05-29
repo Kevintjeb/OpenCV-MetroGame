@@ -65,7 +65,7 @@ void GameScene::render()
 	glVertex3f(50, 3, 50);
 	glEnd();
 
-	glutSwapBuffers();
+	std::cout << "Rendering" << std::endl;
 }
 
 void GameScene::update()

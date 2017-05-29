@@ -175,31 +175,30 @@ void prepareModel(std::string modelPath)
 	modelLoader.insertModel(modelPath);
 	modelsMap.insert(std::pair<std::string, int>(modelPath, modelsMap.size()));
 }
-
-void mg_system::_internal::RenderInit()
-{
-	ZeroMemory(keys, sizeof(keys));
-	WindowID2 = initWindow("2D Panel", WIDTH, HEIGHT, OnDisplay2D);
-	WindowID1 = initWindow("3D Panel", WIDTH, HEIGHT, OnDisplay3D);
-
-	//init planes
-	initTopPlane();
-	initGroundPlane();
-
-	//init textures
-	//loadTexture("textures/dirt.png"); -> Texture.cpp
-	textures.push_back(new Texture("textures/dirt.png"));
-
-	//load models
-	prepareModel("models/steve/steve.obj");
-	prepareModel("models/Metro/metro.obj");
-	prepareModel("models/city/city.obj");
-
-	//createdummyRenderable
-	createDummyRenderableList();
-
-	glClearColor(0, 0, 0, 1);
-}
+//
+//void mg_system::_internal::RenderInit()
+//{
+//	ZeroMemory(keys, sizeof(keys));
+//	WindowID1 = initWindow("3D Panel", WIDTH, HEIGHT, OnDisplay3D);
+//
+//	//init planes
+//	initTopPlane();
+//	initGroundPlane();
+//
+//	//init textures
+//	//loadTexture("textures/dirt.png"); -> Texture.cpp
+//	textures.push_back(new Texture("textures/dirt.png"));
+//
+//	//load models
+//	prepareModel("models/steve/steve.obj");
+//	prepareModel("models/Metro/metro.obj");
+//	prepareModel("models/city/city.obj");
+//
+//	//createdummyRenderable
+//	createDummyRenderableList();
+//
+//	glClearColor(0, 0, 0, 1);
+//}
 
 void drawTopPlane() {
 	glBegin(GL_QUADS);

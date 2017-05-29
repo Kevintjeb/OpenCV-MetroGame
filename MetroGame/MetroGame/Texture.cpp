@@ -5,14 +5,8 @@
 Texture::Texture(const string &filename)
 {
 	int bpp2;
-	string f = "font";
-	if (!filename.find(f) != std::string::npos)
-	{
-		stbi_set_flip_vertically_on_load(1);
-	}
-	else {
-		stbi_set_flip_vertically_on_load(0);
-	}
+
+	stbi_set_flip_vertically_on_load(1);
 
 	unsigned char* imgData = stbi_load(filename.c_str(), &width, &height, &bpp2, 4);
 
