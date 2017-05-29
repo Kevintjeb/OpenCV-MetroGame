@@ -147,11 +147,17 @@
   <ItemGroup>
     <ClCompile Include="errors.cpp" />
     <ClCompile Include="gameLogic.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenuScene.cpp" />
     <ClCompile Include="Main_old.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="ObjModel.cpp" />
     <ClCompile Include="Renderable.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="IScene.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vec.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="system.cpp" />
@@ -162,11 +168,16 @@
     <ClInclude Include="freeglut\include\GL\freeglut_ext.h" />
     <ClInclude Include="freeglut\include\GL\freeglut_std.h" />
     <ClInclude Include="freeglut\include\GL\glut.h" />
+    <ClInclude Include="GameScene.h" />
+    <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ObjModel.h" />
     <ClInclude Include="Renderable.h" />
+    <ClInclude Include="IScene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vec.h" />
     <ClInclude Include="system.h" />

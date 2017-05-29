@@ -4,8 +4,6 @@
 #include <string>
 #include <GL\freeglut.h>
 
-
-
 namespace mg_system
 {
 	void init(int &argc, char **argv);

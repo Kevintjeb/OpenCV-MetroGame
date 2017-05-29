@@ -2,14 +2,14 @@
 
 #include <GL/freeglut.h>
 #include "ModelLoader.h"
-
-extern bool shiftActive;
+#include "SceneManager.h"
 
 void mg_system::init(int &argc, char **argv)
 {
 	mg_system::_internal::freeglutInit(argc, argv);
 	mg_system::_internal::RenderInit();
 	mg_system::_internal::GameInit();
+	SceneManager::getInstance().init();
 }
 
 void mg_system::_internal::freeglutInit(int& argc, char **argv)
@@ -26,22 +26,20 @@ GLuint mg_system::initWindow(std::string name, int width, int height, void (*ren
 
 	glutInitErrorFunc(mg_system::_internal::OnGlutError);
 	glutInitWarningFunc(mg_system::_internal::OnGlutWarning);
-	glutDisplayFunc(renderer);
-	glutIdleFunc(mg_system::_internal::OnIdle);
-	glutKeyboardFunc([](unsigned char key, int, int) {mg_system::_internal::OnKey(key); });
-	glutKeyboardUpFunc([](unsigned char key, int, int) {mg_system::_internal::OnKeyUp(key); });
+	glutDisplayFunc([]() {SceneManager::getInstance().render();});
+	glutIdleFunc([]() {SceneManager::getInstance().onIdle(); });
+	glutKeyboardFunc([](unsigned char key, int, int) {SceneManager::getInstance().onKeyDown(key); });
+	glutKeyboardUpFunc([](unsigned char key, int, int) {SceneManager::getInstance().onKeyUp(key); });
+	glutReshapeFunc([](int w, int h) {SceneManager::getInstance().reshapeFunc(w, h); });
+
 	glutSpecialFunc([](int key, int, int)
 	{
-		if (key == 112) {
-			shiftActive = true;
-		}
+		SceneManager::getInstance().onSpecialFunc(key);
 	});
 
 	glutSpecialUpFunc([](int key, int, int)
 	{
-		if (key == 112) {
-			shiftActive = false;
-		}
+		SceneManager::getInstance().onSpecialUpFunc(key);
 	});
 
 	return window_id;

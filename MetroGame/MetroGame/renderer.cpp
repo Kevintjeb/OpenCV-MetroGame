@@ -12,7 +12,6 @@
 
 #include "Model.h"
 #include "Texture.h"
-
 #include "stb_image.h"
 
 #define WIDTH 600
@@ -41,9 +40,9 @@ struct Camera
 	float height = 41.07;
 } camera;
 
-std::vector < VertexClass> TopPlane;
-std::vector < VertexClass> GroundPlane;
-std::vector<GLuint> textureIDs;
+std::vector<VertexClass> TopPlane;
+std::vector<VertexClass> GroundPlane;
+std::vector<Texture*> textures;
 std::vector<Renderable> renderables;
 
 void createDummyRenderableList()
@@ -68,33 +67,6 @@ void createDummyRenderableList()
 	Vec3f scale3 = Vec3f(2.0f, 2.0f, 2.0f);
 	std::string model3 = "models/Metro/metro.obj";
 	renderables.push_back(Renderable(pos3, rot3, angle3,  scale3, model3));
-}
-
-void loadTexture(std::string filepath)
-{
-	int width2, height2, bpp2;
-
-
-	stbi_set_flip_vertically_on_load(1);
-	unsigned char* imgData = stbi_load(filepath.c_str(), &width2, &height2, &bpp2, 4);
-
-	GLuint textureId;
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	textureIDs.push_back(textureId);
-
-	glTexImage2D(GL_TEXTURE_2D,
-		0,
-		GL_RGBA,
-		width2,
-		height2,
-		0,
-		GL_RGBA,
-		GL_UNSIGNED_BYTE,
-		imgData);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	stbi_image_free(imgData);
 }
 
 void initTopPlane()
@@ -215,7 +187,8 @@ void mg_system::_internal::RenderInit()
 	initGroundPlane();
 
 	//init textures
-	loadTexture("textures/dirt.png");
+	//loadTexture("textures/dirt.png"); -> Texture.cpp
+	textures.push_back(new Texture("textures/dirt.png"));
 
 	//load models
 	prepareModel("models/steve/steve.obj");
@@ -458,7 +431,8 @@ void mg_system::_internal::OnDisplay3D()
 
 	//drawVertexArray(TopPlane);
 
-	glBindTexture(GL_TEXTURE_2D, textureIDs.at(DIRT));
+	//glBindTexture(GL_TEXTURE_2D, textureIDs.at(DIRT)); -> Texture class.
+	textures.at(0)->Bind(); // or textures[0]->Bind();
 	glEnable(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
