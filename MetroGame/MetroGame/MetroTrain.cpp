@@ -56,14 +56,62 @@ MetroTrain::MetroTrain(const Line& line, float init_pos, State state, int size) 
 {
 	
 }
-
-float mg_gameLogic::MetroTrain::getSpeed()
+float totalTimeSpend = 0;
+float speeddif = 0;
+int stopState = 0;
+int oldIndex = -1;
+float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 {
-	return speed;
+
+	int index = line.getIndexByPosition(line_pos);
+	totalTimeSpend += elapsedTime;
+	for (pair<int, MetroStation> p : line.getStationPosistion())
+	{
+		int pcompare = p.first - (state == State::FORWARD ? 1 : 2);
+		if ((pcompare == index /*|| (p.first+1)==index*/)&& stopState==0 && oldIndex != index)
+		{
+			speeddif = 0.01;
+		
+			if (speed > 0) {
+				speed -= speeddif;
+			}
+			
+			totalTimeSpend = 0;
+		}
+		if (speed < 0) {
+			totalTimeSpend = 0;
+			stopState = 1;
+			oldIndex = index;
+			speed = 0; }
+		if (totalTimeSpend > 3) 
+		{
+			stopState = 2;
+		}
+		if ( stopState ==2)
+		{
+				speeddif = 0.1;
+				if (speed <= 0.5f) 
+				{
+					speed += speeddif;
+				}
+		}
+		if (speed >= 0.5f) 
+		{
+			stopState = 0;
+			speed = 0.5f;
+		}
+		if (index != pcompare) 
+		{
+			oldIndex = -1;
+		}
+		
+	}
+	return speed*elapsedTime;
 }
 
 void MetroTrain::Recalculate(float elapsedTime)
 {
+
 	// ensuring we have the correct size
 	if (trains.size() < size) // if we have to little trains
 	{
@@ -80,7 +128,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 		}
 	}
 
-	line_pos += elapsedTime*getSpeed() * (state == State::FORWARD ? 1 : -1);
+	line_pos += getSpeed(elapsedTime) * (state == State::FORWARD ? 1 : -1);
 
 	line_pos = checkAndSetPosRange(line_pos);
 

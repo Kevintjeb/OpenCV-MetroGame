@@ -8,7 +8,7 @@ using namespace std;
 mg_gameLogic::Line::Line(std::list<Vec2f> line, std::list<MetroStation> stations): positions(line.size()+stations.size()), distances(line.size() + stations.size()), metroStations(stations)
 {
 	for (MetroStation &station : stations) {
-		pair<float, MetroStation> currentStation =  make_pair(-1, station);
+		pair<int, MetroStation> currentStation =  make_pair(-1, station);
 		int i = 0;
 		float previousDistance =999999;
 		list<Vec2f>::iterator itr = line.begin();
@@ -18,12 +18,12 @@ mg_gameLogic::Line::Line(std::list<Vec2f> line, std::list<MetroStation> stations
 			if (v.distance(currentStation.second.position) < previousDistance)
 			{
 				itr = line.begin();
-				for (int j = 0; j < i; j++) 
+				for (int j = 0; j <= i; j++) 
 				{
 					itr++;
 				}
 				previousDistance = v.distance(currentStation.second.position);
-				currentStation.first = previousDistance;
+				currentStation.first = i;
 			}
 		}
 
@@ -86,10 +86,12 @@ int Line::getIndexByPosition(const float position) const
 	}
 }
 
-std::list<std::pair<float, MetroStation>> mg_gameLogic::Line::getStationPosistion()
+const std::list<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationPosistion() const
 {
 	return stationIndex;
 }
+
+
 
 const Vec2f& Line::operator[](int index) const
 {

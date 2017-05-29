@@ -32,12 +32,12 @@ namespace mg_gameLogic
 		inline std::tuple<Vec2f, float> findComplementaryPositionAndDistance(float pos);
 
 	public:
-		float speed = 1.0f;
+		float speed = .50f;
 		static constexpr int   max_size     = 16;
 		static constexpr float train_length = 10 / 100.0f;
 		
 		explicit MetroTrain(const Line& line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
-		float getSpeed();
+		float getSpeed(float);
 		void Recalculate(float elapsedTime);
 		int get_size() const;
 		void resize(int nsize);
