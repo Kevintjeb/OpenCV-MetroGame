@@ -87,7 +87,7 @@ void GameScene::onKeyUP(unsigned char key)
 {
 	std::cout << "onKeyUp GameScene" << std::endl;
 	if (key == 'q') {
-		SceneManager::getInstance().loadScene(*new MainMenuScene(800, 600));
+		SceneManager::getInstance().loadScene(*new MainMenuScene());
 	}
 }
 

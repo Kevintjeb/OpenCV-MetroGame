@@ -22,6 +22,9 @@
 #include "stb_image.h"
 #include "RenderableOutput.h"
 
+#include "SceneManager.h"
+#include "MainMenuScene.h"
+
 using namespace mg_system;
 using namespace mg_gameLogic;
 
@@ -37,8 +40,8 @@ std::map<std::string, int>::iterator it;
 
 
 GLuint window_db;
+Test test{};
 Renderable testTrain;
-
 
 int lastTime;
 float rotation;
@@ -687,6 +690,9 @@ void GameScene3D::onIdle()
 	if (keys['d']) move(180, deltaTime*speed);
 	if (keys['w']) move(90, deltaTime*speed);
 	if (keys['s']) move(270, deltaTime*speed);
+	if (keys['q']) {
+		SceneManager::getInstance().loadScene(*new MainMenuScene());
+	}
 
 	if (keys[' ']) camera.height -= 25 * deltaTime;
 	if (shiftActive) {

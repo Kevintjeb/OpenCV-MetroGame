@@ -6,11 +6,8 @@
 Font* MainMenuScene::largeFont = nullptr;
 Font* MainMenuScene::smallFont = nullptr;
 
-MainMenuScene::MainMenuScene(int w, int h)
+MainMenuScene::MainMenuScene()
 {
-	this->width = w;
-	this->height = h;
-
 	if(!largeFont)
 		largeFont = new Font("font_72.fnt");
 	if(!smallFont)
@@ -44,6 +41,8 @@ void MainMenuScene::render() {
 
 void MainMenuScene::onEnter() {
 	//Do some onEnter stuff, maybe intro animation?
+	this->width = SceneManager::getInstance().getWidth();
+	this->height = SceneManager::getInstance().getHeight();
 	std::cout << "Entered MainMenuScene" << std::endl;
 }
 

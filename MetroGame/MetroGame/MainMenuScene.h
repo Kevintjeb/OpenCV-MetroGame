@@ -11,7 +11,7 @@ private:
 	int width, height;
 
 public:
-	MainMenuScene(int width, int height);
+	MainMenuScene();
 	~MainMenuScene();
 	
 	// Inherited via IScene

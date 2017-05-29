@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "MainMenuScene.h"
 #include "GameScene.h"
+#include "GameScene3D.h"
 #include "system.h"
 
 SceneManager::SceneManager(const SceneManager &other)
@@ -22,7 +23,7 @@ void SceneManager::init() {
 		createWindow3D(800, 600, "3D window");
 		this->width = 800;
 		this->height = 600;
-		this->currentScene = new GameScene();
+		this->currentScene = new GameScene3D();
 		isInit = true;
 	}
 	else {
