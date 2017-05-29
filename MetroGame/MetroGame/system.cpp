@@ -1,5 +1,4 @@
 #include "system.h"
-
 #include <GL/freeglut.h>
 #include "ModelLoader.h"
 #include "SceneManager.h"
