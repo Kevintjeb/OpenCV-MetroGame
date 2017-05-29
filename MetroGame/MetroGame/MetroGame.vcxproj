@@ -148,6 +148,7 @@
     <ClCompile Include="errors.cpp" />
     <ClCompile Include="gameLogic.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="GameScene3D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuScene.cpp" />
     <ClCompile Include="Main_old.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="freeglut\include\GL\freeglut_std.h" />
     <ClInclude Include="freeglut\include\GL\glut.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="GameScene3D.h" />
     <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
