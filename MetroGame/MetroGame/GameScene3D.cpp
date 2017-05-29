@@ -42,6 +42,10 @@ std::map<std::string, int>::iterator it;
 GLuint window_db;
 Test test{};
 Renderable testTrain;
+Line *line;
+MetroTrain *train;
+
+int oldTime = -1;
 
 int lastTime;
 float rotation;
@@ -592,6 +596,10 @@ GameScene3D::GameScene3D()
 
 	//createdummyRenderable
 	createDummyRenderableList();
+
+	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
+	auto handle = mg_gameLogic::allocate_line(line);
+	train = new MetroTrain(*line);
 }
 
 
@@ -680,6 +688,13 @@ void GameScene3D::onKeyDown(unsigned char key)
 
 void GameScene3D::onIdle()
 {
+	int newTime = glutGet(GLUT_ELAPSED_TIME);
+	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
+	oldTime = newTime;
+
+	train->Recalculate(deltaTime2 / 1000.0f);
+
+
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	float deltaTime = (currentTime - lastTime) / 1000.0f;
 	lastTime = currentTime;
