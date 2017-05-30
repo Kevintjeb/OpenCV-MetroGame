@@ -57,6 +57,10 @@ MetroTrain::MetroTrain(const Line& line, float init_pos, State state, int size) 
 	
 }
 
+MetroTrain::~MetroTrain() {
+
+}
+
 void MetroTrain::Recalculate(float elapsedTime)
 {
 	// ensuring we have the correct size

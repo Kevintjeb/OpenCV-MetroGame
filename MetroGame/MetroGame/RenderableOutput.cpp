@@ -18,6 +18,12 @@ LinePointer mg_gameLogic::allocate_line(Line* line)
 	return std::prev(lines.end());
 }
 
+void mg_gameLogic::clear_renderables() {
+	renderables.clear();
+	lines.clear();
+}
+
+
 void mg_gameLogic::deallocate_renderable(RenderablePointer renderable)
 {
 	renderables.erase(renderable);

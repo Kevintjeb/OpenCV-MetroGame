@@ -1,10 +1,11 @@
 #include "MainMenuScene.h"
 #include <iostream>
 #include "SceneManager.h"
-#include "GameScene.h"
+#include "GameScene3D.h"
 
 Font* MainMenuScene::largeFont = nullptr;
 Font* MainMenuScene::smallFont = nullptr;
+
 
 MainMenuScene::MainMenuScene()
 {
@@ -32,9 +33,9 @@ void MainMenuScene::render3D() {
 	glDisable(GL_DEPTH_TEST);
 	
 	glColor4f(0, 0, 0, 1);
-	largeFont->drawText("Main Menu", width / 2 - largeFont->textLength("Main Menu") / 2, height / 3);
-	smallFont->drawText("Play", width / 2 - smallFont->textLength("Play") / 2, height / 2);
-	smallFont->drawText("Exit", width / 2 - smallFont->textLength("Exit") / 2, height / 2 + 50);
+	largeFont->drawText(mainString, width / 2 - largeFont->textLength(mainString) / 2, height / 3);
+	smallFont->drawText(startString, width / 2 - smallFont->textLength(startString) / 2, height / 2);
+	//smallFont->drawText("Exit", width / 2 - smallFont->textLength("Exit") / 2, height / 2 + 50);
 
 	glEnable(GL_DEPTH_TEST);
 }
@@ -76,17 +77,14 @@ void MainMenuScene::onIdle()
 
 void MainMenuScene::onKeyUP(unsigned char key)
 {
-	std::cout << "onKeyUp GameScene" << std::endl;
-	if (key == 'q') {
-		SceneManager::getInstance().loadScene(new GameScene());
-	}
-	if (key == 27) {
-		exit(0);
-	}
 }
 
-void MainMenuScene::onKeyDown(unsigned char)
+void MainMenuScene::onKeyDown(unsigned char key)
 {
+	if (key == 27)
+		exit(0);
+	else
+		SceneManager::getInstance().loadScene(new GameScene3D());
 }
 
 void MainMenuScene::onSpecialFunc(int)

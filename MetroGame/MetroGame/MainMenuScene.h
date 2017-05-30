@@ -8,6 +8,8 @@ class MainMenuScene :
 private:
 	static Font* largeFont;// ("font_72.fnt");
 	static Font* smallFont;// ("Font_0.fnt");
+	string startString = "Press any key to start!";
+	string mainString = "Main Menu";
 
 public:
 	MainMenuScene();

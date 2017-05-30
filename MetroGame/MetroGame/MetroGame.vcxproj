@@ -146,7 +146,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="errors.cpp" />
-    <ClCompile Include="gameLogic.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameScene3D.cpp" />
     <ClCompile Include="Line.cpp" />

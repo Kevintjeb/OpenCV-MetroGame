@@ -38,8 +38,9 @@ ModelLoader modelLoader;
 std::map<std::string, int> modelsMap;
 std::map<std::string, int>::iterator it;
 
-
 GLuint window_db;
+
+LinePointer handle;
 Test test{};
 Renderable testTrain;
 Line *line;
@@ -55,8 +56,6 @@ int speed = 25;
 bool keys[255];
 bool shiftActive = false;
 
-
-
 struct Camera
 {
 	float posX = 7.57;
@@ -66,18 +65,18 @@ struct Camera
 	float height = 41.07;
 } camera;
 
-std::vector < VertexClass> TopPlane;
-std::vector < VertexClass> GroundPlane;
-std::vector < VertexClass > metroLines;
-std::vector < std::pair<int, int>> metroLinesPosition;
-std::vector<GLuint> textureIDs;
+std::vector <VertexClass> TopPlane;
+std::vector <VertexClass> GroundPlane;
+std::vector <VertexClass> metroLines;
+std::vector <std::pair<int, int>> metroLinesPosition;
+std::vector<Texture> textures;
+std::vector<RenderablePointer> renderablePointers;
 
 float randScale(float standScale)
 {
 	standScale += 0.1f;
 
 	float randNum = 0 + (rand() % (int)(10 - 0 + 1));
-	cout << randNum << endl;
 	float scale = (randNum / 10.0f) * standScale;
 	return scale;
 }
@@ -100,14 +99,14 @@ void createDummyRenderableList()
 		case 0:
 			pos = Vec3f(0.0f, 4.0f, 100.0f);
 			scale = Vec3f(standScale, randScale(standScale), standScale);
-			mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+			renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			break;
 		case 1:
 			for (float x = 25.0f; x > -26.0f; x -= 50.0f)
 			{
 				pos = Vec3f(x, 4.0f, z);
 				scale = Vec3f(standScale, randScale(standScale), standScale);
-				mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 2:
@@ -115,7 +114,7 @@ void createDummyRenderableList()
 			{
 				pos = Vec3f(x, 4.0f, z);
 				scale = Vec3f(standScale, randScale(standScale), standScale);
-				mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 3:
@@ -123,7 +122,7 @@ void createDummyRenderableList()
 			{
 				pos = Vec3f(x, 4.0f, z);
 				scale = Vec3f(standScale, randScale(standScale), standScale);
-				mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 4:
@@ -131,7 +130,7 @@ void createDummyRenderableList()
 			{
 				pos = Vec3f(x, 4.0f, z);
 				scale = Vec3f(standScale, randScale(standScale), standScale);
-				mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 5:
@@ -139,13 +138,13 @@ void createDummyRenderableList()
 			{
 				pos = Vec3f(x, 4.0f, z);
 				scale = Vec3f(standScale, randScale(standScale), standScale);
-				mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 6:
 			pos = Vec3f(0.0f, 4.0f, -50.0f);
 			scale = Vec3f(standScale, randScale(standScale), standScale);
-			mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale));
+			renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			break;
 
 		default:
@@ -154,33 +153,6 @@ void createDummyRenderableList()
 
 		layer++;
 	}
-}
-
-void loadTexture(std::string filepath)
-{
-	int width2, height2, bpp2;
-
-
-	stbi_set_flip_vertically_on_load(1);
-	unsigned char* imgData = stbi_load(filepath.c_str(), &width2, &height2, &bpp2, 4);
-
-	GLuint textureId;
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	textureIDs.push_back(textureId);
-
-	glTexImage2D(GL_TEXTURE_2D,
-		0,
-		GL_RGBA,
-		width2,
-		height2,
-		0,
-		GL_RGBA,
-		GL_UNSIGNED_BYTE,
-		imgData);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	stbi_image_free(imgData);
 }
 
 void initTopPlane()
@@ -586,7 +558,7 @@ GameScene3D::GameScene3D()
 	initGroundPlane();
 
 	//init textures
-	loadTexture("textures/dirt.png");
+	textures.push_back(Texture("textures/dirt.png"));
 
 	//load models
 	prepareModel("models/steve/steve.obj");
@@ -598,8 +570,8 @@ GameScene3D::GameScene3D()
 	createDummyRenderableList();
 
 	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
-	auto handle = mg_gameLogic::allocate_line(line);
 	train = new MetroTrain(*line);
+	handle = mg_gameLogic::allocate_line(line);
 }
 
 
@@ -636,8 +608,7 @@ void GameScene3D::render3D()
 	glTranslatef(0, 0, -50);
 
 	//drawVertexArray(TopPlane);
-
-	glBindTexture(GL_TEXTURE_2D, textureIDs.at(0));
+	textures[0].Bind();
 	glEnable(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -656,7 +627,6 @@ void GameScene3D::render3D()
 	drawRails();
 
 	glPopMatrix();
-
 	//drawRenderable
 	drawRenderables();
 }
@@ -706,9 +676,22 @@ void GameScene3D::onEnter()
 {
 }
 
+void setAllKeysFalse() {
+	for (size_t i = 0; i < 255; i++)
+	{
+		if (keys[i])
+			keys[i] = false;
+	}
+}
+
 void GameScene3D::onExit()
 {
+	delete train;
+	delete line;
+	setAllKeysFalse();
+	clear_renderables();
 }
+
 
 void GameScene3D::onKeyUP(unsigned char key)
 {
@@ -743,7 +726,7 @@ void GameScene3D::onIdle()
 	if (keys['w']) move(90, deltaTime*speed);
 	if (keys['s']) move(270, deltaTime*speed);
 	if (keys['q']) {
-		SceneManager::getInstance().loadScene(*new MainMenuScene());
+		SceneManager::getInstance().loadScene(new MainMenuScene());
 	}
 
 	if (keys[' ']) camera.height -= 25 * deltaTime;
