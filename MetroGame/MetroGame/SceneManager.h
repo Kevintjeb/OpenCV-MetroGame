@@ -9,18 +9,8 @@ class SceneManager
 public:
 	void loadScene(IScene *);
 	IScene& getCurrentScene();
-	void render3D();
-	void render2D();
 	int getWidth();
 	int getHeight();
-	void createWindow(int, int, std::string, void(* callback)());
-	void tick();
-	void onKeyUp(unsigned char);
-	void onKeyDown(unsigned char);
-	void onIdle();
-	void onSpecialFunc(int key);
-	void onSpecialUpFunc(int key);
-	void reshapeFunc(int, int);
 	void init();
 	static SceneManager& getInstance();
 
@@ -31,6 +21,16 @@ private:
 	SceneManager(const SceneManager&);
 	SceneManager();
 	~SceneManager();
+	void onKeyUp(unsigned char);
+	void onKeyDown(unsigned char);
+	void onIdle();
+	void onSpecialFunc(int key);
+	void onSpecialUpFunc(int key);
+	void reshapeFunc(int, int);
+	void createWindow(int, int, std::string, void(*callback)());
+	void render3D();
+	void render2D();
+	void tick();
 	IScene* currentScene;
 };
 
