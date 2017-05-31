@@ -361,6 +361,11 @@ void drawRenderables()
 {
 	for (Renderable &renderable : mg_gameLogic::get_renderables())
 	{
+
+		if (renderable.model != "models/city/city.obj")
+		{
+			glRotatef(45, 0, 1, 0);
+		}
 		glPushMatrix();
 
 		//zorgen dat het object met de wereld mee draait
@@ -616,6 +621,7 @@ void GameScene3D::render3D()
 
 	//translation for drawing rails correct
 	glTranslatef(0, 0, 50);
+	glRotatef(45, 0, 1, 0);
 
 	//draw rails
 	glLineWidth(1.5);
