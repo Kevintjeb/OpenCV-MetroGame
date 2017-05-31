@@ -11,11 +11,11 @@ namespace mg_gameLogic
 	public:
 		Vec3f position, rotation, scale;
 		float angle;
-		Model model;
+		std::string model;
 
 		Renderable();
 		Renderable(const Renderable&);
-		Renderable(Model model, Vec3f pos, float angle, Vec3f rot, Vec3f scale = Vec3f(1, 1, 1));
+		Renderable(std::string model, Vec3f pos, float angle, Vec3f rot, Vec3f scale = Vec3f(1, 1, 1));
 		~Renderable();
 	};
 }

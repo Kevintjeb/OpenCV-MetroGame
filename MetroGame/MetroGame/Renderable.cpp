@@ -2,7 +2,7 @@
 
 using namespace mg_gameLogic;
 
-Renderable::Renderable() : model(METRO), position(Vec3f()), rotation(Vec3f()), scale(Vec3f())
+Renderable::Renderable() : model("models/Metro/metro.obj"), position(Vec3f()), rotation(Vec3f()), scale(Vec3f())
 {
 
 }
@@ -13,7 +13,7 @@ Renderable::Renderable(const Renderable& render) : model(render.model), angle(re
 }
 
 
-Renderable::Renderable(Model model, Vec3f pos ,float angle, Vec3f rot, Vec3f scale) : model(model), position(pos), rotation(rot), scale(scale), angle(angle)
+Renderable::Renderable(std::string model, Vec3f pos ,float angle, Vec3f rot, Vec3f scale) : model(model), position(pos), rotation(rot), scale(scale), angle(angle)
 {
 }
 

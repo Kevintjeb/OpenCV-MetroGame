@@ -3,7 +3,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 /**
@@ -235,18 +234,12 @@ void ObjModel::createDisplayList()
 	glTexCoordPointer(2, GL_FLOAT, sizeof(VertexClass), ((float*)verts.data()) + 6);
 	glNormalPointer(GL_FLOAT, sizeof(VertexClass), ((float*)verts.data()) + 3);
 	glVertexPointer(3, GL_FLOAT, sizeof(VertexClass), ((float*)verts.data()) + 0);
-
-	//foreach group in groups
-	//  set material
-	//  foreach face in group
-	//    foreach vertex in face
-	//      emit vertex
+	
 	for (auto &g : groups)
 	{
 		//set material
-
 		auto material = materials[g->materialIndex];
-		material->texture->bind();
+		material->texture->Bind();
 		glEnable(GL_TEXTURE_2D);
 		glDrawArrays(GL_TRIANGLES, g->beginIndex, g->eindIndex);
 	}
@@ -344,34 +337,4 @@ ObjModel::MaterialInfo::MaterialInfo()
 {
 	texture = NULL;
 }
-
-Texture::Texture(const std::string filename)
-{
-	int width2, height2, bpp2;
-
-	stbi_set_flip_vertically_on_load(1);
-	unsigned char* imgData = stbi_load(filename.c_str(), &width2, &height2, &bpp2, 4);
-
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
-
-	glTexImage2D(GL_TEXTURE_2D,
-		0,
-		GL_RGBA,
-		width2,
-		height2,
-		0,
-		GL_RGBA,
-		GL_UNSIGNED_BYTE,
-		imgData);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	stbi_image_free(imgData);
-}
-
-void Texture::bind()
-{
-	glBindTexture(GL_TEXTURE_2D, textureId);
-}
-
-
+	

@@ -3,19 +3,11 @@
 #include <string>
 #include <vector>
 #include <list>
-
+#include "texture.h"
 #include <windows.h>
 #include <gl/GL.h>
 #include "Vect.h"
 #include "VertexClass.h"
-
-class Texture
-{
-	public:
-		GLuint textureId;
-		Texture(const std::string filename);
-		void bind();
-};
 
 class ObjModel
 {
