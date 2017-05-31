@@ -21,5 +21,6 @@ MetroStation::~MetroStation()
 
 void mg_gameLogic::MetroStation::setPosition(Vec2f pos)
 {
+	position = pos;
 	pointer->position = Vec3f(pos.x*50,-92,pos.y*50);
 }
