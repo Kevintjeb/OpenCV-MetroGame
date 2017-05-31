@@ -13,7 +13,8 @@ RedenderablePointer mg_gameLogic::allocate_renderable(Renderable& renderable)
 
 void mg_gameLogic::deallocate_renderable(RedenderablePointer renderable)
 {
-	renderables.erase(renderable);
+		renderables.erase(renderable);
+	
 }
 
 list<Renderable>& mg_gameLogic::get_renderables()

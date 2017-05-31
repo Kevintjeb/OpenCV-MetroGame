@@ -1,12 +1,37 @@
 #include "Line.h"
+#include "Renderable.h"
+#include "MetroStation.h"
 
 using namespace mg_gameLogic;
 using namespace std;
 
-Line::Line(list<Vec2f> line) : positions(line.size()), distances(line.size())
+mg_gameLogic::Line::Line(std::list<Vec2f> line, std::list<MetroStation> stations): positions(line.size()+stations.size()), distances(line.size() + stations.size()), metroStations(stations)
 {
-	int index = 0;
+	for (MetroStation &station : stations) {
+		pair<int, MetroStation> currentStation =  make_pair(-1, station);
+		int i = 0;
+		float previousDistance =999999;
+		list<Vec2f>::iterator itr = line.begin();
+		for (Vec2f &v: line)
+		{
+			i++;
+			if (v.distance(currentStation.second.position) < previousDistance)
+			{
+				itr = line.begin();
+				for (int j = 0; j <= i; j++) 
+				{
+					itr++;
+				}
+				previousDistance = v.distance(currentStation.second.position);
+				currentStation.first = i;
+			}
+		}
 
+		line.insert(itr, currentStation.second.position);
+		stationIndex.push_back(currentStation);
+	}
+
+	int index = 0;
 	// we itterate over all points in the line
 	for (Vec2f &v : line)
 	{
@@ -17,7 +42,7 @@ Line::Line(list<Vec2f> line) : positions(line.size()), distances(line.size())
 			distances[index] = distances[index - 1] + v.distance(positions[index - 1]);
 		}
 		else
-			// we are the first point so our distance is 0
+			//then we  are the first point so our distance is 0
 			distances[index] = 0;
 		index++;
 	}
@@ -60,6 +85,13 @@ int Line::getIndexByPosition(const float position) const
 		else return m;
 	}
 }
+
+const std::list<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationPosistion() const
+{
+	return stationIndex;
+}
+
+
 
 const Vec2f& Line::operator[](int index) const
 {
