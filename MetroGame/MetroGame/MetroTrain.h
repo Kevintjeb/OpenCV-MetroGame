@@ -20,9 +20,13 @@ namespace mg_gameLogic
 		};
 
 	private:
-		Line& line;
+		Line *line;
 		float line_pos;
 		State state;
+		float totalTimeSpend = 0;
+		float speeddif = 0;
+		int stopState = 0;	//0= normaal rijden // 1 = gestopt // 2 = optrekken 
+		int oldIndex = -1;  //zorgt voor de eerste check zodat niet meerdere keren stopt.
 
 		std::vector<RedenderablePointer> trains;
 		int size;
@@ -39,11 +43,11 @@ namespace mg_gameLogic
 		static constexpr int   max_size     = 16;
 		static constexpr float train_length = 0.25f;
 		
-		explicit MetroTrain(Line& line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
+		explicit MetroTrain(Line* line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
 		float getSpeed(float);
 		void Recalculate(float elapsedTime);
 		int get_size() const;
 		void resize(int nsize);
-		void reposistion(Line& line);
+		void reposistion(Line* line);
 	};
 }
