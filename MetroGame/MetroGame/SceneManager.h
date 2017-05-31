@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "GL/freeglut.h"
+#include <vector>
 
 class IScene;
 
@@ -16,7 +17,8 @@ public:
 
 private:
 	int width, height;
-	GLuint windowID;
+	//GLuint windowID;
+	std::vector<GLuint> windowIDS;
 	bool isInit = false;
 	SceneManager(const SceneManager&);
 	SceneManager();

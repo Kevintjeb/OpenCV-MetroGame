@@ -65,10 +65,21 @@ struct Camera
 	float height = 41.07;
 } camera;
 
+struct Camera2D
+{
+	float posX = 0;
+	float posY = 0;
+	float rotX = 90;
+	float rotY = 0;
+	float height = -80;
+}camera2D;
+
 std::vector <VertexClass> TopPlane;
 std::vector <VertexClass> GroundPlane;
 std::vector <VertexClass> metroLines;
 std::vector <std::pair<int, int>> metroLinesPosition;
+std::vector <VertexClass> metroLines2D;
+std::vector <std::pair<int, int>> metroLinesPosition2D;
 std::vector<Texture> textures;
 std::vector<RenderablePointer> renderablePointers;
 
@@ -311,7 +322,6 @@ void drawTopPlane() {
 	glEnd();
 }
 
-
 void drawGroundPlane() {
 	glBegin(GL_QUADS);
 	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
@@ -383,6 +393,36 @@ void drawRenderables()
 	}
 }
 
+void draw2DRenderables()
+{
+	for (Renderable &renderable : mg_gameLogic::get_renderables())
+	{
+
+		if (renderable.model != "models/city/city.obj")
+		{
+			glRotatef(45, 0, 1, 0);
+		}
+		glPushMatrix();
+
+		glTranslatef(renderable.position.x, renderable.position.y, renderable.position.z);
+		glRotatef(renderable.angle, renderable.rotation.x, renderable.rotation.y, renderable.rotation.z);
+
+		glScalef(renderable.scale.x, 0.0f, renderable.scale.z);
+
+		if (renderable.model == "models/city/city.obj")
+		{
+			it = modelsMap.find("models/city2/city2d.obj");
+		}
+		else
+		{
+			it = modelsMap.find(renderable.model);
+		}
+
+		modelLoader.getModel(it->second)->draw();
+		glPopMatrix();
+	}
+}
+
 void prepare_lines()
 {
 	int position = 0;
@@ -402,6 +442,29 @@ void prepare_lines()
 			position++;
 		}
 		metroLinesPosition.push_back(std::make_pair(start, position));
+		position++;
+	}
+}
+
+void prepare_lines2D()
+{
+	int position = 0;
+	metroLines2D.clear();
+	metroLinesPosition2D.clear();
+	for (Line* line : mg_gameLogic::get_lines())
+	{
+		int start = position;
+		for (int index = 0; index < line->size(); index++)
+		{
+			if (index > 0 && index < line->size() - 1)
+			{
+				metroLines2D.push_back(VertexClass(line->operator[](index).x * 50, 10.0f, line->operator[](index).y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f));
+				position++;
+			}
+			metroLines2D.push_back(VertexClass(line->operator[](index).x * 50, 10.0f, line->operator[](index).y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f));
+			position++;
+		}
+		metroLinesPosition2D.push_back(std::make_pair(start, position));
 		position++;
 	}
 }
@@ -570,6 +633,7 @@ GameScene3D::GameScene3D()
 	prepareModel("models/Metro/metro.obj");
 	prepareModel("models/city/city.obj");
 	prepareModel("models/track/track_2.obj");
+	prepareModel("models/city2/city2d.obj");
 
 	//createdummyRenderable
 	createDummyRenderableList();
@@ -638,39 +702,32 @@ void GameScene3D::render3D()
 }
 
 void GameScene3D::render2D() {
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90.0f, 800 / (float)600, 0.1f, 200000);
+
+	gluPerspective(90.0f, WIDTH / (float)HEIGHT, 0.1f, 5000.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glMatrixMode(GL_MODELVIEW);
 
+	glEnable(GL_DEPTH_TEST);
+
 	glLoadIdentity();
-	gluLookAt(100, 100, 100,
-		0, 0, 0,
-		0, 1, 0);
+	glRotatef(camera2D.rotX, 1, 0, 0);
+	glRotatef(camera2D.rotY, 0, 1, 0);
+	glTranslatef(camera2D.posX, camera2D.height, camera2D.posY);
 
-	glBegin(GL_QUADS);
-
-	glColor4f(0.6f, 0.2f, 0.2f, 1.0f);
-
-	glVertex3f(0, 3, 0);
-	glVertex3f(0, 0, 0);
-	glVertex3f(50, 0, 50);
-	glVertex3f(50, 3, 50);
-
-	glVertex3f(0, 3, 100);
-	glVertex3f(0, 0, 100);
-	glVertex3f(-50, 0, 50);
-	glVertex3f(-50, 3, 50);
-
-	glVertex3f(0, 3, 100);
-	glVertex3f(0, 0, 100);
-	glVertex3f(50, 0, 50);
-	glVertex3f(50, 3, 50);
-	glEnd();
+	//draw map and lines
+	glRotatef(45, 0, 1, 0);
+	draw2DRenderables();
+	prepare_lines2D();
+	glLineWidth(5.0);
+	for (int i = 0; i < metroLinesPosition2D.size(); i++)
+	{
+		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(i).first, metroLinesPosition2D.at(i).second);
+	}
 
 }
 
@@ -743,10 +800,12 @@ void GameScene3D::onIdle()
 
 void GameScene3D::onSpecialFunc(int)
 {
+	shiftActive = true;
 }
 
 void GameScene3D::onSpecialUpFunc(int)
 {
+	shiftActive = false;
 }
 
 void GameScene3D::reshapeFunc(int, int)

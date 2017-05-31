@@ -19,7 +19,8 @@ SceneManager::SceneManager()
 */
 void SceneManager::init() {
 	if (!isInit) {
-		createWindow(800, 600, "3D window", []() {SceneManager::getInstance().render3D(); });
+		//createWindow(800, 600, "3D window", []() {SceneManager::getInstance().render3D(); });
+		createWindow(800, 600, "2D window", []() {SceneManager::getInstance().render2D(); });
 		this->width = 800;
 		this->height = 600;
 		this->currentScene = new MainMenuScene();
@@ -93,7 +94,8 @@ void SceneManager::createWindow(int width, int height, std::string name, void(* 
 {
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(width, height);
-	windowID = glutCreateWindow(name.c_str());
+	GLuint windowID = glutCreateWindow(name.c_str());
+	windowIDS.push_back(windowID);
 	glEnable(GL_DEPTH_TEST);
 	glutDisplayFunc(callback);
 	glutInitErrorFunc(mg_system::_internal::OnGlutError);
@@ -144,6 +146,7 @@ void SceneManager::onIdle()
 	if (isInit) {
 		currentScene->onIdle();
 		glutPostRedisplay();
+		
 	}
 	else throw "Scenemanager not initialized";
 }
