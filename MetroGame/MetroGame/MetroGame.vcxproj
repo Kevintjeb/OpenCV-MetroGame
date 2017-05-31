@@ -146,7 +146,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="errors.cpp" />
-    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameScene3D.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
@@ -171,7 +170,6 @@
     <ClInclude Include="freeglut\include\GL\freeglut_ext.h" />
     <ClInclude Include="freeglut\include\GL\freeglut_std.h" />
     <ClInclude Include="freeglut\include\GL\glut.h" />
-    <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameScene3D.h" />
     <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="Line.h" />

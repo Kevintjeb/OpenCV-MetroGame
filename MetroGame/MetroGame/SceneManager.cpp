@@ -1,6 +1,5 @@
 #include "SceneManager.h"
 #include "MainMenuScene.h"
-#include "GameScene.h"
 #include "system.h"
 #include <functional>
 
