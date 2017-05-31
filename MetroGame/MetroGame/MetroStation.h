@@ -10,9 +10,11 @@ namespace mg_gameLogic
 	public:
 		
 		MetroStation();
-		MetroStation(Vec2f pos);
+		MetroStation(Vec2f pos, int id = -1); //TODO Vervangen door echte waarde
 		~MetroStation();
 		Vec2f position;
+		void setPosition(Vec2f pos);
+		int stationID;
 	private:
 		RedenderablePointer pointer;
 	};
