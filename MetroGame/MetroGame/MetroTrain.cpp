@@ -143,11 +143,6 @@ MetroTrain::MetroTrain(Line* line, float init_pos, State state, int size) :
 	
 }
 
-float totalTimeSpend = 0;
-float speeddif = 0;
-int stopState = 0;	//0= normaal rijden // 1 = gestopt // 2 = optrekken 
-int oldIndex = -1;  //zorgt voor de eerste check zodat niet meerdere keren stopt.
-bool called = false;
 
 float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 {
@@ -193,12 +188,14 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 		{
 			oldIndex = -1;
 		}
-		if (totalTimeSpend > 5 && !called) 
-		{
-			called = true;
-			reposistion(new Line({ { { -1.0f,0.25f },{ 0,0.25f },{ 1, 0.25f } } }, { { MetroStation(Vec2f(0.5f,0.25f)) } }));
-			totalTimeSpend = 0;
-		}
+		//DEBUG for LINE SWITCHING
+
+		//if (totalTimeSpend > 5 && !called) 
+		//{
+		//	called = true;
+		//	reposistion(new Line({ { { -1.0f,0.25f },{ 0,0.25f },{ 1, 0.25f } } }, { { MetroStation(Vec2f(0.5f,0.25f)) } }));
+		//	totalTimeSpend = 0;
+		//}
 	}
 	
 
