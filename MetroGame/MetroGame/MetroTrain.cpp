@@ -81,12 +81,15 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 	}
 	else // we go over the previus line pieces
 	{
-		for (index = prev(index); is_invalid(index) == false; index = prev(index))
+		for (index = index; is_invalid(index) == false; index = prev(index))
 		{
 			const Vec2f L = line[index];
 
 			// if L is with the circle and next(L) is per definition, P' can't be on LP
 			if ((L - line[next(index)]).magnitude() < train_length) continue;
+
+			if ((P - line[next(index)]).magnitude() > train_length)
+				exit(-2);
 
 			const Vec2f LV(L - line[next(index)]);
 
@@ -120,6 +123,9 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 			ret.second += get_dist(index);
 			ret.second = con_pos(ret.second);
 
+			if (ret.first.magnitude() >= train_length * 1.1f)
+				exit(-1);
+
 			return ret;
 		}
 
@@ -137,7 +143,7 @@ MetroTrain::MetroTrain(const Line& line, float init_pos, State state, int size) 
 void MetroTrain::Recalculate(float elapsedTime)
 {
 	// DEBUG
-	size = 2;
+	//size = 2;
 
 	// ensuring we have the correct size
 	if (trains.size() < size) // if we have to little trains
@@ -160,16 +166,16 @@ void MetroTrain::Recalculate(float elapsedTime)
 	line_pos = checkAndSetPosRange(line_pos);
 
 	auto npos = pos2d_from_pos(line_pos);
-	auto cpos = findComplementaryPositionAndDistance(line_pos);
+	//auto cpos = findComplementaryPositionAndDistance(line_pos);
 	trains[0]->position.x = npos.x*50;
 	trains[0]->position.z = npos.y*50;
-	auto y = (npos - cpos.first).y;
-	auto x = (npos - cpos.first).x;
-	auto at = atan2f(x, y);
+	//auto y = (npos - cpos.first).y;
+	//auto x = (npos - cpos.first).x;
+	//auto at = atan2f(x, y);
 	//auto conv = at * 180.f / 3.14159265358979323846f;
 	//trains[0]->angle = conv;
-	trains[1]->position.x = cpos.first.x * 50;
-	trains[1]->position.z = cpos.first.y * 50;
+	//trains[1]->position.x = cpos.first.x * 50;
+	//trains[1]->position.z = cpos.first.y * 50;
 }
 
 int MetroTrain::get_size() const
