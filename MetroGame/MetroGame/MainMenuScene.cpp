@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "GameScene3D.h"
 
+// these have to be initialized by the constructor since there are some OpenGL calls in Font()
 Font* MainMenuScene::largeFont = nullptr;
 Font* MainMenuScene::smallFont = nullptr;
 
