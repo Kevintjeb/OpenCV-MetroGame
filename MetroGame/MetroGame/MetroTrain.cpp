@@ -51,7 +51,7 @@ inline std::tuple<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPosit
 	
 }
 
-MetroTrain::MetroTrain(const Line& line, float init_pos, State state, int size) :
+MetroTrain::MetroTrain(Line& line, float init_pos, State state, int size) :
 	line(line), line_pos(init_pos), state(state), size(size), trains(0)
 {
 	
@@ -149,4 +149,35 @@ void MetroTrain::resize(int nsize)
 {
 	if (nsize > 0 && nsize <= max_size)
 		size = nsize;
+}
+
+void mg_gameLogic::MetroTrain::reposistion(Line& line)
+{
+	Vec2f trainPosition(trains[0]->position.x, trains[0]->position.z);
+	int index = 0;
+	float minimumDistance = 9999999;
+	float distance;
+	for (int i = 0; i < line.size(); i++) 
+	{
+		if (trainPosition.distance(line[i]) < minimumDistance) 
+		{
+			index = i;
+			distance = line.getDistance(i);
+		}
+	}
+	int seconIndex=0;
+	if (index > 0) 
+	{
+		if (trainPosition.distance(line[index - 1]) > trainPosition.distance(line[index + 1])) 
+		{
+			seconIndex = index + 1;
+		}
+		else { seconIndex = index - 1; }
+	}
+	else 
+	{
+		seconIndex = 1;
+	}
+	Vec2f newVec = line[index] - line[seconIndex];
+
 }

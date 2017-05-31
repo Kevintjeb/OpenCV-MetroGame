@@ -20,7 +20,7 @@ namespace mg_gameLogic
 		};
 
 	private:
-		const Line& line;
+		Line& line;
 		float line_pos;
 		State state;
 
@@ -36,10 +36,11 @@ namespace mg_gameLogic
 		static constexpr int   max_size     = 16;
 		static constexpr float train_length = 10 / 100.0f;
 		
-		explicit MetroTrain(const Line& line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
+		explicit MetroTrain(Line& line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
 		float getSpeed(float);
 		void Recalculate(float elapsedTime);
 		int get_size() const;
 		void resize(int nsize);
+		void reposistion(Line& line);
 	};
 }
