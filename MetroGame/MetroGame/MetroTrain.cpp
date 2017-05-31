@@ -224,7 +224,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 		}
 	}
 
-	line_pos += speed * elapsedTime; //getSpeed(elapsedTime) * (state == State::FORWARD ? 1 : -1);
+	line_pos += getSpeed(elapsedTime) * (state == State::FORWARD ? 1 : -1);
 
 	line_pos = checkAndSetPosRange(line_pos);
 
@@ -232,11 +232,11 @@ void MetroTrain::Recalculate(float elapsedTime)
 	auto cpos = findComplementaryPositionAndDistance(line_pos);
 	trains[0]->position.x = npos.x*50;
 	trains[0]->position.z = npos.y*50;
-	//auto y = (npos - cpos.first).y;
-	//auto x = (npos - cpos.first).x;
-	//auto at = atan2f(x, y);
-	//auto conv = at * 180.f / 3.14159265358979323846f;
-	//trains[0]->angle = conv;
+	auto y = (npos - cpos.first).y;
+	auto x = (npos - cpos.first).x;
+	auto at = atan2f(x, y);
+	auto conv = at * 180.0f / 3.14159265358979323846f;
+	trains[0]->angle = conv;
 	trains[1]->position.x = cpos.first.x * 50;
 	trains[1]->position.z = cpos.first.y * 50;
 }
