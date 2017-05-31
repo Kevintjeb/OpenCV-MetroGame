@@ -13,8 +13,7 @@ public:
 	void render2D();
 	int getWidth();
 	int getHeight();
-	void createWindow3D(int, int, std::string);
-	void createWindow2D(int, int, std::string);
+	void createWindow(int, int, std::string, void(* callback)());
 	void tick();
 	void onKeyUp(unsigned char);
 	void onKeyDown(unsigned char);
