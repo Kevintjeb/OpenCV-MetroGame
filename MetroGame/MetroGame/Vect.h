@@ -36,6 +36,7 @@ public:
 	Vec2f operator +(const Vec2f &other) const;
 	Vec2f operator *(const float s) const;
 	Vec2f operator /(const float s) const;
+
 	float dotProduct(const Vec2f &other) const;
 	float distance(const Vec2f &other) const;
 	float magnitude() const;
