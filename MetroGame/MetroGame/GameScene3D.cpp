@@ -488,7 +488,7 @@ void drawRails()
 {
 	for (int i = 0; i < metroLinesPosition.size(); i++)
 	{
-		for (int b = metroLinesPosition.at(i).first; b < metroLinesPosition.at(i).second; b++)
+		for (int b = metroLinesPosition.at(i).first; b < metroLinesPosition.at(i).second-1; b++)
 		{
 			float deltaX = metroLines.at(b + 1).x - metroLines.at(b).x;
 			float deltaZ = metroLines.at(b + 1).z - metroLines.at(b).z;
@@ -648,10 +648,6 @@ GameScene3D::GameScene3D()
 	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
 	train = new MetroTrain(*line);
 	handle = mg_gameLogic::allocate_line(line);
-
-	line2 = new Line({ { -1.0f, 0.0f },{ 1.0, -0.25f },{ 0.75f, 0.5f } });
-	train2 = new MetroTrain(*line2);
-	handle2 = mg_gameLogic::allocate_line(line2);
 }
 
 
