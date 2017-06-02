@@ -160,6 +160,7 @@
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="IScene.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="RenderableOutput.cpp" />
     <ClCompile Include="system.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="Test.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vect.h" />
     <ClInclude Include="VertexClass.h" />
