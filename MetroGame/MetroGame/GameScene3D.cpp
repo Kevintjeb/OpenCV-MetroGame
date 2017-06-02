@@ -46,6 +46,10 @@ Renderable testTrain;
 Line *line;
 MetroTrain *train;
 
+LinePointer handle2;
+Line *line2;
+MetroTrain *train2;
+
 int oldTime = -1;
 
 int lastTime;
@@ -441,7 +445,6 @@ void prepare_lines()
 			position++;
 		}
 		metroLinesPosition.push_back(std::make_pair(start, position));
-		position++;
 	}
 }
 
@@ -464,7 +467,6 @@ void prepare_lines2D()
 			position++;
 		}
 		metroLinesPosition2D.push_back(std::make_pair(start, position));
-		position++;
 	}
 }
 
@@ -485,7 +487,7 @@ void drawRails()
 {
 	for (int i = 0; i < metroLinesPosition.size(); i++)
 	{
-		for (int b = metroLinesPosition.at(i).first; b < metroLinesPosition.at(i).second - 1; b++)
+		for (int b = metroLinesPosition.at(i).first; b < metroLinesPosition.at(i).second; b++)
 		{
 			float deltaX = metroLines.at(b + 1).x - metroLines.at(b).x;
 			float deltaZ = metroLines.at(b + 1).z - metroLines.at(b).z;
@@ -620,7 +622,7 @@ void drawRails()
 
 GameScene3D::GameScene3D()
 {
-	SceneManager::getInstance().switchWindow3D();
+	//SceneManager::getInstance().switchWindow3D();
 
 	//init planes
 	initTopPlane();
@@ -633,19 +635,22 @@ GameScene3D::GameScene3D()
 	prepareModel("models/Metro/metro.obj");
 	prepareModel("models/city/city.obj");
 	prepareModel("models/track/track_2.obj");
-	prepareModel("models/steve/steve.obj");
 	
-	SceneManager::getInstance().switchWindow2D();
+	//SceneManager::getInstance().switchWindow2D();
 	prepareModel("models/city2/city2d.obj");
 
-	SceneManager::getInstance().switchWindow3D();
-	//createdummyRenderable
-	createDummyRenderableList();
+	//SceneManager::getInstance().switchWindow3D();
+	//create city
+	//createDummyRenderableList();
 
 	//debug data
-	/*line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
+	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
 	train = new MetroTrain(*line);
-	handle = mg_gameLogic::allocate_line(line);*/
+	handle = mg_gameLogic::allocate_line(line);
+
+	line2 = new Line({ { -1.0f, 0.0f },{ 1.0, -0.25f },{ 0.75f, 0.5f } });
+	train2 = new MetroTrain(*line2);
+	handle2 = mg_gameLogic::allocate_line(line2);
 }
 
 
@@ -697,9 +702,9 @@ void GameScene3D::render3D()
 	prepare_lines();
 	for (int i = 0; i < metroLinesPosition.size(); i++)
 	{
-		drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(i).first, metroLinesPosition.at(i).second);
+		drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(i).first, metroLinesPosition.at(i).second-1);
 	}
-	drawRails();
+	//drawRails();
 
 	glPopMatrix();
 	//drawRenderable
@@ -732,7 +737,7 @@ void GameScene3D::render2D() {
 	glLineWidth(5.0);
 	for (int i = 0; i < metroLinesPosition2D.size(); i++)
 	{
-		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(i).first, metroLinesPosition2D.at(i).second);
+		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(i).first, metroLinesPosition2D.at(i).second-1);
 	}
 
 }
@@ -781,7 +786,7 @@ void GameScene3D::onIdle()
 	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
 	oldTime = newTime;
 
-//	train->Recalculate(deltaTime2 / 1000.0f);
+	train->Recalculate(deltaTime2 / 1000.0f);
 
 
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
@@ -802,6 +807,8 @@ void GameScene3D::onIdle()
 	if (shiftActive) {
 		camera.height += 5 * deltaTime;
 	}
+
+	cout << "FPS:" << (int)(1 / deltaTime) << endl;
 }
 
 void GameScene3D::onSpecialFunc(int)
