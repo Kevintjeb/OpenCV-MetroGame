@@ -9,6 +9,11 @@ Font* MainMenuScene::largeFont3D = nullptr;
 Font* MainMenuScene::smallFont3D = nullptr;
 
 
+void MainMenuScene::drawStrings()
+{
+
+}
+
 MainMenuScene::MainMenuScene()
 {
 	SceneManager::getInstance().switchWindow2D();
@@ -21,10 +26,20 @@ MainMenuScene::MainMenuScene()
 		largeFont3D = new Font("font_72.fnt");
 	if (!smallFont3D)
 		smallFont3D = new Font("font_0.fnt");
+	this->width = SceneManager::getInstance().getWidth();
+	this->height = SceneManager::getInstance().getHeight();
+
+	appendText(Text(width/2 - largeFont3D->textLength("Main Menu")/2, height / 3, largeFont3D, "Main Menu"));
+	appendText(Text(width/2 - smallFont3D->textLength("Press any key to play!")/2, height / 2, smallFont3D, "Press any key to play!"));
 }
 
 MainMenuScene::~MainMenuScene()
 {
+}
+
+void MainMenuScene::appendText(Text &string)
+{
+	text.push_back(string);
 }
 
 void MainMenuScene::render3D() {
@@ -39,12 +54,16 @@ void MainMenuScene::render3D() {
 	glLoadIdentity();
 
 	glDisable(GL_DEPTH_TEST);
-	
+
 	glColor4f(0, 0, 0, 1);
+	
+	for (Text& t : text) {
+		t.getFont()->drawText(t.getText(), t.getX(), t.getY());
+	}
+/*
 	largeFont3D->drawText(mainString, width / 2 - largeFont3D->textLength(mainString) / 2, height / 3);
 	smallFont3D->drawText(startString, width / 2 - smallFont3D->textLength(startString) / 2, height / 2);
-	//smallFont->drawText("Exit", width / 2 - smallFont->textLength("Exit") / 2, height / 2 + 50);
-
+*/
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -68,8 +87,6 @@ void MainMenuScene::render2D()
 
 void MainMenuScene::onEnter() {
 	//Do some onEnter stuff, maybe intro animation?
-	this->width = SceneManager::getInstance().getWidth();
-	this->height = SceneManager::getInstance().getHeight();
 	std::cout << "Entered MainMenuScene" << std::endl;
 }
 
@@ -111,4 +128,7 @@ void MainMenuScene::onExit() {
 void MainMenuScene::reshapeFunc(int w, int h) {
 	width = w;
 	height = h;
+	for (Text& t : text) {
+		t.setX(width/2 - t.getFont()->textLength(t.getText()) /2);
+	}
 }

@@ -27,6 +27,8 @@
 
 using namespace mg_system;
 using namespace mg_gameLogic;
+using std::cout;
+using std::endl;
 
 #define WIDTH 600
 #define HEIGHT 600
@@ -54,8 +56,7 @@ int oldTime = -1;
 
 int lastTime;
 float rotation;
-using std::cout;
-using std::endl;
+
 int speed = 25;
 bool keys[255];
 bool shiftActive = false;
