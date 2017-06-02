@@ -11,12 +11,12 @@ Font* MainMenuScene::smallFont3D = nullptr;
 
 MainMenuScene::MainMenuScene()
 {
-	glutSetWindow(2); //2D
+	SceneManager::getInstance().switchWindow2D();
 	if (!largeFont2D)
 		largeFont2D = new Font("font_72.fnt");
 	if (!smallFont2D)
 		smallFont2D = new Font("font_0.fnt");
-	glutSetWindow(1); //3D
+	SceneManager::getInstance().switchWindow3D();
 	if (!largeFont3D)
 		largeFont3D = new Font("font_72.fnt");
 	if (!smallFont3D)

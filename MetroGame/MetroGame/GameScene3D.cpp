@@ -397,7 +397,6 @@ void draw2DRenderables()
 {
 	for (Renderable &renderable : mg_gameLogic::get_renderables())
 	{
-
 		if (renderable.model != "models/city/city.obj")
 		{
 			glRotatef(45, 0, 1, 0);
@@ -621,32 +620,32 @@ void drawRails()
 
 GameScene3D::GameScene3D()
 {
-	glutSetWindow(1); //3D, todo, verander dit vieze ID
-	//manager->switch3DContext();
+	SceneManager::getInstance().switchWindow3D();
 
 	//init planes
 	initTopPlane();
 	initGroundPlane();
 
-
 	//init textures
 	textures.push_back(Texture("textures/dirt.png"));
 
 	//load models
-	prepareModel("models/steve/steve.obj");
 	prepareModel("models/Metro/metro.obj");
 	prepareModel("models/city/city.obj");
 	prepareModel("models/track/track_2.obj");
-	glutSetWindow(2); //2D, todo, verander dit vieze ID
-	//manager->switch2DContext();
+	prepareModel("models/steve/steve.obj");
+	
+	SceneManager::getInstance().switchWindow2D();
 	prepareModel("models/city2/city2d.obj");
 
+	SceneManager::getInstance().switchWindow3D();
 	//createdummyRenderable
 	createDummyRenderableList();
 
-	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
+	//debug data
+	/*line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
 	train = new MetroTrain(*line);
-	handle = mg_gameLogic::allocate_line(line);
+	handle = mg_gameLogic::allocate_line(line);*/
 }
 
 
@@ -708,6 +707,7 @@ void GameScene3D::render3D()
 }
 
 void GameScene3D::render2D() {
+	
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -781,7 +781,7 @@ void GameScene3D::onIdle()
 	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
 	oldTime = newTime;
 
-	train->Recalculate(deltaTime2 / 1000.0f);
+//	train->Recalculate(deltaTime2 / 1000.0f);
 
 
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);

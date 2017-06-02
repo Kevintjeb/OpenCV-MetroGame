@@ -19,8 +19,8 @@ SceneManager::SceneManager()
 */
 void SceneManager::init() {
 	if (!isInit) {
-		createWindow(800, 600, "3D window", []() {SceneManager::getInstance().render3D(); });
-		createWindow(800, 600, "2D window", []() {SceneManager::getInstance().render2D(); });
+		window3D = createWindow(800, 600, "3D window", []() {SceneManager::getInstance().render3D(); });
+		window2D = createWindow(800, 600, "2D window", []() {SceneManager::getInstance().render2D(); });
 		this->width = 800;
 		this->height = 600;
 		this->currentScene = new MainMenuScene();
@@ -90,12 +90,11 @@ int SceneManager::getHeight()
 	return height;
 }
 
-void SceneManager::createWindow(int width, int height, std::string name, void(* callback)())
+GLuint SceneManager::createWindow(int width, int height, std::string name, void(* callback)())
 {
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(width, height);
 	GLuint windowID = glutCreateWindow(name.c_str());
-	windowIDS.push_back(windowID);
 	glEnable(GL_DEPTH_TEST);
 	glutDisplayFunc(callback);
 	glutInitErrorFunc(mg_system::_internal::OnGlutError);
@@ -115,6 +114,8 @@ void SceneManager::createWindow(int width, int height, std::string name, void(* 
 	{
 		SceneManager::getInstance().onSpecialUpFunc(key);
 	});
+
+	return windowID;
 }
 
 void SceneManager::tick()
@@ -123,6 +124,16 @@ void SceneManager::tick()
 		currentScene->update();
 	}
 	else throw "Scenemanager not initialized";
+}
+
+void SceneManager::switchWindow2D()
+{
+	glutSetWindow(window2D);
+}
+
+void SceneManager::switchWindow3D()
+{
+	glutSetWindow(window3D);
 }
 
 void SceneManager::onKeyUp(unsigned char key)
@@ -146,11 +157,11 @@ void SceneManager::onIdle()
 	if (isInit) {
 		currentScene->onIdle();
 
-		for (auto i : windowIDS)
-		{
-			glutSetWindow(i);
-			glutPostRedisplay();
-		}
+		glutSetWindow(window3D);
+		glutPostRedisplay();
+
+		glutSetWindow(window2D);
+		glutPostRedisplay();
 		
 	}
 	else throw "Scenemanager not initialized";
