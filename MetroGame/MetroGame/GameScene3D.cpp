@@ -410,6 +410,8 @@ void drawRenderables()
 		modelLoader.getModel(it->second)->draw();
 		glPopMatrix();
 	}
+
+
 }
 
 void draw2DRenderables()
@@ -802,9 +804,7 @@ void GameScene3D::render2D() {
 
 	//draw map and lines
 	glRotatef(45, 0, 1, 0);
-	draw2DRenderables();	
-	glDisable(GL_TEXTURE_2D);
-	glRotatef(45, 0, 1, 0);
+	draw2DRenderables();
 	prepare_lines2D();
 	glLineWidth(5.0);
 	for (int i = 0; i < metroLinesPosition2D.size(); i++)
@@ -825,6 +825,7 @@ void GameScene3D::update()
 
 void GameScene3D::onEnter()
 {
+	lastTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
 void setAllKeysFalse() {
@@ -847,6 +848,9 @@ void GameScene3D::onExit()
 void GameScene3D::onKeyUP(unsigned char key)
 {
 	keys[key] = false;
+	if (key == ' ') {
+		SceneManager::getInstance().pauseScene();
+	}
 }
 
 void GameScene3D::onKeyDown(unsigned char key)
@@ -859,10 +863,6 @@ void GameScene3D::onKeyDown(unsigned char key)
 
 void GameScene3D::onIdle()
 {
-	int newTime = glutGet(GLUT_ELAPSED_TIME);
-	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
-	oldTime = newTime;
-
 	//train->Recalculate(deltaTime2 / 1000.0f);
 
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
