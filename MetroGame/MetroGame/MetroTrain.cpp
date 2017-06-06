@@ -1,6 +1,7 @@
 ﻿#include "MetroTrain.h"
 #include <cmath>
 #include <limits>
+#include <iostream>
 
 using namespace mg_gameLogic;
 using namespace std;
@@ -227,9 +228,11 @@ void MetroTrain::Recalculate(float elapsedTime)
 		}
 	}
 
-	line_pos += speed * elapsedTime; //getSpeed(elapsedTime) * (state == State::FORWARD ? 1 : -1);
+	line_pos += getSpeed(elapsedTime) * (state == State::FORWARD ? 1 : -1);
 
 	line_pos = checkAndSetPosRange(line_pos);
+
+	
 
 	auto npos = pos2d_from_pos(line_pos);
 	auto cpos = findComplementaryPositionAndDistance(line_pos);

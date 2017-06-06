@@ -63,11 +63,25 @@ int Line::getIndexByPosition(const float position) const
 	// standard binary tree with interpolation
 	// if the position is not in the list we get the point to the 'left' of it
 
+	if (position < 0 ) return 0;
+	if (position >= distances[size() - 1]) return size() - 1;
+
 	int l, r;
 	l = 0;
 	r = size() - 1;
+
+#ifdef _DEBUG
+	constexpr int max_iter = 10;
+			  int     iter =  0;
+#endif
+
 	while (true)
 	{
+#ifdef _DEBUG
+		if (iter++ >= max_iter) 
+			throw "invalid position";
+#endif
+
 		int m = (l + r) / 2;
 		if (distances[m] < position) // we are lower than our position
 		{
