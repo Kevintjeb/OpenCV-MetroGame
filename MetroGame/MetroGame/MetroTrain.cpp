@@ -33,14 +33,14 @@ inline float MetroTrain::checkAndSetPosRange(float pos)
 		if (pos >= line->getDistance(line->size() - 1))
 		{
 			state = State::BACKWARD;
-			return line->getDistance(line->size() - 1) - (size*train_length/2);
+			return line->getDistance(line->size() - 1) - ((size-1)*(train_length+train_spacing));
 		}
 		break;
 	case State::BACKWARD:
 		if (pos <= 0)
 		{
 			state = State::FORWARD;
-			return size*train_length/2;
+			return (size-1)*(train_length+train_spacing);
 		}
 		break;
 	}
@@ -133,8 +133,8 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 			return ret;
 		}
 
-		// if the point isn't on the line, we return a vector of [∞, ∞] and a distance of ∞
-		return pair<Vec2f, float>({ numeric_limits<float>::infinity(), numeric_limits<float>::infinity() }, numeric_limits<float>::infinity());
+		// if the point isn't on the line, we return a vector of [NaN, NaN] and a distance of NaN
+		return pair<Vec2f, float>({ NAN, NAN }, NAN);
 	}
 }
 
@@ -208,7 +208,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 	{
 		int diff = size - trains.size(); // we need 'diff' new trains
 		for (int i = 0; i < diff; ++i) // we allocate new Renderables 
-			trains.push_back(allocate_renderable(Renderable(METRO, Vec3f(0, -92.0f, 0), 0.0f, Vec3f(0, 1, 0), Vec3f(2, 2, 2))));
+			trains.push_back(allocate_renderable(Renderable(METRO, Vec3f(0, -92.0f, 0), 0.0f, Vec3f(0, 1, 0), Vec3f(1, 1, 1))));
 	}
 	else if (trains.size() > size) // if we have to many trains
 	{
@@ -225,20 +225,30 @@ void MetroTrain::Recalculate(float elapsedTime)
 
 	
 
-	auto npos = pos2d_from_pos(line_pos);
-	auto cpos = findComplementaryPositionAndDistance(line_pos);
-	trains[0]->position.x = npos.x*50;
-	trains[0]->position.z = npos.y*50;
-	auto y = (npos - cpos.first).y;
-	auto x = (npos - cpos.first).x;
-	auto at = atan2f(x, y);
-	auto conv = at * 180.f / 3.14159265358979323846f - 90;
-	trains[0]->angle = conv;
+
+	auto tmp_line_pos = line_pos;
+
+	for (int i = 0; i < size; i++)
+	{
+		auto npos = pos2d_from_pos(tmp_line_pos);
+		auto cpos = findComplementaryPositionAndDistance(tmp_line_pos);
+
+		if (isnan(cpos.second)) break;
+
+		trains[i]->position.x = npos.x * 50;
+		trains[i]->position.z = npos.y * 50;
+		auto y = (npos - cpos.first).y;
+		auto x = (npos - cpos.first).x;
+		auto at = atan2f(x, y);
+		auto conv = at * 180.f / 3.14159265358979323846f - 90;
+		trains[i]->angle = conv;
+
+		tmp_line_pos = cpos.second + (state == State::FORWARD ? -train_spacing : train_spacing);
+	}
+
 	//trains[1]->position.x = cpos.first.x * 50;
 	//trains[1]->position.z = cpos.first.y * 50;
 }
-
-
 
 int MetroTrain::get_size() const
 {

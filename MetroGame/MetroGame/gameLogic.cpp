@@ -18,7 +18,7 @@ void mg_system::_internal::GameInit()
 {
 	
 	line = new Line({ {-0.9f,-0.9f}, {0.9f,-0.9f}, {0.9f, 0.9f} }, { /*{ MetroStation(Vec2f(-0.9f,-0.9f)) }*/ });
-	train = new MetroTrain(line);
+	train = new MetroTrain(line, .0f, MetroTrain::State::FORWARD, 5);
 }
 
 int oldTime = -1;
