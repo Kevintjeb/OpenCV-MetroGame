@@ -17,7 +17,7 @@ MetroStation station;
 void mg_system::_internal::GameInit()
 {
 	
-	line = new Line({ {-1.0f,-0.25f}, {0,-0.25f}, {1, -0.25f} }, { { MetroStation(Vec2f(0.5,-0.25f)) } });
+	line = new Line({ {-0.9f,-0.9f}, {0.9f,-0.9f}, {0.9f, 0.9f} }, { /*{ MetroStation(Vec2f(-0.9f,-0.9f)) }*/ });
 	train = new MetroTrain(line);
 }
 

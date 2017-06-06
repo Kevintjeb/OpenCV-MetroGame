@@ -33,14 +33,14 @@ inline float MetroTrain::checkAndSetPosRange(float pos)
 		if (pos >= line->getDistance(line->size() - 1))
 		{
 			state = State::BACKWARD;
-			return line->getDistance(line->size() - 1) - (size*train_length);
+			return line->getDistance(line->size() - 1) - (size*train_length/2);
 		}
 		break;
 	case State::BACKWARD:
 		if (pos <= 0)
 		{
 			state = State::FORWARD;
-			return size*train_length;
+			return size*train_length/2;
 		}
 		break;
 	}
@@ -194,12 +194,6 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 		{
 			oldIndex = -1;
 		}
-		if (totalTimeSpend > 5 && !called) 
-		{
-			called = true;
-			reposistion(new Line({ { { -1.0f,0.25f },{ 0,0.25f },{ 1, 0.25f } } }, { { MetroStation(Vec2f(0.5f,0.25f)) } }));
-			totalTimeSpend = 0;
-		}
 	}
 	
 
@@ -209,9 +203,6 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 
 void MetroTrain::Recalculate(float elapsedTime)
 {
-	// DEBUG
-	size = 2;
-
 	// ensuring we have the correct size
 	if (trains.size() < size) // if we have to little trains
 	{
@@ -238,13 +229,13 @@ void MetroTrain::Recalculate(float elapsedTime)
 	auto cpos = findComplementaryPositionAndDistance(line_pos);
 	trains[0]->position.x = npos.x*50;
 	trains[0]->position.z = npos.y*50;
-	//auto y = (npos - cpos.first).y;
-	//auto x = (npos - cpos.first).x;
-	//auto at = atan2f(x, y);
-	//auto conv = at * 180.f / 3.14159265358979323846f;
-	//trains[0]->angle = conv;
-	trains[1]->position.x = cpos.first.x * 50;
-	trains[1]->position.z = cpos.first.y * 50;
+	auto y = (npos - cpos.first).y;
+	auto x = (npos - cpos.first).x;
+	auto at = atan2f(x, y);
+	auto conv = at * 180.f / 3.14159265358979323846f - 90;
+	trains[0]->angle = conv;
+	//trains[1]->position.x = cpos.first.x * 50;
+	//trains[1]->position.z = cpos.first.y * 50;
 }
 
 

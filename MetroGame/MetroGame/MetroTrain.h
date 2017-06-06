@@ -41,7 +41,7 @@ namespace mg_gameLogic
 	public:
 		float speed = .50f;
 		static constexpr int   max_size     = 16;
-		static constexpr float train_length = 0.25f;
+		static constexpr float train_length = 0.3f;
 		
 		explicit MetroTrain(Line* line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
 		float getSpeed(float);
