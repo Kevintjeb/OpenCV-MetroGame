@@ -1,5 +1,7 @@
 ﻿#include "MetroTrain.h"
-#include <cmath>
+
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <limits>
 #include <iostream>
 
@@ -33,14 +35,14 @@ inline float MetroTrain::checkAndSetPosRange(float pos)
 		if (pos >= line->getDistance(line->size() - 1))
 		{
 			state = State::BACKWARD;
-			return line->getDistance(line->size() - 1) - ((size-1)*(train_length+train_spacing));
+			return line->getDistance(line->size() - 1) - ((size)*(train_length+train_spacing) - train_spacing);
 		}
 		break;
 	case State::BACKWARD:
 		if (pos <= 0)
 		{
 			state = State::FORWARD;
-			return (size-1)*(train_length+train_spacing);
+			return (size)*(train_length+train_spacing) - train_spacing;
 		}
 		break;
 	}
@@ -228,6 +230,8 @@ void MetroTrain::Recalculate(float elapsedTime)
 
 	auto tmp_line_pos = line_pos;
 
+	// @TODO to prevent stutering, we could attemt to use the train_spacing as a spring
+
 	for (int i = 0; i < size; i++)
 	{
 		auto npos = pos2d_from_pos(tmp_line_pos);
@@ -240,7 +244,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 		auto y = (npos - cpos.first).y;
 		auto x = (npos - cpos.first).x;
 		auto at = atan2f(x, y);
-		auto conv = at * 180.f / 3.14159265358979323846f - 90;
+		auto conv = at * 180.f / M_PI - 90;
 		trains[i]->angle = conv;
 
 		tmp_line_pos = cpos.second + (state == State::FORWARD ? -train_spacing : train_spacing);
