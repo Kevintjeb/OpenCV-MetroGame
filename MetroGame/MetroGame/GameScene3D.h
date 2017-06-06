@@ -1,8 +1,18 @@
 #pragma once
 #include "IScene.h"
+#include "Font.h"
 class GameScene3D :
 	public IScene
 {
+private:
+	static Font* largeFont3D;
+	string time;
+	struct {
+		float seconds = 0;
+		int minutes = 0;
+	}Time;
+	void prepareTime(float deltaTime);
+
 public:
 	GameScene3D();
 	~GameScene3D();
