@@ -392,6 +392,8 @@ void drawRenderables()
 		modelLoader.getModel(it->second)->draw();
 		glPopMatrix();
 	}
+
+
 }
 
 void draw2DRenderables()
@@ -709,32 +711,32 @@ void GameScene3D::render3D()
 
 void GameScene3D::render2D() {
 	
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
 
-	gluPerspective(90.0f, WIDTH / (float)HEIGHT, 0.1f, 5000.0f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glMatrixMode(GL_MODELVIEW);
+	//gluPerspective(90.0f, WIDTH / (float)HEIGHT, 0.1f, 5000.0f);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glMatrixMode(GL_MODELVIEW);
 
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 
-	glLoadIdentity();
-	glRotatef(camera2D.rotX, 1, 0, 0);
-	glRotatef(camera2D.rotY, 0, 1, 0);
-	glTranslatef(camera2D.posX, camera2D.height, camera2D.posY);
+	//glLoadIdentity();
+	//glRotatef(camera2D.rotX, 1, 0, 0);
+	//glRotatef(camera2D.rotY, 0, 1, 0);
+	//glTranslatef(camera2D.posX, camera2D.height, camera2D.posY);
 
-	//draw map and lines
-	glRotatef(45, 0, 1, 0);
-	draw2DRenderables();
-	prepare_lines2D();
-	glLineWidth(5.0);
-	for (int i = 0; i < metroLinesPosition2D.size(); i++)
-	{
-		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(i).first, metroLinesPosition2D.at(i).second);
-	}
+	////draw map and lines
+	//glRotatef(45, 0, 1, 0);
+	//draw2DRenderables();
+	//prepare_lines2D();
+	//glLineWidth(5.0);
+	//for (int i = 0; i < metroLinesPosition2D.size(); i++)
+	//{
+	//	drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(i).first, metroLinesPosition2D.at(i).second);
+	//}
 
 }
 
@@ -790,7 +792,8 @@ void GameScene3D::onIdle()
 	lastTime = currentTime;
 
 	rotation += deltaTime * 15;
-
+	
+	cout << "FPS:" << (int)(1 / deltaTime) << endl;
 	if (keys['a']) move(0, deltaTime*speed);
 	if (keys['d']) move(180, deltaTime*speed);
 	if (keys['w']) move(90, deltaTime*speed);
