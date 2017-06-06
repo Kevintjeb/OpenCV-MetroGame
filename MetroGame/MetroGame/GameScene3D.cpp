@@ -28,11 +28,13 @@
 
 using namespace mg_system;
 using namespace mg_gameLogic;
+using std::cout;
+using std::endl;
 
 #define WIDTH 600
 #define HEIGHT 600
 
-#define STEP 0.1f
+#define STEP 0.2f
 
 ModelLoader modelLoader;
 
@@ -47,12 +49,27 @@ Renderable testTrain;
 Line *pLine;
 MetroTrain *train;
 
+LinePointer handle2;
+Line *line2;
+MetroTrain *train2;
+
+LinePointer handle3;
+Line *line3;
+MetroTrain *train3;
+
+LinePointer handle4;
+Line *line4;
+MetroTrain *train4;
+
+LinePointer handle5;
+Line *line5;
+MetroTrain *train5;
+
 int oldTime = -1;
 
 int lastTime;
 float rotation;
-using std::cout;
-using std::endl;
+
 int speed = 25;
 bool keys[255];
 bool shiftActive = false;
@@ -66,11 +83,22 @@ struct Camera
 	float height = 41.07;
 } camera;
 
+struct Camera2D
+{
+	float posX = 0;
+	float posY = 0;
+	float rotX = 90;
+	float rotY = 0;
+	float height = -80;
+}camera2D;
+
 std::vector <VertexClass> TopPlane;
 std::vector <VertexClass> GroundPlane;
 std::vector <VertexClass> metroLines;
 std::vector <std::pair<int, int>> metroLinesPosition;
-std::vector<Texture> textures;
+std::vector <VertexClass> metroLines2D;
+std::vector <std::pair<int, int>> metroLinesPosition2D;
+std::vector<Texture*> textures;
 std::vector<RenderablePointer> renderablePointers;
 
 //TEMP
@@ -315,7 +343,6 @@ void drawTopPlane() {
 	glEnd();
 }
 
-
 void drawGroundPlane() {
 	glBegin(GL_QUADS);
 	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
@@ -387,6 +414,32 @@ void drawRenderables()
 	}
 }
 
+void draw2DRenderables()
+{
+	for (Renderable &renderable : mg_gameLogic::get_renderables())
+	{
+		glPushMatrix();
+
+		glTranslatef(renderable.position.x, renderable.position.y, renderable.position.z);
+		glRotatef(renderable.angle, renderable.rotation.x, renderable.rotation.y, renderable.rotation.z);
+
+		glScalef(renderable.scale.x, 0.0f, renderable.scale.z);
+
+		if (renderable.model == "models/city/city.obj")
+		{
+			it = modelsMap.find("models/city2/city2d.obj");
+		}
+		else
+		{
+			continue;
+			it = modelsMap.find(renderable.model);
+		}
+
+		modelLoader.getModel(it->second)->draw();
+		glPopMatrix();
+	}
+}
+
 void prepare_lines()
 {
 	int position = 0;
@@ -405,12 +458,35 @@ void prepare_lines()
 			metroLines.push_back(VertexClass(line->operator[](index).x * 25, -50 + 3.1f, line->operator[](index).y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f));
 			position++;
 		}
+		position--;
 		metroLinesPosition.push_back(std::make_pair(start, position));
 		position++;
 	}
 }
 
-void drawTrack(float x, float y, float z, GameLogic::Vec2f line)
+void prepare_lines2D()
+{
+	int position = 0;
+	metroLines2D.clear();
+	metroLinesPosition2D.clear();
+	for (Line* line : mg_gameLogic::get_lines())
+	{
+		int start = position;
+		for (int index = 0; index < line->size(); index++)
+		{
+			if (index > 0 && index < line->size() - 1)
+			{
+				metroLines2D.push_back(VertexClass(line->operator[](index).x * 50, 10.0f, line->operator[](index).y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f));
+				position++;
+			}
+			metroLines2D.push_back(VertexClass(line->operator[](index).x * 50, 10.0f, line->operator[](index).y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f));
+			position++;
+		}
+		metroLinesPosition2D.push_back(std::make_pair(start, position));
+	}
+}
+
+void drawTrack(float x, float y, float z, Vec2f line)
 {
 	float rot = atan2f(line.x, line.y);
 	rot = rot * 180.0f / M_PI;
@@ -427,7 +503,9 @@ void drawRails()
 {
 	for (int i = 0; i < metroLinesPosition.size(); i++)
 	{
-		for (int b = metroLinesPosition.at(i).first; b < metroLinesPosition.at(i).second - 1; b++)
+		volatile int grens = metroLinesPosition.at(i).second;
+
+		for (int b = metroLinesPosition.at(i).first; b < metroLinesPosition.at(i).second; b++)
 		{
 			if (b >= metroLines.size()) {
 				continue;
@@ -565,26 +643,47 @@ void drawRails()
 
 GameScene3D::GameScene3D()
 {
+	SceneManager::getInstance().switchWindow3D();
+
 	//init planes
 	initTopPlane();
 	initGroundPlane();
 
 	//init textures
-	textures.push_back(Texture("textures/dirt.png"));
+	textures.push_back(new Texture("textures/dirt.png"));
 
 	//load models
-	prepareModel("models/steve/steve.obj");
 	prepareModel("models/Metro/metro.obj");
 	prepareModel("models/city/city.obj");
 	prepareModel("models/track/track_2.obj");
+	
+	SceneManager::getInstance().switchWindow2D();
+	prepareModel("models/city2/city2d.obj");
 
-	//createdummyRenderable
+	SceneManager::getInstance().switchWindow3D();
+	//create city
 	createDummyRenderableList();
 
-	/*pLine = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
-	train = new MetroTrain(*pLine);
+	//debug data
+	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } });
+	train = new MetroTrain(*line);
+	handle = mg_gameLogic::allocate_line(line);
 
-	handle = mg_gameLogic::allocate_line(pLine);*/
+	line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } });
+	train2 = new MetroTrain(*line2);
+	handle2 = mg_gameLogic::allocate_line(line2);
+
+	line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } });
+	train3 = new MetroTrain(*line3);
+	handle3 = mg_gameLogic::allocate_line(line3);
+
+	line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } });
+	train4 = new MetroTrain(*line4);
+	handle4 = mg_gameLogic::allocate_line(line4);
+
+	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } });
+	train5 = new MetroTrain(*line5);
+	handle5 = mg_gameLogic::allocate_line(line5);
 }
 
 
@@ -621,7 +720,7 @@ void GameScene3D::render3D()
 	glTranslatef(0, 0, -50);
 
 	//drawVertexArray(TopPlane);
-	textures[0].Bind();
+	textures[0]->Bind();
 	glEnable(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -634,10 +733,11 @@ void GameScene3D::render3D()
 	//draw rails
 	glLineWidth(1.5);
 	prepare_lines();
-	for (int i = 0; i < metroLinesPosition.size(); i++)
-	{
-		drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(i).first, metroLinesPosition.at(i).second);
-	}
+	//draw rails as line
+	//for (int i = 0; i < metroLinesPosition.size(); i++)
+	//{
+	//	drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(i).first, metroLinesPosition.at(i).second-1);
+	//}
 	drawRails();
 
 	glPopMatrix();
@@ -646,39 +746,35 @@ void GameScene3D::render3D()
 }
 
 void GameScene3D::render2D() {
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90.0f, 800 / (float)600, 0.1f, 200000);
+
+	gluPerspective(90.0f, WIDTH / (float)HEIGHT, 0.1f, 5000.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glMatrixMode(GL_MODELVIEW);
 
+	glEnable(GL_DEPTH_TEST);
+
 	glLoadIdentity();
-	gluLookAt(100, 100, 100,
-		0, 0, 0,
-		0, 1, 0);
+	glRotatef(camera2D.rotX, 1, 0, 0);
+	glRotatef(camera2D.rotY, 0, 1, 0);
+	glTranslatef(camera2D.posX, camera2D.height, camera2D.posY);
 
-	glBegin(GL_QUADS);
-
-	glColor4f(0.6f, 0.2f, 0.2f, 1.0f);
-
-	glVertex3f(0, 3, 0);
-	glVertex3f(0, 0, 0);
-	glVertex3f(50, 0, 50);
-	glVertex3f(50, 3, 50);
-
-	glVertex3f(0, 3, 100);
-	glVertex3f(0, 0, 100);
-	glVertex3f(-50, 0, 50);
-	glVertex3f(-50, 3, 50);
-
-	glVertex3f(0, 3, 100);
-	glVertex3f(0, 0, 100);
-	glVertex3f(50, 0, 50);
-	glVertex3f(50, 3, 50);
-	glEnd();
+	//draw map and lines
+	glRotatef(45, 0, 1, 0);
+	draw2DRenderables();	
+	glDisable(GL_TEXTURE_2D);
+	glRotatef(45, 0, 1, 0);
+	prepare_lines2D();
+	glLineWidth(5.0);
+	for (int i = 0; i < metroLinesPosition2D.size(); i++)
+	{
+		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(i).first, metroLinesPosition2D.at(i).second);
+	}
 
 }
 
@@ -733,9 +829,7 @@ void GameScene3D::onIdle()
 	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
 	oldTime = newTime;
 
-
 	//train->Recalculate(deltaTime2 / 1000.0f);
-
 
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	float deltaTime = (currentTime - lastTime) / 1000.0f;
@@ -755,14 +849,18 @@ void GameScene3D::onIdle()
 	if (shiftActive) {
 		camera.height += 5 * deltaTime;
 	}
+
+	cout << "FPS:" << (int)(1 / deltaTime) << endl;
 }
 
 void GameScene3D::onSpecialFunc(int)
 {
+	shiftActive = true;
 }
 
 void GameScene3D::onSpecialUpFunc(int)
 {
+	shiftActive = false;
 }
 
 void GameScene3D::reshapeFunc(int, int)

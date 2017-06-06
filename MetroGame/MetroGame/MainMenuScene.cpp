@@ -3,26 +3,48 @@
 #include "SceneManager.h"
 #include "GameScene3D.h"
 
-// these have to be initialized by the constructor since there are some OpenGL calls in Font()
-Font* MainMenuScene::largeFont = nullptr;
-Font* MainMenuScene::smallFont = nullptr;
+Font* MainMenuScene::largeFont2D = nullptr;
+Font* MainMenuScene::smallFont2D = nullptr;
+Font* MainMenuScene::largeFont3D = nullptr;
+Font* MainMenuScene::smallFont3D = nullptr;
 
+
+void MainMenuScene::drawStrings()
+{
+
+}
 
 MainMenuScene::MainMenuScene()
 {
-	if(!largeFont)
-		largeFont = new Font("font_72.fnt");
-	if(!smallFont)
-		smallFont = new Font("font_0.fnt");
+	SceneManager::getInstance().switchWindow2D();
+	if (!largeFont2D)
+		largeFont2D = new Font("font_72.fnt");
+	if (!smallFont2D)
+		smallFont2D = new Font("font_0.fnt");
+	SceneManager::getInstance().switchWindow3D();
+	if (!largeFont3D)
+		largeFont3D = new Font("font_72.fnt");
+	if (!smallFont3D)
+		smallFont3D = new Font("font_0.fnt");
+	this->width = SceneManager::getInstance().getWidth();
+	this->height = SceneManager::getInstance().getHeight();
+
+	appendText(Text(width/2 - largeFont3D->textLength("Main Menu")/2, height / 3, largeFont3D, "Main Menu"));
+	appendText(Text(width/2 - smallFont3D->textLength("Press any key to play!")/2, height / 2, smallFont3D, "Press any key to play!"));
 }
 
 MainMenuScene::~MainMenuScene()
 {
 }
 
+void MainMenuScene::appendText(Text &string)
+{
+	text.push_back(string);
+}
+
 void MainMenuScene::render3D() {
 
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	glMatrixMode(GL_PROJECTION);
@@ -32,12 +54,16 @@ void MainMenuScene::render3D() {
 	glLoadIdentity();
 
 	glDisable(GL_DEPTH_TEST);
-	
-	glColor4f(0, 0, 0, 1);
-	largeFont->drawText(mainString, width / 2 - largeFont->textLength(mainString) / 2, height / 3);
-	smallFont->drawText(startString, width / 2 - smallFont->textLength(startString) / 2, height / 2);
-	//smallFont->drawText("Exit", width / 2 - smallFont->textLength("Exit") / 2, height / 2 + 50);
 
+	glColor4f(0, 0, 0, 1);
+	
+	for (Text& t : text) {
+		t.getFont()->drawText(t.getText(), t.getX(), t.getY());
+	}
+/*
+	largeFont3D->drawText(mainString, width / 2 - largeFont3D->textLength(mainString) / 2, height / 3);
+	smallFont3D->drawText(startString, width / 2 - smallFont3D->textLength(startString) / 2, height / 2);
+*/
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -55,14 +81,12 @@ void MainMenuScene::render2D()
 	glDisable(GL_DEPTH_TEST);
 
 	glColor4f(0, 0, 0, 1);
-	largeFont->drawText("2D view", width / 2 - largeFont->textLength("2D view") / 2, height / 2);
+	largeFont2D->drawText("2D view", width / 2 - largeFont2D->textLength("2D view") / 2, height / 2);
 	glEnable(GL_DEPTH_TEST);
 }
 
 void MainMenuScene::onEnter() {
 	//Do some onEnter stuff, maybe intro animation?
-	this->width = SceneManager::getInstance().getWidth();
-	this->height = SceneManager::getInstance().getHeight();
 	std::cout << "Entered MainMenuScene" << std::endl;
 }
 
@@ -104,4 +128,7 @@ void MainMenuScene::onExit() {
 void MainMenuScene::reshapeFunc(int w, int h) {
 	width = w;
 	height = h;
+	for (Text& t : text) {
+		t.setX(width/2 - t.getFont()->textLength(t.getText()) /2);
+	}
 }

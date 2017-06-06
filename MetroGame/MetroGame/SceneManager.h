@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "GL/freeglut.h"
+#include <vector>
 
 class IScene;
 
@@ -13,10 +14,12 @@ public:
 	int getHeight();
 	void init();
 	static SceneManager& getInstance();
+	void switchWindow2D();
+	void switchWindow3D();
 
 private:
 	int width, height;
-	GLuint windowID;
+	GLuint window2D, window3D;
 	bool isInit = false;
 	SceneManager(const SceneManager&);
 	SceneManager();
@@ -27,7 +30,7 @@ private:
 	void onSpecialFunc(int key);
 	void onSpecialUpFunc(int key);
 	void reshapeFunc(int, int);
-	void createWindow(int, int, std::string, void(*callback)());
+	GLuint createWindow(int, int, std::string, void(*callback)());
 	void render3D();
 	void render2D();
 	void tick();

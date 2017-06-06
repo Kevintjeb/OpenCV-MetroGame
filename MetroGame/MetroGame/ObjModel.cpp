@@ -76,6 +76,8 @@ static inline std::string cleanLine(std::string line)
 */
 ObjModel::ObjModel(const std::string &fileName)
 {
+	windowCreated = glutGetWindow();
+	this->fileName = fileName;
 	std::cout << "Loading " << fileName << std::endl;
 	std::string dirName = fileName;
 	if(dirName.rfind("/") != std::string::npos)
@@ -212,7 +214,7 @@ ObjModel::ObjModel(const std::string &fileName)
 		g->eindIndex = verts.size() - 1;
 	}
 
-	createDisplayList();
+//	createDisplayList();
 }
 
 
@@ -222,9 +224,9 @@ ObjModel::~ObjModel(void)
 
 void ObjModel::createDisplayList()
 {
-	listID = glGenLists(1);
+	//listID = glGenLists(1);
 
-	glNewList(listID, GL_COMPILE);
+	//glNewList(listID, GL_COMPILE);
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -248,13 +250,16 @@ void ObjModel::createDisplayList()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
-	glEndList();
+	//glEndList();
 }
 
 
 void ObjModel::draw()
 {
-	glCallList(listID);
+	if (windowCreated != glutGetWindow())
+		printf("Uhoh\n");
+//	glCallList(listID);
+	createDisplayList();
 }
 
 void ObjModel::loadMaterialFile( const std::string &fileName, const std::string &dirName )

@@ -26,6 +26,8 @@ private:
 	};
 
 	map<int, Glyph> glyphs;
+	int windowCreated = -1;
+
 
 public:
 	Font(const string &source);
