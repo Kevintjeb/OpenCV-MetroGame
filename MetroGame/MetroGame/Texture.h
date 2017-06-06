@@ -10,6 +10,7 @@ using std::string;
 class Texture
 {
 private:
+	std::string fileName;
 	std::map<int, GLuint> textureIds;
 	unsigned char* data = nullptr;
 public:

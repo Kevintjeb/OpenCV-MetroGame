@@ -82,6 +82,7 @@ int Font::textLength(const string &text) {
 
 Font::Font(const string & source)
 {
+	windowCreated = glutGetWindow();
 	std::ifstream input(source);
 	if (!input.is_open())
 		std::cout << "Could not open " << source << std::endl;
@@ -144,6 +145,9 @@ Font::Font(const string & source)
 
 void Font::drawText(const string &text)
 {
+	if (windowCreated != glutGetWindow())
+		printf("Uhoh\n");
+
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -158,6 +162,9 @@ void Font::drawText(const string &text)
 
 void Font::drawText(const string &text, int x, int y)
 {
+	if (windowCreated != glutGetWindow())
+		printf("Uhoh\n");
+
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

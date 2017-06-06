@@ -20,7 +20,14 @@ SceneManager::SceneManager()
 void SceneManager::init() {
 	if (!isInit) {
 		window3D = createWindow(800, 600, "3D window", []() {SceneManager::getInstance().render3D(); });
-		//window2D = createWindow(800, 600, "2D window", []() {SceneManager::getInstance().render2D(); });
+		HGLRC context3D = wglGetCurrentContext();
+		window2D = createWindow(800, 600, "2D window", []() {SceneManager::getInstance().render2D(); });
+		HGLRC context2D = wglGetCurrentContext();
+
+		if (!wglShareLists(context3D, context2D))
+		{
+			printf("Error sharing lists\n");
+		}
 		this->width = 800;
 		this->height = 600;
 		this->currentScene = new MainMenuScene();
@@ -157,11 +164,11 @@ void SceneManager::onIdle()
 	if (isInit) {
 		currentScene->onIdle();
 
-		//glutSetWindow(window3D);
+		glutSetWindow(window3D);
 		glutPostRedisplay();
 
-		//glutSetWindow(window2D);
-		//glutPostRedisplay();
+		glutSetWindow(window2D);
+		glutPostRedisplay();
 		
 	}
 	else throw "Scenemanager not initialized";

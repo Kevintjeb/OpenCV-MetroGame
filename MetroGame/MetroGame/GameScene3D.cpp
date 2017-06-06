@@ -33,7 +33,7 @@ using std::endl;
 #define WIDTH 600
 #define HEIGHT 600
 
-#define STEP 0.1f
+#define STEP 0.2f
 
 ModelLoader modelLoader;
 
@@ -51,6 +51,18 @@ MetroTrain *train;
 LinePointer handle2;
 Line *line2;
 MetroTrain *train2;
+
+LinePointer handle3;
+Line *line3;
+MetroTrain *train3;
+
+LinePointer handle4;
+Line *line4;
+MetroTrain *train4;
+
+LinePointer handle5;
+Line *line5;
+MetroTrain *train5;
 
 int oldTime = -1;
 
@@ -85,7 +97,7 @@ std::vector <VertexClass> metroLines;
 std::vector <std::pair<int, int>> metroLinesPosition;
 std::vector <VertexClass> metroLines2D;
 std::vector <std::pair<int, int>> metroLinesPosition2D;
-std::vector<Texture> textures;
+std::vector<Texture*> textures;
 std::vector<RenderablePointer> renderablePointers;
 
 float randScale(float standScale)
@@ -402,10 +414,6 @@ void draw2DRenderables()
 {
 	for (Renderable &renderable : mg_gameLogic::get_renderables())
 	{
-		if (renderable.model != "models/city/city.obj")
-		{
-			glRotatef(45, 0, 1, 0);
-		}
 		glPushMatrix();
 
 		glTranslatef(renderable.position.x, renderable.position.y, renderable.position.z);
@@ -419,6 +427,7 @@ void draw2DRenderables()
 		}
 		else
 		{
+			continue;
 			it = modelsMap.find(renderable.model);
 		}
 
@@ -445,7 +454,9 @@ void prepare_lines()
 			metroLines.push_back(VertexClass(line->operator[](index).x * 25, -50 + 3.1f, line->operator[](index).y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f));
 			position++;
 		}
+		position--;
 		metroLinesPosition.push_back(std::make_pair(start, position));
+		position++;
 	}
 }
 
@@ -488,7 +499,9 @@ void drawRails()
 {
 	for (int i = 0; i < metroLinesPosition.size(); i++)
 	{
-		for (int b = metroLinesPosition.at(i).first; b < metroLinesPosition.at(i).second-1; b++)
+		volatile int grens = metroLinesPosition.at(i).second;
+
+		for (int b = metroLinesPosition.at(i).first; b < metroLinesPosition.at(i).second; b++)
 		{
 			float deltaX = metroLines.at(b + 1).x - metroLines.at(b).x;
 			float deltaZ = metroLines.at(b + 1).z - metroLines.at(b).z;
@@ -623,31 +636,47 @@ void drawRails()
 
 GameScene3D::GameScene3D()
 {
-	//SceneManager::getInstance().switchWindow3D();
+	SceneManager::getInstance().switchWindow3D();
 
 	//init planes
 	initTopPlane();
 	initGroundPlane();
 
 	//init textures
-	textures.push_back(Texture("textures/dirt.png"));
+	textures.push_back(new Texture("textures/dirt.png"));
 
 	//load models
 	prepareModel("models/Metro/metro.obj");
 	prepareModel("models/city/city.obj");
 	prepareModel("models/track/track_2.obj");
 	
-	//SceneManager::getInstance().switchWindow2D();
+	SceneManager::getInstance().switchWindow2D();
 	prepareModel("models/city2/city2d.obj");
 
-	//SceneManager::getInstance().switchWindow3D();
+	SceneManager::getInstance().switchWindow3D();
 	//create city
-	//createDummyRenderableList();
+	createDummyRenderableList();
 
 	//debug data
-	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
+	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } });
 	train = new MetroTrain(*line);
 	handle = mg_gameLogic::allocate_line(line);
+
+	line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } });
+	train2 = new MetroTrain(*line2);
+	handle2 = mg_gameLogic::allocate_line(line2);
+
+	line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } });
+	train3 = new MetroTrain(*line3);
+	handle3 = mg_gameLogic::allocate_line(line3);
+
+	line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } });
+	train4 = new MetroTrain(*line4);
+	handle4 = mg_gameLogic::allocate_line(line4);
+
+	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } });
+	train5 = new MetroTrain(*line5);
+	handle5 = mg_gameLogic::allocate_line(line5);
 }
 
 
@@ -684,7 +713,7 @@ void GameScene3D::render3D()
 	glTranslatef(0, 0, -50);
 
 	//drawVertexArray(TopPlane);
-	textures[0].Bind();
+	textures[0]->Bind();
 	glEnable(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -697,11 +726,12 @@ void GameScene3D::render3D()
 	//draw rails
 	glLineWidth(1.5);
 	prepare_lines();
-	for (int i = 0; i < metroLinesPosition.size(); i++)
-	{
-		drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(i).first, metroLinesPosition.at(i).second-1);
-	}
-	//drawRails();
+	//draw rails as line
+	//for (int i = 0; i < metroLinesPosition.size(); i++)
+	//{
+	//	drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(i).first, metroLinesPosition.at(i).second-1);
+	//}
+	drawRails();
 
 	glPopMatrix();
 	//drawRenderable
@@ -729,12 +759,14 @@ void GameScene3D::render2D() {
 
 	//draw map and lines
 	glRotatef(45, 0, 1, 0);
-	draw2DRenderables();
+	draw2DRenderables();	
+	glDisable(GL_TEXTURE_2D);
+	glRotatef(45, 0, 1, 0);
 	prepare_lines2D();
 	glLineWidth(5.0);
 	for (int i = 0; i < metroLinesPosition2D.size(); i++)
 	{
-		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(i).first, metroLinesPosition2D.at(i).second-1);
+		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(i).first, metroLinesPosition2D.at(i).second);
 	}
 
 }
@@ -783,8 +815,7 @@ void GameScene3D::onIdle()
 	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
 	oldTime = newTime;
 
-	train->Recalculate(deltaTime2 / 1000.0f);
-
+	//train->Recalculate(deltaTime2 / 1000.0f);
 
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	float deltaTime = (currentTime - lastTime) / 1000.0f;
