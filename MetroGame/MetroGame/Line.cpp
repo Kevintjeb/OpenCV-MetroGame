@@ -5,9 +5,12 @@
 using namespace mg_gameLogic;
 using namespace std;
 
+//TODO CREATE REPOSITION FUNCTION
+
 mg_gameLogic::Line::Line(std::list<Vec2f> line, std::list<MetroStation> stations): positions(line.size()+stations.size()), distances(line.size() + stations.size()), metroStations(stations)
 {
 	for (MetroStation &station : stations) {
+		station.connectedLines.push_back(this);
 		pair<int, MetroStation> currentStation =  make_pair(-1, station);
 		int i = 0;
 		float previousDistance =999999;

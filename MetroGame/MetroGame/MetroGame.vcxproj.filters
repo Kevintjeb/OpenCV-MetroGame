@@ -49,6 +49,9 @@
     <ClCompile Include="MetroStation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Timetable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system.h">
@@ -91,6 +94,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MetroStation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Timetable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

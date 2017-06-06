@@ -2,6 +2,7 @@
 #include <list>
 #include "Renderable.h"
 #include "RenderableOutput.h"
+#include <vector>
 namespace mg_gameLogic 
 {
 	class Line;
@@ -16,8 +17,11 @@ namespace mg_gameLogic
 		Vec2f position;
 		void setPosition(Vec2f pos);
 		int stationID;
+		std::list<Line*> connectedLines;
+		std::list<int> connectedStations;
 	private:
 		RedenderablePointer pointer;
+	
 	};
 
 

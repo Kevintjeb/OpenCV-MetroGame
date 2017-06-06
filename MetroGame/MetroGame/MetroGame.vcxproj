@@ -159,6 +159,7 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="Test.cpp" />
+    <ClCompile Include="Timetable.cpp" />
     <ClCompile Include="Vect.cpp" />
     <ClCompile Include="VertexClass.cpp" />
   </ItemGroup>
@@ -175,6 +176,7 @@
     <ClInclude Include="system.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Timetable.h" />
     <ClInclude Include="Vect.h" />
     <ClInclude Include="VertexClass.h" />
   </ItemGroup>
