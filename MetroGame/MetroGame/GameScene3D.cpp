@@ -805,6 +805,8 @@ void GameScene3D::render2D() {
 	//draw map and lines
 	glRotatef(45, 0, 1, 0);
 	draw2DRenderables();
+	glDisable(GL_TEXTURE_2D);
+	glRotatef(45, 0, 1, 0);
 	prepare_lines2D();
 	glLineWidth(5.0);
 	for (int i = 0; i < metroLinesPosition2D.size(); i++)
