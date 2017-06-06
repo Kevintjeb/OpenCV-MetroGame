@@ -27,9 +27,9 @@ namespace mg_gameLogic
 		std::vector<RenderablePointer> trains;
 		int size;
 
-		inline Vec2f pos2d_from_pos(float pos);
+		inline GameLogic::Vec2f pos2d_from_pos(float pos);
 		inline float checkAndSetPosRange(float pos);
-		inline std::tuple<Vec2f, float> findComplementaryPositionAndDistance(float pos);
+		inline std::tuple<GameLogic::Vec2f, float> findComplementaryPositionAndDistance(float pos);
 
 	public:
 		

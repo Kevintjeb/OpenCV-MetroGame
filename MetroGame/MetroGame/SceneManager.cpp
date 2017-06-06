@@ -143,6 +143,7 @@ void SceneManager::onIdle()
 {
 	if (isInit) {
 		currentScene->onIdle();
+		tick();
 		glutPostRedisplay();
 	}
 	else throw "Scenemanager not initialized";

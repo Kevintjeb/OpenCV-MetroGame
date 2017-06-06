@@ -58,6 +58,12 @@
     <ClCompile Include="GameScene3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Vision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linedetection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system.h">
@@ -124,6 +130,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="freeglut\include\GL\glut.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linedetection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,13 +4,13 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-inline Vec2f MetroTrain::pos2d_from_pos(float pos)
+inline GameLogic::Vec2f MetroTrain::pos2d_from_pos(float pos)
 {
 	int index = line.getIndexByPosition(pos);
 
-	Vec2f far = line[index+1], close = line[index];
+	GameLogic::Vec2f far = line[index+1], close = line[index];
 
-	Vec2f normal(close.x - far.x, close.y - far.y);
+	GameLogic::Vec2f normal(close.x - far.x, close.y - far.y);
 	float mag = sqrt(normal.x*normal.x + normal.y*normal.y);
 	normal.x /= mag;
 	normal.y /= mag;
@@ -19,7 +19,7 @@ inline Vec2f MetroTrain::pos2d_from_pos(float pos)
 	normal.x *= dist;
 	normal.y *= dist;
 
-	Vec2f pos2d(close.x + normal.x, close.y + normal.y);
+	GameLogic::Vec2f pos2d(close.x + normal.x, close.y + normal.y);
 	return pos2d;
 }
 
@@ -46,7 +46,7 @@ inline float MetroTrain::checkAndSetPosRange(float pos)
 	return pos;
 }
 
-inline std::tuple<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositionAndDistance(float pos)
+inline std::tuple<GameLogic::Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositionAndDistance(float pos)
 {
 	
 }
@@ -68,7 +68,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 	{
 		int diff = size - trains.size(); // we need 'diff' new trains
 		for (int i = 0; i < diff; ++i) // we allocate new Renderables 
-			trains.push_back(allocate_renderable(Renderable("models/Metro/metro.obj", Vec3f(0, -90.8f, 0), 0.0f, Vec3f(0, 1, 0), Vec3f(2, 2, 2))));
+			trains.push_back(allocate_renderable(Renderable("models/Metro/metro.obj", GameLogic::Vec3f(0, -90.8f, 0), 0.0f, GameLogic::Vec3f(0, 1, 0), GameLogic::Vec3f(2, 2, 2))));
 	}
 	else if (trains.size() > size) // if we have to many trains
 	{

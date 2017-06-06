@@ -9,24 +9,24 @@
 
 namespace mg_gameLogic
 {
-	std::list<Vec2f> filterData(const std::list<Vec2f> &data);
-	bool compareVector(Vec2f &v1,Vec2f &v2);
+	std::list<GameLogic::Vec2f> filterData(const std::list<GameLogic::Vec2f> &data);
+	bool compareVector(GameLogic::Vec2f &v1, GameLogic::Vec2f &v2);
 
 	class Line
 	{
 	private:
 		std::valarray<float> distances;
-		std::valarray<Vec2f> positions;
+		std::valarray<GameLogic::Vec2f> positions;
 	public:
 		
 		Line() = delete;
 		Line(const Line&) = delete;
-		explicit Line(std::list<Vec2f> line);
+		explicit Line(std::list<GameLogic::Vec2f> line);
 		~Line();
 		
 		std::size_t size() const;
 		int getIndexByPosition(float position) const;
-		const Vec2f& operator[](int i) const;
+		const GameLogic::Vec2f& operator[](int i) const;
 		float getDistance(int i) const;
 	};
 }

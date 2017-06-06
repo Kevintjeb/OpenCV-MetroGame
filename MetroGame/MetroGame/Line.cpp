@@ -3,12 +3,12 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-Line::Line(list<Vec2f> line) : positions(line.size()), distances(line.size())
+Line::Line(list<GameLogic::Vec2f> line) : positions(line.size()), distances(line.size())
 {
 	int index = 0;
 
 	// we itterate over all points in the line
-	for (Vec2f &v : line)
+	for (GameLogic::Vec2f &v : line)
 	{
 		positions[index] = v; // we copy the point to our array
 		if (index) // unless we'are 0
@@ -61,7 +61,7 @@ int Line::getIndexByPosition(const float position) const
 	}
 }
 
-const Vec2f& Line::operator[](int index) const
+const GameLogic::Vec2f& Line::operator[](int index) const
 {
 	return positions[index];
 }
@@ -71,13 +71,13 @@ float mg_gameLogic::Line::getDistance(int i) const
 	return distances[i];
 }
 
-list<Vec2f> mg_gameLogic::filterData(const list<Vec2f> &data)
+list<GameLogic::Vec2f> mg_gameLogic::filterData(const list<GameLogic::Vec2f> &data)
 {
-	std::list<Vec2f >  filtered;
+	std::list<GameLogic::Vec2f >  filtered;
 
-	Vec2f previousVector = Vec2f(-1, -1);
+	GameLogic::Vec2f previousVector = GameLogic::Vec2f(-1, -1);
 
-	for (Vec2f vector : data)
+	for (GameLogic::Vec2f vector : data)
 	{
 		if (compareVector(vector, previousVector)) {
 			filtered.push_back(vector);
@@ -87,7 +87,7 @@ list<Vec2f> mg_gameLogic::filterData(const list<Vec2f> &data)
 	return filtered;
 }
 
-bool mg_gameLogic::compareVector(Vec2f &v1,Vec2f &v2)
+bool mg_gameLogic::compareVector(GameLogic::Vec2f &v1, GameLogic::Vec2f &v2)
 {
 
 	if (abs(v1.x - v2.x) > MARGINX || abs(v1.y - v2.y) > MARGINY)

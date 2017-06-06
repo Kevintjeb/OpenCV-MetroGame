@@ -1,37 +1,38 @@
 #pragma once
-
-class Vec3f
-{
-public:
-	union
+namespace GameLogic {
+	class Vec3f
 	{
-		struct
+	public:
+		union
 		{
-			float x, y, z;
+			struct
+			{
+				float x, y, z;
+			};
+			float v[3];
 		};
-		float v[3];
+		Vec3f();
+		Vec3f(const Vec3f &other);
+		Vec3f(float x, float y, float z);
+		float& operator [](int);
 	};
-	Vec3f();
-	Vec3f(const Vec3f &other);
-	Vec3f(float x, float y, float z);
-	float& operator [](int);
-};
 
-class Vec2f
-{
-public:
-	union
+	class Vec2f
 	{
-		struct
+	public:
+		union
 		{
-			float x, y;
+			struct
+			{
+				float x, y;
+			};
+			float v[2];
 		};
-		float v[2];
-	};
-	Vec2f();
-	Vec2f(float x, float y);
-	Vec2f(const Vec2f &other);
-	float& operator [](int);
+		Vec2f();
+		Vec2f(float x, float y);
+		Vec2f(const Vec2f &other);
+		float& operator [](int);
 
-	float distance(const Vec2f &other);
-};
+		float distance(const Vec2f &other);
+	};
+}

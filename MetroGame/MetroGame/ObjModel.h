@@ -45,9 +45,9 @@ private:
 
 	GLuint listID;
 
-	std::vector<Vec3f>	vertices;
-	std::vector<Vec3f>	normals;
-	std::vector<Vec2f>	texcoords;
+	std::vector<GameLogic::Vec3f>	vertices;
+	std::vector<GameLogic::Vec3f>	normals;
+	std::vector<GameLogic::Vec2f>	texcoords;
 	std::vector<ObjGroup*> groups;
 	std::vector<MaterialInfo*> materials;
 	std::vector<VertexClass> verts;

@@ -24,6 +24,7 @@
 
 #include "SceneManager.h"
 #include "MainMenuScene.h"
+#include "Vision.h"
 
 using namespace mg_system;
 using namespace mg_gameLogic;
@@ -43,7 +44,7 @@ GLuint window_db;
 LinePointer handle;
 Test test{};
 Renderable testTrain;
-Line *line;
+Line *pLine;
 MetroTrain *train;
 
 int oldTime = -1;
@@ -72,6 +73,9 @@ std::vector <std::pair<int, int>> metroLinesPosition;
 std::vector<Texture> textures;
 std::vector<RenderablePointer> renderablePointers;
 
+//TEMP
+Vision vision;
+
 float randScale(float standScale)
 {
 	standScale += 0.1f;
@@ -84,66 +88,66 @@ float randScale(float standScale)
 void createDummyRenderableList()
 {
 	srand(time(NULL));
-	Vec3f rot = Vec3f(0.0f, 1.0f, 0.0f);
+	GameLogic::Vec3f rot = GameLogic::Vec3f(0.0f, 1.0f, 0.0f);
 	float angle = 45;
 	std::string model = "models/city/city.obj";
 
 	int layer = 0;
 	float standScale = 0.2f;
-	Vec3f pos, scale;
+	GameLogic::Vec3f pos, scale;
 
 	for (float z = 100.0f; z > -100.0f; z -= 25.0f)
 	{
 		switch (layer)
 		{
 		case 0:
-			pos = Vec3f(0.0f, 4.0f, 100.0f);
-			scale = Vec3f(standScale, randScale(standScale), standScale);
+			pos = GameLogic::Vec3f(0.0f, 4.0f, 100.0f);
+			scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 			renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			break;
 		case 1:
 			for (float x = 25.0f; x > -26.0f; x -= 50.0f)
 			{
-				pos = Vec3f(x, 4.0f, z);
-				scale = Vec3f(standScale, randScale(standScale), standScale);
+				pos = GameLogic::Vec3f(x, 4.0f, z);
+				scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 2:
 			for (float x = 50.0f; x > -51.0f; x -= 50.0f)
 			{
-				pos = Vec3f(x, 4.0f, z);
-				scale = Vec3f(standScale, randScale(standScale), standScale);
+				pos = GameLogic::Vec3f(x, 4.0f, z);
+				scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 3:
 			for (float x = 75.0f; x > -76.0f; x -= 50.0f)
 			{
-				pos = Vec3f(x, 4.0f, z);
-				scale = Vec3f(standScale, randScale(standScale), standScale);
+				pos = GameLogic::Vec3f(x, 4.0f, z);
+				scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 4:
 			for (float x = 50.0f; x > -51.0f; x -= 50.0f)
 			{
-				pos = Vec3f(x, 4.0f, z);
-				scale = Vec3f(standScale, randScale(standScale), standScale);
+				pos = GameLogic::Vec3f(x, 4.0f, z);
+				scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 5:
 			for (float x = 25.0f; x > -26.0f; x -= 50.0f)
 			{
-				pos = Vec3f(x, 4.0f, z);
-				scale = Vec3f(standScale, randScale(standScale), standScale);
+				pos = GameLogic::Vec3f(x, 4.0f, z);
+				scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 6:
-			pos = Vec3f(0.0f, 4.0f, -50.0f);
-			scale = Vec3f(standScale, randScale(standScale), standScale);
+			pos = GameLogic::Vec3f(0.0f, 4.0f, -50.0f);
+			scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 			renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			break;
 
@@ -262,7 +266,7 @@ void prepareModel(std::string modelPath)
 	modelsMap.insert(std::pair<std::string, int>(modelPath, modelsMap.size()));
 }
 
-void drawRail(Vec2f v1, Vec2f vold)
+void drawRail(GameLogic::Vec2f v1, GameLogic::Vec2f vold)
 {
 	glLineWidth(2.5);
 	glBegin(GL_LINES);
@@ -406,7 +410,7 @@ void prepare_lines()
 	}
 }
 
-void drawTrack(float x, float y, float z, Vec2f line)
+void drawTrack(float x, float y, float z, GameLogic::Vec2f line)
 {
 	float rot = atan2f(line.x, line.y);
 	rot = rot * 180.0f / M_PI;
@@ -425,11 +429,14 @@ void drawRails()
 	{
 		for (int b = metroLinesPosition.at(i).first; b < metroLinesPosition.at(i).second - 1; b++)
 		{
-			float deltaX = metroLines.at(b + 1).x - metroLines.at(b).x;
-			float deltaZ = metroLines.at(b + 1).z - metroLines.at(b).z;
+			if (b >= metroLines.size()) {
+				continue;
+			}
+			float deltaX = metroLines.at(b).x - metroLines.at(b).x;
+			float deltaZ = metroLines.at(b).z - metroLines.at(b).z;
 			float rc;
 
-			Vec2f vectorLine = Vec2f(deltaX, deltaZ);
+			GameLogic::Vec2f vectorLine = GameLogic::Vec2f(deltaX, deltaZ);
 
 			if (deltaX > 0)
 			{
@@ -574,9 +581,10 @@ GameScene3D::GameScene3D()
 	//createdummyRenderable
 	createDummyRenderableList();
 
-	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
-	train = new MetroTrain(*line);
-	handle = mg_gameLogic::allocate_line(line);
+	/*pLine = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
+	train = new MetroTrain(*pLine);
+
+	handle = mg_gameLogic::allocate_line(pLine);*/
 }
 
 
@@ -676,10 +684,17 @@ void GameScene3D::render2D() {
 
 void GameScene3D::update()
 {
+	vision.getStations();
+	vision.getLines(LINE_RED);
+	vision.getLines(LINE_GREEN);
+	vision.getLines(LINE_BLUE);
+	
 }
 
 void GameScene3D::onEnter()
 {
+	vision.start();
+	vision.calibrate();
 }
 
 void setAllKeysFalse() {
@@ -693,7 +708,7 @@ void setAllKeysFalse() {
 void GameScene3D::onExit()
 {
 	delete train;
-	delete line;
+	delete pLine;
 	setAllKeysFalse();
 	clear_renderables();
 }
@@ -711,14 +726,15 @@ void GameScene3D::onKeyDown(unsigned char key)
 	}
 	keys[key] = true;
 }
-
+int counter = 0;
 void GameScene3D::onIdle()
 {
 	int newTime = glutGet(GLUT_ELAPSED_TIME);
 	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
 	oldTime = newTime;
 
-	train->Recalculate(deltaTime2 / 1000.0f);
+
+	//train->Recalculate(deltaTime2 / 1000.0f);
 
 
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);

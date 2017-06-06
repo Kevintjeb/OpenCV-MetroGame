@@ -13,6 +13,6 @@ namespace mg_gameLogic
 		~Test();
 		Line line;
 		MetroTrain train;
-		std::list<Vec2f> testMetroLine();
+		std::list<GameLogic::Vec2f> testMetroLine();
 	};
 }
