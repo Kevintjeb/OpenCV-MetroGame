@@ -4,7 +4,6 @@
 #include "RenderableOutput.h"
 namespace mg_gameLogic 
 {
-	class Line;
 
 	class MetroStation
 	{
@@ -17,7 +16,7 @@ namespace mg_gameLogic
 		void setPosition(Vec2f pos);
 		int stationID;
 	private:
-		RedenderablePointer pointer;
+		RenderablePointer *pointer;
 	};
 
 

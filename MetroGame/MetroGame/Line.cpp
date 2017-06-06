@@ -117,6 +117,11 @@ float mg_gameLogic::Line::getDistance(int i) const
 	return distances[i];
 }
 
+const std::vector<Vec2f>& mg_gameLogic::Line::getLine() const
+{
+	return positions;
+}
+
 list<Vec2f> mg_gameLogic::filterData(const list<Vec2f> &data)
 {
 	std::list<Vec2f >  filtered;

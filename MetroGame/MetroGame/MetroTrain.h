@@ -28,7 +28,7 @@ namespace mg_gameLogic
 		int stopState = 0;	//0= normaal rijden // 1 = gestopt // 2 = optrekken 
 		int oldIndex = -1;  //zorgt voor de eerste check zodat niet meerdere keren stopt.
 
-		std::vector<RedenderablePointer> trains;
+		std::vector<RenderablePointer> trains;
 		int size;
 
 		inline Vec2f pos2d_from_pos(float pos);
@@ -39,6 +39,7 @@ namespace mg_gameLogic
 		inline std::pair<Vec2f, float> findComplementaryPositionAndDistance(float pos);
 
 	public:
+
 		float speed = .50f;
 		static constexpr int   max_size     = 16;
 		static constexpr float train_length = 0.2f;

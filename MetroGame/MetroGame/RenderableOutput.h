@@ -5,10 +5,18 @@
 
 namespace mg_gameLogic
 {
-	using RedenderablePointer = std::list<Renderable>::iterator;
+	using RenderablePointer = std::list<Renderable>::iterator;
+	using LinePointer = std::list<RenderableLine>::iterator;
 
-	RedenderablePointer allocate_renderable(Renderable&);
-	void deallocate_renderable(RedenderablePointer);
+	RenderablePointer allocate_renderable(Renderable&);
+	LinePointer allocate_line(RenderableLine&);
+
+	void deallocate_renderable(RenderablePointer);
+	void deallocate_line(LinePointer);
+	void clear_renderables();
 
 	std::list<Renderable>& get_renderables();
+	std::list<RenderableLine>& get_lines();
+
+
 }

@@ -146,7 +146,6 @@ MetroTrain::MetroTrain(Line* line, float init_pos, State state, int size) :
 	
 }
 
-
 float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 {
 
@@ -155,7 +154,7 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 	for (pair<int, MetroStation> p : line->getStationPosistion())
 	{
 		int pcompare = p.first - (state == State::FORWARD ? 1 : 2);				// -1 voor eerste punt -2 voor achteruit want fuck flobo
-		if ((pcompare == index /*|| (p.first+1)==index*/)&& stopState==0 && oldIndex != index)	//Eerstvolgende punt is het huidige punt
+		if ((pcompare == index /*|| (p.first+1)==index*/) && stopState == 0 && oldIndex != index)	//Eerstvolgende punt is het huidige punt
 		{
 			//snelheid verminderen als groter dan 0
 			if (speed > 0) {
@@ -168,26 +167,27 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 			totalTimeSpend = 0;
 			stopState = 1;		//bevesigen dat de trein stil staat.
 			oldIndex = index;
-			speed = 0; }
-		if (totalTimeSpend > 3 && stopState ==1) 
+			speed = 0;
+		}
+		if (totalTimeSpend > 3 && stopState == 1)
 		{
 			stopState = 2;		//Toestemming voor optrekken
 		}
 		//Opstrekken
-		if ( stopState ==2)
+		if (stopState == 2)
 		{
-			if (speed <= 0.5f) 
-				{
-					speed += 0.1;
-				}
+			if (speed <= 0.5f)
+			{
+				speed += 0.1;
+			}
 		}//Voorkomen dat snelheid boven max gaat.
-		if (speed >= 0.5f) 
+		if (speed >= 0.5f)
 		{
 			stopState = 0;
 			speed = 0.5f;
 		}
 		//zorgen dat stop niet meerdere keren per traject gebeurt.
-		if (index != pcompare) 
+		if (index != pcompare)
 		{
 			oldIndex = -1;
 		}
@@ -201,7 +201,7 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 		//	totalTimeSpend = 0;
 		//}
 	}
-	
+
 
 	//snelheid keer tijd zodat gelijk blijft.
 	return speed*elapsedTime;
@@ -214,7 +214,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 	{
 		int diff = size - trains.size(); // we need 'diff' new trains
 		for (int i = 0; i < diff; ++i) // we allocate new Renderables 
-			trains.push_back(allocate_renderable(Renderable(METRO, Vec3f(0, -92.0f, 0), 0.0f, Vec3f(0, 1, 0), Vec3f(1, 1, 1))));
+			trains.push_back(allocate_renderable(Renderable("models/Metro/metro.obj", Vec3f(0, -90.8f, 0), 0.0f, Vec3f(0, 1, 0), Vec3f(1, 1, 1))));
 	}
 	else if (trains.size() > size) // if we have to many trains
 	{

@@ -6,8 +6,8 @@ using namespace mg_gameLogic;
 
 int main(int argc, char **argv)
 {
-	Test test;
-	test.testMetroLine();
+	//Test test;
+	//test.testMetroLine();
 	mg_system::init(argc, argv);
 	mg_system::start();
 

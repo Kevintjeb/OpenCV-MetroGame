@@ -425,7 +425,8 @@ void idle()
 }
 
 
-int main(int argc, char* argv[])
+int
+(int argc, char* argv[])
 {
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutInitWindowSize(width, height);
