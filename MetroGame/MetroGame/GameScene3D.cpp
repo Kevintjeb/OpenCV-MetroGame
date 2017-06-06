@@ -802,6 +802,7 @@ void GameScene3D::update()
 
 void GameScene3D::onEnter()
 {
+	lastTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
 void setAllKeysFalse() {
@@ -824,6 +825,9 @@ void GameScene3D::onExit()
 void GameScene3D::onKeyUP(unsigned char key)
 {
 	keys[key] = false;
+	if (key == ' ') {
+		SceneManager::getInstance().pauseScene();
+	}
 }
 
 void GameScene3D::onKeyDown(unsigned char key)
@@ -836,10 +840,6 @@ void GameScene3D::onKeyDown(unsigned char key)
 
 void GameScene3D::onIdle()
 {
-	int newTime = glutGet(GLUT_ELAPSED_TIME);
-	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
-	oldTime = newTime;
-
 	//train->Recalculate(deltaTime2 / 1000.0f);
 
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);

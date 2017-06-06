@@ -9,6 +9,8 @@ class SceneManager
 {
 public:
 	void loadScene(IScene *);
+	void pauseScene();
+	void unPauseScene();
 	IScene& getCurrentScene();
 	int getWidth();
 	int getHeight();
@@ -35,6 +37,8 @@ private:
 	void render2D();
 	void tick();
 	IScene* currentScene;
+	bool isPaused;
+	IScene* pausedScene;
 };
 
 

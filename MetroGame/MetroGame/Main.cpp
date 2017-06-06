@@ -4,10 +4,10 @@
 
 using namespace mg_gameLogic;
 
-/*
+
 extern "C" {
 	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
-}*/
+}
 
 int main(int argc, char **argv)
 {
@@ -15,6 +15,5 @@ int main(int argc, char **argv)
 	test.testMetroLine();
 	mg_system::init(argc, argv);
 	mg_system::start();
-
 }
 

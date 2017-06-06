@@ -2,7 +2,7 @@
 #include "MainMenuScene.h"
 #include "system.h"
 #include <functional>
-
+#include "PauseScene.h"
 SceneManager::SceneManager(const SceneManager &other)
 {
 	this->currentScene = other.currentScene;
@@ -55,6 +55,29 @@ void SceneManager::loadScene(IScene *newScene)
 		delete currentScene; //remove it
 		currentScene = newScene;
 		currentScene->onEnter();
+	}
+	else return;
+}
+
+void SceneManager::pauseScene()
+{
+	if (isInit && !isPaused) {
+		isPaused = true;
+		pausedScene = currentScene;
+		
+		currentScene = new PauseScene();
+		currentScene->onEnter();
+	}
+	else return;
+}
+
+void SceneManager::unPauseScene() {
+	if (isInit && isPaused) {
+		isPaused = false;
+		delete currentScene;
+		currentScene = pausedScene;
+		currentScene->onEnter();
+		pausedScene = nullptr;
 	}
 	else return;
 }
