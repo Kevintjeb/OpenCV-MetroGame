@@ -4,7 +4,8 @@
 #include "RenderableOutput.h"
 namespace mg_gameLogic 
 {
-	
+	class Line;
+
 	class MetroStation
 	{
 	public:
