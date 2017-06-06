@@ -20,7 +20,14 @@ SceneManager::SceneManager()
 void SceneManager::init() {
 	if (!isInit) {
 		window3D = createWindow(800, 600, "3D window", []() {SceneManager::getInstance().render3D(); });
+		HGLRC context3D = wglGetCurrentContext();
 		window2D = createWindow(800, 600, "2D window", []() {SceneManager::getInstance().render2D(); });
+		HGLRC context2D = wglGetCurrentContext();
+
+		if (!wglShareLists(context3D, context2D))
+		{
+			printf("Error sharing lists\n");
+		}
 		this->width = 800;
 		this->height = 600;
 		this->currentScene = new MainMenuScene();

@@ -6,6 +6,7 @@
 
 Texture::Texture(const string &filename)
 {
+	this->fileName = filename;
 	int bpp2;
 
 	stbi_set_flip_vertically_on_load(1);
@@ -19,6 +20,7 @@ void Texture::Bind() {
 	int window = glutGetWindow();
 	if (textureIds.find(window) == textureIds.end())
 	{
+		printf("Building texture %s for window %i, data=%i\n", fileName.c_str(), window, (void*)data);
 		GLuint textureId;
 		glGenTextures(1, &textureId);
 		glBindTexture(GL_TEXTURE_2D, textureId);
@@ -44,7 +46,8 @@ void Texture::Bind() {
 Texture::~Texture()
 {
 //TODO
-//	if(data)
-//		stbi_image_free(data);
-//	data = nullptr;
+	printf("Cleaning up %s\n", fileName);
+	if(data)
+		stbi_image_free(data);
+	data = nullptr;
 }
