@@ -12,16 +12,22 @@ namespace mg_gameLogic
 	std::list<Vec2f> filterData(const std::list<Vec2f> &data);
 	bool compareVector(Vec2f &v1,Vec2f &v2);
 
+	enum class LineType
+	{
+		Red, Blue, Green
+	};
+
 	class Line
 	{
 	private:
 		std::valarray<float> distances;
 		std::valarray<Vec2f> positions;
 	public:
-		
+		const LineType type;
+
 		Line() = delete;
 		Line(const Line&) = delete;
-		explicit Line(std::list<Vec2f> line);
+		explicit Line(std::list<Vec2f> line, LineType type);
 		~Line();
 		
 		std::size_t size() const;

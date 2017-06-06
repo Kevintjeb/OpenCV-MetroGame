@@ -460,6 +460,29 @@ void prepare_lines()
 	}
 }
 
+Vec3f getLineColor(LineType color)
+{
+	Vec3f lineColor;
+
+	switch (color)
+	{
+		case LineType::Red:
+			lineColor = Vec3f(1.0f, 0.0f, 0.0f);
+			break;
+		case LineType::Green:
+			lineColor = Vec3f(0.0f, 1.0f, 0.0f);
+			break;
+		case LineType::Blue:
+			lineColor = Vec3f(0.0f, 0.0f, 1.0f);
+			break;
+		default:
+			lineColor = Vec3f(1.0f, 1.0f, 0.0f);
+			break;
+	}
+
+	return lineColor;
+}
+
 void prepare_lines2D()
 {
 	int position = 0;
@@ -467,15 +490,17 @@ void prepare_lines2D()
 	metroLinesPosition2D.clear();
 	for (Line* line : mg_gameLogic::get_lines())
 	{
+		Vec3f color = getLineColor(line->type);
+
 		int start = position;
 		for (int index = 0; index < line->size(); index++)
 		{
 			if (index > 0 && index < line->size() - 1)
 			{
-				metroLines2D.push_back(VertexClass(line->operator[](index).x * 50, 10.0f, line->operator[](index).y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f));
+				metroLines2D.push_back(VertexClass(line->operator[](index).x * 50, 10.0f, line->operator[](index).y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
 				position++;
 			}
-			metroLines2D.push_back(VertexClass(line->operator[](index).x * 50, 10.0f, line->operator[](index).y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f));
+			metroLines2D.push_back(VertexClass(line->operator[](index).x * 50, 10.0f, line->operator[](index).y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
 			position++;
 		}
 		metroLinesPosition2D.push_back(std::make_pair(start, position));
@@ -658,23 +683,23 @@ GameScene3D::GameScene3D()
 	createDummyRenderableList();
 
 	//debug data
-	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } });
+	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } }, LineType::Red);
 	train = new MetroTrain(*line);
 	handle = mg_gameLogic::allocate_line(line);
 
-	line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } });
+	line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } }, LineType::Green);
 	train2 = new MetroTrain(*line2);
 	handle2 = mg_gameLogic::allocate_line(line2);
 
-	line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } });
+	line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } }, LineType::Blue);
 	train3 = new MetroTrain(*line3);
 	handle3 = mg_gameLogic::allocate_line(line3);
 
-	line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } });
+	line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } }, LineType::Red);
 	train4 = new MetroTrain(*line4);
 	handle4 = mg_gameLogic::allocate_line(line4);
 
-	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } });
+	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, LineType::Green);
 	train5 = new MetroTrain(*line5);
 	handle5 = mg_gameLogic::allocate_line(line5);
 }

@@ -3,7 +3,7 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-Line::Line(list<Vec2f> line) : positions(line.size()), distances(line.size())
+Line::Line(list<Vec2f> line, LineType type) : positions(line.size()), distances(line.size()), type(type)
 {
 	int index = 0;
 
