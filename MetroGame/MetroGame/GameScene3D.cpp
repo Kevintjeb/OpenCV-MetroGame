@@ -24,6 +24,7 @@
 
 #include "SceneManager.h"
 #include "MainMenuScene.h"
+#include "Passengers.h"
 
 using namespace mg_system;
 using namespace mg_gameLogic;
@@ -99,6 +100,7 @@ std::vector <VertexClass> metroLines2D;
 std::vector <std::pair<int, int>> metroLinesPosition2D;
 std::vector<Texture*> textures;
 std::vector<RenderablePointer> renderablePointers;
+std::vector<Passengers> passengers;
 
 float randScale(float standScale)
 {
@@ -658,6 +660,11 @@ void drawRails()
 	}
 }
 
+void DrawCircle(float cx, float cy, float r, Vec3f color)
+{
+	
+}
+
 
 GameScene3D::GameScene3D()
 {
@@ -677,6 +684,15 @@ GameScene3D::GameScene3D()
 	
 	SceneManager::getInstance().switchWindow2D();
 	prepareModel("models/city2/city2d.obj");
+
+
+	//debug
+	passengers.push_back(Passengers(0, 0, Passengers::Priority::LOW));
+	passengers.push_back(Passengers(-50, 0, Passengers::Priority::HIGH));
+	passengers.push_back(Passengers(50, 50, Passengers::Priority::HIGH));
+	passengers.push_back(Passengers(40, 10, Passengers::Priority::LOW));
+	passengers.push_back(Passengers(-5, -25, Passengers::Priority::EMERENCY));
+	passengers.push_back(Passengers(20, -25, Passengers::Priority::HIGH));
 
 	SceneManager::getInstance().switchWindow3D();
 	//create city
@@ -761,6 +777,8 @@ void GameScene3D::render3D()
 	glPopMatrix();
 	//drawRenderable
 	drawRenderables();
+
+	
 }
 
 void GameScene3D::render2D() {
@@ -792,6 +810,11 @@ void GameScene3D::render2D() {
 	for (int i = 0; i < metroLinesPosition2D.size(); i++)
 	{
 		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(i).first, metroLinesPosition2D.at(i).second);
+	}
+
+	for (Passengers &p : passengers)
+	{
+		p.draw();
 	}
 
 }
@@ -847,6 +870,13 @@ void GameScene3D::onIdle()
 	lastTime = currentTime;
 
 	rotation += deltaTime * 15;
+
+
+	for (Passengers &p : passengers)
+	{
+		p.update();
+	}
+	
 
 	if (keys['a']) move(0, deltaTime*speed);
 	if (keys['d']) move(180, deltaTime*speed);

@@ -162,6 +162,7 @@
     <ClCompile Include="MetroTrain.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="ObjModel.cpp" />
+    <ClCompile Include="Passengers.cpp" />
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ObjModel.h" />
+    <ClInclude Include="Passengers.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="IScene.h" />
     <ClInclude Include="SceneManager.h" />
