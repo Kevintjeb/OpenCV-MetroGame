@@ -160,7 +160,6 @@
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="RenderableOutput.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="Test.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vect.cpp" />
     <ClCompile Include="VertexClass.cpp" />
@@ -180,7 +179,6 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="system.h" />
-    <ClInclude Include="Test.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vect.h" />
     <ClInclude Include="VertexClass.h" />
