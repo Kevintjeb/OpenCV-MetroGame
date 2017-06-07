@@ -149,7 +149,7 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 
 	int index = line->getIndexByPosition(line_pos);
 	totalTimeSpend += elapsedTime;
-	for (pair<int, MetroStation> p : line->getStationPosistion())
+	for (pair<int, MetroStation> p : line->getStationsPosistions())
 	{
 		int pcompare = p.first - (state == State::FORWARD ? 1 : 2);				// -1 voor eerste punt -2 voor achteruit want fuck flobo
 		if ((pcompare == index /*|| (p.first+1)==index*/)&& stopState==0 && oldIndex != index)	//Eerstvolgende punt is het huidige punt

@@ -24,3 +24,14 @@ void mg_gameLogic::MetroStation::setPosition(Vec2f pos)
 	position = pos;
 	pointer->position = Vec3f(pos.x*50,-92,pos.y*50);
 }
+
+bool mg_gameLogic::MetroStation::operator==(const MetroStation & other) const
+{
+	if (this->stationID == stationID) 
+	{
+		return true;
+	}
+	return false;
+}
+
+

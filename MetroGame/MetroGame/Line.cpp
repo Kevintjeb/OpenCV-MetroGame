@@ -89,9 +89,20 @@ int Line::getIndexByPosition(const float position) const
 	}
 }
 
-const std::list<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationPosistion() const
+const std::list<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationsPosistions() const
 {
 	return stationIndex;
+}
+
+float mg_gameLogic::Line::getStationDistance(MetroStation station) const
+{
+	for (std::pair<int, MetroStation> p : stationIndex)
+	{
+		if (p.second.stationID == station.stationID) 
+		{
+			return getDistance(p.first);
+		}
+	}
 }
 
 

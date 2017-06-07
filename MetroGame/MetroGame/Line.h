@@ -28,7 +28,8 @@ namespace mg_gameLogic
 		
 		std::size_t size() const;
 		int getIndexByPosition(float position) const;
-		const std::list<std::pair<int, MetroStation>>  getStationPosistion() const;
+		const std::list<std::pair<int, MetroStation>>  getStationsPosistions() const;
+		float getStationDistance(MetroStation station) const;
 		const Vec2f& operator[](int i) const;
 		float getDistance(int i) const;
 	};

@@ -18,7 +18,10 @@ namespace mg_gameLogic
 		void setPosition(Vec2f pos);
 		int stationID;
 		std::list<Line*> connectedLines;
-		std::list<int> connectedStations;
+		std::list<MetroStation> connectedStations;
+		MetroStation * parent;
+		bool operator ==(const MetroStation &other) const;
+		std::vector<MetroStation> path;
 	private:
 		RedenderablePointer pointer;
 	
