@@ -156,7 +156,6 @@
     <ClCompile Include="errors.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameScene3D.cpp" />
-    <ClCompile Include="IScene.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuScene.cpp" />

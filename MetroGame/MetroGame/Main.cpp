@@ -1,9 +1,6 @@
 #include "system.h"
 #include "Main.h"
 
-using namespace mg_gameLogic;
-
-
 //extern "C" {
 //	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 //}

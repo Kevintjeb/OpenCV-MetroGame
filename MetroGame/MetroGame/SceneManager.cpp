@@ -42,7 +42,7 @@ void SceneManager::init() {
 		this->width = 800;
 		this->height = 600;
 #ifdef _DEBUG
-		this->currentScene = new GameScene3D();
+		this->currentScene = new MainMenuScene();
 #elif
 		this->currentScene = new MainMenuScene();
 #endif

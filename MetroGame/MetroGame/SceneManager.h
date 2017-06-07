@@ -2,6 +2,7 @@
 #include <string>
 #include "GL/freeglut.h"
 #include <vector>
+#include "GameScene3D.h"
 
 class IScene;
 

@@ -19,7 +19,6 @@ std::map<std::string, int>::iterator it;
 GLuint window_db;
 
 LinePointer handle;
-Test test{};
 Renderable testTrain;
 Line *line;
 MetroTrain *train;
@@ -327,20 +326,20 @@ void prepare_lines()
 	int position = 0;
 	metroLines.clear();
 	metroLinesPosition.clear();
-	for (Line* line : mg_gameLogic::get_lines())
+	for (RenderableLine Rline : mg_gameLogic::get_lines())
 	{
 
-		Vec3f color = getLineColor(line->type);
+		Vec3f color = getLineColor(Rline.type);
 
 		int start = position;
-		for (int index = 0; index < line->size(); index++)
+		for (int index = 0; index < Rline.line.size(); index++)
 		{
-			if (index > 0 && index < line->size() - 1)
+			if (index > 0 && index < Rline.line.size() - 1)
 			{
-				metroLines.push_back(VertexClass(line->operator[](index).x * 25, -50 + 3.1f, line->operator[](index).y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+				metroLines.push_back(VertexClass(Rline.line[index].x * 25, -50 + 3.1f, Rline.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
 				position++;
 			}
-			metroLines.push_back(VertexClass(line->operator[](index).x * 25, -50 + 3.1f, line->operator[](index).y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+			metroLines.push_back(VertexClass(Rline.line[index].x * 25, -50 + 3.1f, Rline.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
 			position++;
 		}
 		metroLinesPosition.push_back(std::make_pair(start, position));
@@ -353,19 +352,19 @@ void prepare_lines2D()
 	int position = 0;
 	metroLines2D.clear();
 	metroLinesPosition2D.clear();
-	for (Line* line : mg_gameLogic::get_lines())
+	for (RenderableLine Rline : mg_gameLogic::get_lines())
 	{
-		Vec3f color = getLineColor(line->type);
+		Vec3f color = getLineColor(Rline.type);
 
 		int start = position;
-		for (int index = 0; index < line->size(); index++)
+		for (int index = 0; index < Rline.line.size(); index++)
 		{
-			if (index > 0 && index < line->size() - 1)
+			if (index > 0 && index < Rline.line.size() - 1)
 			{
-				metroLines2D.push_back(VertexClass(line->operator[](index).x * 50, 10.0f, line->operator[](index).y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+				metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 10.0f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
 				position++;
 			}
-			metroLines2D.push_back(VertexClass(line->operator[](index).x * 50, 10.0f, line->operator[](index).y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+			metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 10.0f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
 			position++;
 		}
 		metroLinesPosition2D.push_back(std::make_pair(start, position));
@@ -406,25 +405,25 @@ GameScene3D::GameScene3D()
 	createCityList();
 
 	//debug data
-	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } }, LineType::Red);
-	train = new MetroTrain(*line);
-	handle = mg_gameLogic::allocate_line(line);
+	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } }, {});
+	train = new MetroTrain(line);
+	handle = mg_gameLogic::allocate_line(RenderableLine(line->getLine(), LineType::Red));
 
-	line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } }, LineType::Green);
-	train2 = new MetroTrain(*line2);
-	handle2 = mg_gameLogic::allocate_line(line2);
+	line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } }, {});
+	train2 = new MetroTrain(line2);
+	handle2 = mg_gameLogic::allocate_line(RenderableLine(line2->getLine(), LineType::Green));
 
-	line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } }, LineType::Blue);
-	train3 = new MetroTrain(*line3);
-	handle3 = mg_gameLogic::allocate_line(line3);
+	line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } }, {});
+	train3 = new MetroTrain(line3);
+	handle3 = mg_gameLogic::allocate_line(RenderableLine(line3->getLine(), LineType::Blue));
 
-	line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } }, LineType::Red);
-	train4 = new MetroTrain(*line4);
-	handle4 = mg_gameLogic::allocate_line(line4);
+	line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } }, {});
+	train4 = new MetroTrain(line4);
+	handle4 = mg_gameLogic::allocate_line(RenderableLine(line4->getLine(), LineType::Red));
 
-	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, LineType::Green);
-	train5 = new MetroTrain(*line5);
-	handle5 = mg_gameLogic::allocate_line(line5);
+	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, {});
+	train5 = new MetroTrain(line5);
+	handle5 = mg_gameLogic::allocate_line(RenderableLine(line5->getLine(), LineType::Green));
 }
 
 
@@ -475,7 +474,10 @@ void GameScene3D::render3D()
 	prepare_lines();
 	glDisable(GL_TEXTURE_2D);
 	glLineWidth(1.5);
-	drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(0).first, metroLinesPosition.at(metroLinesPosition.size()-1).second);
+	if (metroLinesPosition.size() > 0)
+	{
+		drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(0).first, metroLinesPosition.at(metroLinesPosition.size() - 1).second);
+	}
 
 	glPopMatrix();
 
@@ -520,7 +522,10 @@ void GameScene3D::render2D() {
 	glRotatef(45, 0, 1, 0);
 	prepare_lines2D();
 	glLineWidth(5.0);
-	drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(0).first, metroLinesPosition2D.at(metroLinesPosition2D.size()-1).second);
+	if (metroLinesPosition2D.size() > 0)
+	{
+		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(0).first, metroLinesPosition2D.at(metroLinesPosition2D.size() - 1).second);
+	}
 
 	//draw passangers and their destination.
 	for (Passengers &p : passengers)
@@ -550,8 +555,8 @@ void setAllKeysFalse() {
 
 void GameScene3D::onExit()
 {
-	delete train;
-	delete line;
+	/*delete train;
+	delete line;*/
 	setAllKeysFalse();
 	clear_renderables();
 }
@@ -603,14 +608,14 @@ void GameScene3D::onIdle()
 	////FIX THIS! IN COMBINATION WITH 2D WINDOW. 2D LINES NOT RIGHT VISIBLE.
 
 	////update metro
-	//int newTime = glutGet(GLUT_ELAPSED_TIME);
-	//int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
-	//oldTime = newTime;
-	//train->Recalculate(deltaTime2 / 1000.0f);
-	//train2->Recalculate(deltaTime2 / 1000.0f);
-	//train3->Recalculate(deltaTime2 / 1000.0f);
-	//train4->Recalculate(deltaTime2 / 1000.0f);
-	//train5->Recalculate(deltaTime2 / 1000.0f);
+	/*int newTime = glutGet(GLUT_ELAPSED_TIME);
+	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
+	oldTime = newTime;
+	train->Recalculate(deltaTime2 / 1000.0f);
+	train2->Recalculate(deltaTime2 / 1000.0f);
+	train3->Recalculate(deltaTime2 / 1000.0f);
+	train4->Recalculate(deltaTime2 / 1000.0f);
+	train5->Recalculate(deltaTime2 / 1000.0f);*/
 
 	//Update passangers
 	for (Passengers &p : passengers)

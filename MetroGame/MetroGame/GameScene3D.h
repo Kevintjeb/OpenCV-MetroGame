@@ -7,7 +7,6 @@
 #include "IScene.h"
 #include "Font.h"
 #include "Vect.h"
-#include "Test.h"
 #include "Line.h"
 #include <math.h>
 #define _USE_MATH_DEFINES
@@ -18,8 +17,8 @@
 #include "VertexClass.h"
 #include "Renderable.h"
 
-#include "Model.h"
 #include "Texture.h"
+#include "MetroTrain.h"
 
 #include "stb_image.h"
 #include "RenderableOutput.h"
