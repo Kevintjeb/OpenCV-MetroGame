@@ -1,12 +1,39 @@
 #include "Line.h"
+#include "Renderable.h"
+#include "MetroStation.h"
 
 using namespace mg_gameLogic;
 using namespace std;
 
-Line::Line(list<Vec2f> line) : positions(line.size()), distances(line.size())
+mg_gameLogic::Line::Line(std::list<Vec2f> line, std::list<MetroStation> stations): positions(line.size()+stations.size()), distances(line.size() + stations.size()), metroStations(stations)
 {
-	int index = 0;
 
+	//Getting and Setting the index of every station. Each Station is stored with its index in stationIndex
+	for (MetroStation &station : stations) {
+		pair<int, MetroStation> currentStation =  make_pair(-1, station);
+		int i = 0;
+		float previousDistance =999999;
+		list<Vec2f>::iterator itr = line.begin();
+		for (Vec2f &v: line)
+		{
+			i++;
+			if (v.distance(currentStation.second.position) < previousDistance)
+			{
+				itr = line.begin();
+				for (int j = 0; j <= i; j++) 
+				{
+					itr++;
+				}
+				previousDistance = v.distance(currentStation.second.position);
+				currentStation.first = i;
+			}
+		}
+
+		line.insert(itr, currentStation.second.position);
+		stationIndex.push_back(currentStation);
+	}
+
+	int index = 0;
 	// we itterate over all points in the line
 	for (Vec2f &v : line)
 	{
@@ -17,7 +44,7 @@ Line::Line(list<Vec2f> line) : positions(line.size()), distances(line.size())
 			distances[index] = distances[index - 1] + v.distance(positions[index - 1]);
 		}
 		else
-			// we are the first point so our distance is 0
+			//then we  are the first point so our distance is 0
 			distances[index] = 0;
 		index++;
 	}
@@ -38,11 +65,26 @@ int Line::getIndexByPosition(const float position) const
 	// standard binary tree with interpolation
 	// if the position is not in the list we get the point to the 'left' of it
 
+	if (position < 0 ) return 0;
+	if (position >= distances[size() - 1]) 
+		return size() - 2;
+
 	int l, r;
 	l = 0;
 	r = size() - 1;
+
+#ifdef _DEBUG
+	constexpr int max_iter = 10;
+			  int     iter =  0;
+#endif
+
 	while (true)
 	{
+#ifdef _DEBUG
+		if (iter++ >= max_iter) 
+			throw "invalid position";
+#endif
+
 		int m = (l + r) / 2;
 		if (distances[m] < position) // we are lower than our position
 		{
@@ -61,6 +103,14 @@ int Line::getIndexByPosition(const float position) const
 	}
 }
 
+//Returns the list of pairs with statins and indexes
+const std::list<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationIndexes() const
+{
+	return stationIndex;
+}
+
+
+
 const Vec2f& Line::operator[](int index) const
 {
 	return positions[index];
@@ -71,6 +121,12 @@ float mg_gameLogic::Line::getDistance(int i) const
 	return distances[i];
 }
 
+const std::vector<Vec2f>& mg_gameLogic::Line::getLine() const
+{
+	return positions;
+}
+
+//Converts the Data from a list to one with only relevant. 
 list<Vec2f> mg_gameLogic::filterData(const list<Vec2f> &data)
 {
 	std::list<Vec2f >  filtered;
@@ -87,6 +143,7 @@ list<Vec2f> mg_gameLogic::filterData(const list<Vec2f> &data)
 	return filtered;
 }
 
+//Compares two points and returns true if they are exceeding Margins and therefore are relevant.
 bool mg_gameLogic::compareVector(Vec2f &v1,Vec2f &v2)
 {
 

@@ -1,10 +1,11 @@
 #include "Test.h"
 #include "Line.h"
+#include "MetroStation.h"
 
 using namespace std;
 using namespace mg_gameLogic;
 
-mg_gameLogic::Test::Test() :line(testMetroLine()), train(line)
+mg_gameLogic::Test::Test() :line(testMetroLine(), {}), train(&line)
 {
 	
 }

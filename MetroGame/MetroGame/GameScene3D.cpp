@@ -6,17 +6,15 @@
 #include "GameScene3D.h"
 
 #include "Vect.h"
-#include "Test.h"
 #include "Line.h"
 #include <math.h>
 #include <cstdio>
 #include <map>
 #include <time.h>
-
+#include "MetroTrain.h"
 #include "VertexClass.h"
 #include "Renderable.h"
 
-#include "Model.h"
 #include "Texture.h"
 
 #include "stb_image.h"
@@ -41,7 +39,6 @@ std::map<std::string, int>::iterator it;
 GLuint window_db;
 
 LinePointer handle;
-Test test{};
 Renderable testTrain;
 Line *line;
 MetroTrain *train;
@@ -362,11 +359,12 @@ void drawRenderables()
 	for (Renderable &renderable : mg_gameLogic::get_renderables())
 	{
 
+		glPushMatrix();
 		if (renderable.model != "models/city/city.obj")
 		{
 			glRotatef(45, 0, 1, 0);
 		}
-		glPushMatrix();
+		
 
 		//zorgen dat het object met de wereld mee draait
 		glRotatef(rotation, 0, 1, 0);
@@ -388,17 +386,17 @@ void prepare_lines()
 	int position = 0;
 	metroLines.clear();
 	metroLinesPosition.clear();
-	for (Line* line : mg_gameLogic::get_lines())
+	for (RenderableLine line : mg_gameLogic::get_lines())
 	{
 		int start = position;
-		for (int index = 0; index < line->size(); index++)
+		for (int index = 0; index < line.line.size(); index++)
 		{
-			if (index > 0 && index < line->size() - 1)
+			if (index > 0 && index < line.line.size() - 1)
 			{
-				metroLines.push_back(VertexClass(line->operator[](index).x * 25, -50 + 3.1f, line->operator[](index).y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f));
+				metroLines.push_back(VertexClass(line.line[index].x * 25, -50 + 3.1f, line.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f));
 				position++;
 			}
-			metroLines.push_back(VertexClass(line->operator[](index).x * 25, -50 + 3.1f, line->operator[](index).y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f));
+			metroLines.push_back(VertexClass(line.line[index].x * 25, -50 + 3.1f, line.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f));
 			position++;
 		}
 		metroLinesPosition.push_back(std::make_pair(start, position));
@@ -574,9 +572,9 @@ GameScene3D::GameScene3D()
 	//createdummyRenderable
 	createDummyRenderableList();
 
-	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } });
-	train = new MetroTrain(*line);
-	handle = mg_gameLogic::allocate_line(line);
+	line = new Line({{ -1.f, -1.f }, { 1.f, 0.f }, { 1.f, 1.f }}, {});
+	train = new MetroTrain(line, 2.0f, MetroTrain::State::FORWARD, 4);
+	handle = mg_gameLogic::allocate_line(RenderableLine(line->getLine(), mg_gameLogic::LineType::Blue));
 }
 
 
@@ -676,6 +674,7 @@ void GameScene3D::render2D() {
 
 void GameScene3D::update()
 {
+
 }
 
 void GameScene3D::onEnter()
