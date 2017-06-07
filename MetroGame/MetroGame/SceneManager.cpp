@@ -166,6 +166,11 @@ void SceneManager::switchWindow3D()
 	glutSetWindow(window3D);
 }
 
+GLuint SceneManager::getWindow3D()
+{
+	return window3D;
+}
+
 void SceneManager::onKeyUp(unsigned char key)
 {
 	if (isInit) {

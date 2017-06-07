@@ -18,6 +18,7 @@ public:
 	static SceneManager& getInstance();
 	void switchWindow2D();
 	void switchWindow3D();
+	GLuint getWindow3D();
 
 private:
 	int width, height;

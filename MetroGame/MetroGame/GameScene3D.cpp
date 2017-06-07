@@ -390,13 +390,13 @@ void drawRenderables()
 {
 	for (Renderable &renderable : mg_gameLogic::get_renderables())
 	{
+		glPushMatrix();
 
 		if (renderable.model != "models/city/city.obj")
 		{
 			glRotatef(45, 0, 1, 0);
 		}
-		glPushMatrix();
-
+		
 		//zorgen dat het object met de wereld mee draait
 		glRotatef(rotation, 0, 1, 0);
 
@@ -718,9 +718,9 @@ GameScene3D::GameScene3D()
 	train4 = new MetroTrain(*line4);
 	handle4 = mg_gameLogic::allocate_line(line4);
 
-	/*line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, LineType::Green);
+	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, LineType::Green);
 	train5 = new MetroTrain(*line5);
-	handle5 = mg_gameLogic::allocate_line(line5);*/
+	handle5 = mg_gameLogic::allocate_line(line5);
 }
 
 
@@ -859,13 +859,21 @@ void GameScene3D::onKeyDown(unsigned char key)
 
 void GameScene3D::onIdle()
 {
-	//train->Recalculate(deltaTime2 / 1000.0f);
-
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	float deltaTime = (currentTime - lastTime) / 1000.0f;
 	lastTime = currentTime;
 
 	rotation += deltaTime * 15;
+
+	//update metro
+	int newTime = glutGet(GLUT_ELAPSED_TIME);
+	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
+	oldTime = newTime;
+	train->Recalculate(deltaTime2 / 1000.0f);
+	train2->Recalculate(deltaTime2 / 1000.0f);
+	train3->Recalculate(deltaTime2 / 1000.0f);
+	train4->Recalculate(deltaTime2 / 1000.0f);
+	train5->Recalculate(deltaTime2 / 1000.0f);
 
 
 	for (Passengers &p : passengers)
