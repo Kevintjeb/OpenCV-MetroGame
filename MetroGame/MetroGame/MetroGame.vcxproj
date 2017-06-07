@@ -161,6 +161,7 @@
     <ClCompile Include="RenderableOutput.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Timetable.cpp" />
     <ClCompile Include="Vect.cpp" />
     <ClCompile Include="VertexClass.cpp" />
   </ItemGroup>

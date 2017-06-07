@@ -35,4 +35,13 @@ bool mg_gameLogic::MetroStation::operator==(const MetroStation & other) const
 	return false;
 }
 
+bool mg_gameLogic::MetroStation::operator<(const MetroStation & other) const
+{
+	if (this->stationID < stationID) 
+	{
+		return true;
+	}
+	return false;
+}
+
 

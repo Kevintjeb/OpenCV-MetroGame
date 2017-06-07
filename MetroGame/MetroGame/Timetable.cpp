@@ -1,6 +1,6 @@
 #include "Timetable.h"
 
-mg_gameLogic::Timetable::Timetable(std::list<Line> lines, std::vector<MetroStation> stations): lines(lines), stations(stations)
+mg_gameLogic::Timetable::Timetable(std::list<Line *> lines, std::vector<MetroStation> stations): lines(lines), stations(stations)
 {
 	for (MetroStation &s : stations) 
 	{
@@ -8,7 +8,36 @@ mg_gameLogic::Timetable::Timetable(std::list<Line> lines, std::vector<MetroStati
 	}
 	for (MetroStation station : stations)
 	{
-		preCalcedDistances.insert<station, 999999>;
+		preCalcedDistances.insert(std::pair<MetroStation,float>(station, 999999));
+	}
+	for (MetroStation start : stations) 
+	{
+		getPaths(start);
+	}
+}
+
+void mg_gameLogic::Timetable::getPaths(MetroStation start) 
+{
+	for (MetroStation goal : stations)
+	{
+		//Find Path
+		auto result = findPath(start, goal);
+		//Path found
+		if (result.stationID == goal.stationID) 
+		{
+			MetroStation * pGoal = &goal;
+			while (pGoal->parent->stationID != start.stationID) 
+			{
+				pGoal = pGoal->parent;
+			}
+			start.paths[start.stationID] = pGoal->stationID;
+
+		}
+		//No path found
+		else 
+		{
+			start.paths[start.stationID] = -2;
+		}
 	}
 }
 

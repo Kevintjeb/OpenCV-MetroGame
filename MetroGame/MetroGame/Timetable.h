@@ -11,7 +11,8 @@ namespace mg_gameLogic
 	class Timetable
 	{
 	public:
-		Timetable(std::list<Line> lines, std::vector<MetroStation> stations);
+		Timetable(std::list<Line*> lines, std::vector<MetroStation> stations);
+		void getPaths(MetroStation goals);
 		void setWalkableNodes(MetroStation stationToSet);
 
 		float getWeight(MetroStation current, MetroStation target);
@@ -32,9 +33,9 @@ namespace mg_gameLogic
 			}
 		};
 	private:
-		std::list<Line> lines;
+		std::list<Line*> lines;
 		std::vector<MetroStation> stations;
-		const std::map<MetroStation, float> preCalcedDistances;
+		std::map<MetroStation, float> preCalcedDistances;
 
 	};
 }
