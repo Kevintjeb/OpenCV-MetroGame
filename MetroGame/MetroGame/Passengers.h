@@ -3,6 +3,7 @@
 #include <GL\freeglut.h>
 #include <math.h>
 #include <vector>
+#include "VertexClass.h"
 
 class Passengers
 {
@@ -24,5 +25,6 @@ private:
 	float x, z, radius1 = 0, radius2 = 3, radius3 = 6, step = 0.2f, max = 10.0f, destinationX, destinationZ;
 	Passengers::Priority people;
 	void DrawCircle(float cx, float cy, float r, Vec3f color);
+	void DrawArrow(float x, float z, Vec3f color);
 };
 

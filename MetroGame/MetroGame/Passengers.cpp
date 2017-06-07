@@ -108,3 +108,8 @@ void Passengers::DrawCircle(float cx, float cy, float r, Vec3f color)
 	glEnd();
 	glDisable(GL_COLOR);
 }
+
+void Passengers::DrawArrow(float x, float z, Vec3f color)
+{
+	
+}

@@ -440,6 +440,29 @@ void draw2DRenderables()
 	}
 }
 
+Vec3f getLineColor(LineType color)
+{
+	Vec3f lineColor;
+
+	switch (color)
+	{
+	case LineType::Red:
+		lineColor = Vec3f(1.0f, 0.0f, 0.0f);
+		break;
+	case LineType::Green:
+		lineColor = Vec3f(0.0f, 1.0f, 0.0f);
+		break;
+	case LineType::Blue:
+		lineColor = Vec3f(0.0f, 0.0f, 1.0f);
+		break;
+	default:
+		lineColor = Vec3f(1.0f, 1.0f, 0.0f);
+		break;
+	}
+
+	return lineColor;
+}
+
 void prepare_lines()
 {
 	int position = 0;
@@ -447,44 +470,22 @@ void prepare_lines()
 	metroLinesPosition.clear();
 	for (Line* line : mg_gameLogic::get_lines())
 	{
+
+		Vec3f color = getLineColor(line->type);
+
 		int start = position;
 		for (int index = 0; index < line->size(); index++)
 		{
 			if (index > 0 && index < line->size() - 1)
 			{
-				metroLines.push_back(VertexClass(line->operator[](index).x * 25, -50 + 3.1f, line->operator[](index).y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f));
+				metroLines.push_back(VertexClass(line->operator[](index).x * 25, -50 + 3.1f, line->operator[](index).y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
 				position++;
 			}
-			metroLines.push_back(VertexClass(line->operator[](index).x * 25, -50 + 3.1f, line->operator[](index).y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f));
+			metroLines.push_back(VertexClass(line->operator[](index).x * 25, -50 + 3.1f, line->operator[](index).y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
 			position++;
 		}
-		position--;
 		metroLinesPosition.push_back(std::make_pair(start, position));
-		position++;
 	}
-}
-
-Vec3f getLineColor(LineType color)
-{
-	Vec3f lineColor;
-
-	switch (color)
-	{
-		case LineType::Red:
-			lineColor = Vec3f(1.0f, 0.0f, 0.0f);
-			break;
-		case LineType::Green:
-			lineColor = Vec3f(0.0f, 1.0f, 0.0f);
-			break;
-		case LineType::Blue:
-			lineColor = Vec3f(0.0f, 0.0f, 1.0f);
-			break;
-		default:
-			lineColor = Vec3f(1.0f, 1.0f, 0.0f);
-			break;
-	}
-
-	return lineColor;
 }
 
 void prepare_lines2D()
@@ -717,9 +718,9 @@ GameScene3D::GameScene3D()
 	train4 = new MetroTrain(*line4);
 	handle4 = mg_gameLogic::allocate_line(line4);
 
-	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, LineType::Green);
+	/*line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, LineType::Green);
 	train5 = new MetroTrain(*line5);
-	handle5 = mg_gameLogic::allocate_line(line5);
+	handle5 = mg_gameLogic::allocate_line(line5);*/
 }
 
 
@@ -766,20 +767,16 @@ void GameScene3D::render3D()
 	glTranslatef(0, 0, 50);
 	glRotatef(45, 0, 1, 0);
 
-	//draw rails
-	glLineWidth(1.5);
-	prepare_lines();
 	//draw rails as line
-	//for (int i = 0; i < metroLinesPosition.size(); i++)
-	//{
-	//	drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(i).first, metroLinesPosition.at(i).second-1);
-	//}
-	drawRails();
+	prepare_lines();
+	glDisable(GL_TEXTURE_2D);
+	glLineWidth(1.5);
+	drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(0).first, metroLinesPosition.at(metroLinesPosition.size()-1).second);
 
 	glPopMatrix();
+	
 	//drawRenderable
 	drawRenderables();
-
 	
 }
 
@@ -809,10 +806,7 @@ void GameScene3D::render2D() {
 	glRotatef(45, 0, 1, 0);
 	prepare_lines2D();
 	glLineWidth(5.0);
-	for (int i = 0; i < metroLinesPosition2D.size(); i++)
-	{
-		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(i).first, metroLinesPosition2D.at(i).second);
-	}
+	drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(0).first, metroLinesPosition2D.at(metroLinesPosition2D.size()-1).second);
 
 	for (Passengers &p : passengers)
 	{
@@ -850,9 +844,9 @@ void GameScene3D::onExit()
 void GameScene3D::onKeyUP(unsigned char key)
 {
 	keys[key] = false;
-	if (key == ' ') {
+	/*if (key == ' ') {
 		SceneManager::getInstance().pauseScene();
-	}
+	}*/
 }
 
 void GameScene3D::onKeyDown(unsigned char key)
