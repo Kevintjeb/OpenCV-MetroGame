@@ -65,7 +65,7 @@ int Line::getIndexByPosition(const float position) const
 
 	if (position < 0 ) return 0;
 	if (position >= distances[size() - 1]) 
-		return size() - 1;
+		return size() - 2;
 
 	int l, r;
 	l = 0;

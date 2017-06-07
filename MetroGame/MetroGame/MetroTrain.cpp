@@ -236,19 +236,23 @@ void MetroTrain::Recalculate(float elapsedTime)
 	for (int i = 0; i < size; i++)
 	{
 		auto npos = pos2d_from_pos(tmp_line_pos);
-		auto cpos = findComplementaryPositionAndDistance(tmp_line_pos);
+		//auto cpos = findComplementaryPositionAndDistance(tmp_line_pos);
 
-		if (isnan(cpos.second)) break;
+		/*if (isnan(cpos.second))
+		{
+			cout << "caridge " << i << " is not on the line, breaking" << endl;
+			break;
+		}*/
 
-		trains[i]->position.x = npos.x * 50;
-		trains[i]->position.z = npos.y * 50;
-		auto y = (npos - cpos.first).y;
+		trains[i]->position.x = 1 * 50;//npos.x * 50;
+		trains[i]->position.z = 1 * 50;//npos.y * 50;
+		/*auto y = (npos - cpos.first).y;
 		auto x = (npos - cpos.first).x;
 		auto at = atan2f(x, y);
-		auto conv = at * 180.f / M_PI - 90;
-		trains[i]->angle = conv;
+		auto conv = at * 180.f / M_PI - 90;*/
+		//trains[i]->angle = conv;
 
-		tmp_line_pos = cpos.second + (state == State::FORWARD ? -train_spacing : train_spacing);
+		tmp_line_pos += train_length;//cpos.second;//+ (state == State::FORWARD ? -train_spacing : train_spacing);
 	}
 
 	//trains[1]->position.x = cpos.first.x * 50;
