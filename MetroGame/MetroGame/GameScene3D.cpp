@@ -15,7 +15,6 @@
 #include "VertexClass.h"
 #include "Renderable.h"
 
-#include "Model.h"
 #include "Texture.h"
 
 #include "stb_image.h"

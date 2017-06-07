@@ -3,8 +3,6 @@
 #include "Renderable.h"
 #include "Line.h"
 #include "RenderableOutput.h"
-
-
 #include <vector>
 #include <tuple>
 
@@ -31,7 +29,7 @@ namespace mg_gameLogic
 		std::vector<RenderablePointer> trains;
 		int size;
 
-		inline Vec2f pos2d_from_pos(float pos);
+		inline Vec2f pos2d_from_pos1d(float pos);
 		inline float checkAndSetPosRange(float pos);
 
 		// return: position and the position's distance
@@ -44,7 +42,7 @@ namespace mg_gameLogic
 		static constexpr int   max_size     = 16;
 		static constexpr float train_length = 0.2f*scale;
 		static constexpr float train_spacing = 0.025f*scale;
-		static constexpr bool __debug_output = true;
+		static constexpr bool __debug_output = false;
 		
 		explicit MetroTrain(Line* line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
 		float getSpeed(float);

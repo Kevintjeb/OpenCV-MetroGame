@@ -171,7 +171,6 @@
     <ClInclude Include="MetroStation.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="MetroTrain.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ObjModel.h" />
     <ClInclude Include="Renderable.h" />

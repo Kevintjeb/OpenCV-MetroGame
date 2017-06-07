@@ -8,7 +8,7 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-inline Vec2f MetroTrain::pos2d_from_pos(float pos)
+inline Vec2f MetroTrain::pos2d_from_pos1d(float pos)
 {
 	// since the position is on a vector between two points, we first get the points
 
@@ -161,25 +161,25 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 	totalTimeSpend += elapsedTime;
 	for (pair<int, MetroStation> p : line->getStationIndexes())
 	{
-		int pcompare = p.first - (state == State::FORWARD ? 1 : 2);				// -1 voor eerste punt -2 voor achteruit want fuck flobo
-		if ((pcompare == index /*|| (p.first+1)==index*/) && stopState == 0 && oldIndex != index)	//Eerstvolgende punt is het huidige punt
+		int pcompare = p.first - (state == State::FORWARD ? 1 : 2);				// -1 for the first point -2 for reverse
+		if ((pcompare == index /*|| (p.first+1)==index*/) && stopState == 0 && oldIndex != index)	//Nextpoint = currentPoint
 		{
-			//snelheid verminderen als groter dan 0
+			//Decrease speed while it's greater than 0
 			if (speed > 0) {
 				speed -= 0.01;
 			}
 		}
-		//bevestigen dat de snelheid niet negatief wordt.
+		//Preventing the train from going in reverse
 		if (speed < 0) {
-			//Tijd resetten zodat stilstaan bij 0 begint.
+			//Time Resetten when the train stopped
 			totalTimeSpend = 0;
-			stopState = 1;		//bevesigen dat de trein stil staat.
+			stopState = 1;		//confirm that the train stopped
 			oldIndex = index;
 			speed = 0;
 		}
 		if (totalTimeSpend > 3 && stopState == 1)
 		{
-			stopState = 2;		//Toestemming voor optrekken
+			stopState = 2;		//Permission to continue
 		}
 		//Opstrekken
 		if (stopState == 2)
@@ -188,13 +188,13 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 			{
 				speed += 0.1;
 			}
-		}//Voorkomen dat snelheid boven max gaat.
+		}//Preventing the speed from going over the safetylimit
 		if (speed >= 0.5f)
 		{
 			stopState = 0;
 			speed = 0.5f;
 		}
-		//zorgen dat stop niet meerdere keren per traject gebeurt.
+		//preventing from stopping again for the same station.
 		if (index != pcompare)
 		{
 			oldIndex = -1;
@@ -209,10 +209,7 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 		//	totalTimeSpend = 0;
 		//}
 	}
-
-
-	//snelheid keer tijd zodat gelijk blijft.
-	return speed*elapsedTime;
+	return speed*elapsedTime;	//keeping speed the same
 }
 
 void MetroTrain::Recalculate(float elapsedTime)
@@ -244,7 +241,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 
 	for (int i = 0; i < size; i++) // we go over all trains
 	{
-		auto npos = pos2d_from_pos(tmp_line_pos); // we convert our position from 1 to 2 D
+		auto npos = pos2d_from_pos1d(tmp_line_pos); // we convert our position from 1 to 2 D
 		auto cpos = findComplementaryPositionAndDistance(tmp_line_pos); // we calculate the second position
 
 		if (isnan(cpos.second)) // @TODO this is a temporary fix, but this should never happen during corners
@@ -282,7 +279,7 @@ void MetroTrain::resize(int nsize)
 
 void mg_gameLogic::MetroTrain::reposistion(Line* line)
 {
-	Vec2f trainPosition = pos2d_from_pos(line_pos);		//Get Vector for current position
+	Vec2f trainPosition = pos2d_from_pos1d(line_pos);		//Get Vector for current position
 	int index = 0;		
 	float minimumDistance = 9999999;
 	float trainDistance;
@@ -296,26 +293,26 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 			minimumDistance = trainPosition.distance(line->operator[](i));
 		}
 	}
-	int seconIndex=0;
+	int secondIndex=0;
 	if (index > 0)										//Zoek het op een na dichtsbijzijnde punt. (kon ff geen engels)
 	{
 		if (trainPosition.distance(line->operator[](index-1)) > trainPosition.distance(line->operator[](index+1)))
 		{
-			seconIndex = index + 1;
+			secondIndex = index + 1;
 		}
-		else { seconIndex = index - 1; }
+		else { secondIndex = index - 1; }
 	}
 	//IF second index cannot be found it's zero.
 	else 
 	{
-		seconIndex = 1;
+		secondIndex = 1;
 	}
 	trainPosition = line->operator[](index)- trainPosition;					//Get the trainsposition in a local vector
-	Vec2f vectorB = line->operator[](index) - line->operator[](seconIndex); //Vector A is train Vector
+	Vec2f vectorB = line->operator[](index) - line->operator[](secondIndex); //Vector A is train Vector
 	Vec2f vectorA1((vectorB*(trainPosition.dotProduct(vectorB)))/(vectorB.dotProduct(vectorB)));
 
 	//Calculate the distance based on the length of the vector and the second point
-	if (seconIndex > index) 
+	if (secondIndex > index) 
 	{
 		trainDistance +=  vectorA1.magnitude();
 	}

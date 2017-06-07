@@ -23,7 +23,7 @@ namespace mg_gameLogic
 		bool operator ==(const MetroStation &other) const;
 		std::vector<MetroStation> path;
 	private:
-		RenderablePointer *pointer;
+		RenderablePointer pointer;
 	};
 
 
