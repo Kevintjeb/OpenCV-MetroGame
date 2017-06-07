@@ -486,7 +486,7 @@ void prepare_lines2D()
 	}
 }
 
-void drawTrack(float x, float y, float z, Vec2f line)
+void drawTrack(float x, float y, float z, GameLogic::Vec2f line)
 {
 	float rot = atan2f(line.x, line.y);
 	rot = rot * 180.0f / M_PI;
@@ -665,25 +665,6 @@ GameScene3D::GameScene3D()
 	createDummyRenderableList();
 
 	//debug data
-	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } });
-	train = new MetroTrain(*line);
-	handle = mg_gameLogic::allocate_line(line);
-
-	line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } });
-	train2 = new MetroTrain(*line2);
-	handle2 = mg_gameLogic::allocate_line(line2);
-
-	line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } });
-	train3 = new MetroTrain(*line3);
-	handle3 = mg_gameLogic::allocate_line(line3);
-
-	line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } });
-	train4 = new MetroTrain(*line4);
-	handle4 = mg_gameLogic::allocate_line(line4);
-
-	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } });
-	train5 = new MetroTrain(*line5);
-	handle5 = mg_gameLogic::allocate_line(line5);
 }
 
 
@@ -781,9 +762,9 @@ void GameScene3D::render2D() {
 void GameScene3D::update()
 {
 	vision.getStations();
-	vision.getLines(LINE_RED);
-	vision.getLines(LINE_GREEN);
-	vision.getLines(LINE_BLUE);
+	//vision.getLines(LINE_RED);
+	//vision.getLines(LINE_GREEN);
+	//vision.getLines(LINE_BLUE);
 	
 }
 

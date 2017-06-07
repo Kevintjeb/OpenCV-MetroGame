@@ -36,6 +36,8 @@ Vision::~Vision()
 void Vision::start()
 {
 	cap.open(1);
+	cap.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
+	cap.set(CV_CAP_PROP_FRAME_HEIGHT, 720);
 	scanner;
 	scanner.set_config(zbar::ZBAR_NONE, zbar::ZBAR_CFG_ENABLE, 1);
 }
@@ -63,14 +65,41 @@ void Vision::calibrate()
 	createTrackbar("High Green", "TrackBars", &high_g, 255, on_high_g_thresh_trackbar);
 	createTrackbar("Low Blue", "TrackBars", &low_b, 255, on_low_b_thresh_trackbar);
 	createTrackbar("High Blue", "TrackBars", &high_b, 255, on_high_b_thresh_trackbar);
+
+	setTrackbarPos("Low Hue", "TrackBars", 0);
+	setTrackbarPos("High Hue", "TrackBars", 11);
+	setTrackbarPos("Low Saturation", "TrackBars", 10);
+	setTrackbarPos("High Saturation", "TrackBars", 202);
+	setTrackbarPos("Low Value", "TrackBars", 75);
+	setTrackbarPos("High Value", "TrackBars", 255);
+
+	setTrackbarPos("Low Red", "TrackBars", 208);
+	setTrackbarPos("High Red", "TrackBars", 255);
+	setTrackbarPos("Low Green", "TrackBars", 0);
+	setTrackbarPos("High Green", "TrackBars", 227);
+	setTrackbarPos("Low Blue", "TrackBars", 31);
+	setTrackbarPos("High Blue", "TrackBars", 142);
 	redSettings = colourCalibrate();
+
+	low_v = 254, low_s = 161, low_h = 77;
+	high_v = 255, high_s = 255, high_h = 126;
+
+	low_r = 0, low_g = 235, low_b = 188;
+	high_r = 97, high_g = 255, high_b = 247;
 	greenSettings = colourCalibrate();
+
+	low_v = 51, low_s = 144, low_h = 35;
+	high_v = 222, high_s = 255, high_h = 136;
+
+	low_r = 0, low_g = 0, low_b = 99;
+	high_r = 255, high_g = 99, high_b = 255;
 	blueSettings = colourCalibrate();
 }
 
 Vision::ColourSettings Vision::colourCalibrate()
 {
 	Mat frame, frame_threshold, frame_rgb;
+
 	while ((char)waitKey(1) != 'q') {
 		cap >> frame;
 		if (frame.empty())

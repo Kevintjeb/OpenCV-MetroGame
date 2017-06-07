@@ -169,7 +169,7 @@ void SceneManager::onIdle()
 
 		glutSetWindow(window2D);
 		glutPostRedisplay();
-		
+		tick();
 	}
 	else throw "Scenemanager not initialized";
 }
