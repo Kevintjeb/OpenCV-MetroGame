@@ -2,9 +2,11 @@
 
 class IScene
 {
-public:
+protected:
 	IScene();
-	~IScene();
+
+public:
+	virtual ~IScene();
 
 	/*
 		Function to draw 2D graphics in.

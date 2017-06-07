@@ -14,6 +14,17 @@ SceneManager::SceneManager()
 {
 }
 
+void mg_system::init(int &argc, char ** argv)
+{
+	glutInit( &argc, argv);
+	SceneManager::getInstance().init();
+}
+
+void mg_system::start()
+{
+	glutMainLoop();
+}
+
 /*
  Initialize SceneManager;
 */
@@ -30,7 +41,11 @@ void SceneManager::init() {
 		}
 		this->width = 800;
 		this->height = 600;
+#ifdef _DEBUG
+		this->currentScene = new GameScene3D();
+#elif
 		this->currentScene = new MainMenuScene();
+#endif
 		isInit = true;
 	}
 	else {

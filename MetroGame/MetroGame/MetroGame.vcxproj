@@ -154,48 +154,43 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="errors.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameScene3D.cpp" />
+    <ClCompile Include="IScene.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuScene.cpp" />
     <ClCompile Include="Main_old.cpp" />
+    <ClCompile Include="MetroStation.cpp" />
     <ClCompile Include="MetroTrain.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="ObjModel.cpp" />
     <ClCompile Include="PauseScene.cpp" />
     <ClCompile Include="Passengers.cpp" />
     <ClCompile Include="Renderable.cpp" />
-    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="RenderableOutput.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="IScene.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="RenderableOutput.cpp" />
-    <ClCompile Include="system.cpp" />
-    <ClCompile Include="Test.cpp" />
     <ClCompile Include="Vect.cpp" />
     <ClCompile Include="VertexClass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="freeglut\include\GL\freeglut.h" />
-    <ClInclude Include="freeglut\include\GL\freeglut_ext.h" />
-    <ClInclude Include="freeglut\include\GL\freeglut_std.h" />
-    <ClInclude Include="freeglut\include\GL\glut.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="GameScene3D.h" />
-    <ClInclude Include="MainMenuScene.h" />
+    <ClInclude Include="IScene.h" />
+    <ClInclude Include="MetroStation.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="MetroTrain.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ObjModel.h" />
     <ClInclude Include="PauseScene.h" />
     <ClInclude Include="Passengers.h" />
     <ClInclude Include="Renderable.h" />
-    <ClInclude Include="IScene.h" />
-    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="RenderableOutput.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="Font.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="Text.h" />
