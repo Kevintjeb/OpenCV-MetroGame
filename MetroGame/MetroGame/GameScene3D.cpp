@@ -35,6 +35,7 @@ using std::endl;
 #define HEIGHT 600
 
 #define STEP 0.2f
+Font* GameScene3D::largeFont3D = nullptr;
 
 ModelLoader modelLoader;
 
@@ -671,8 +672,11 @@ void DrawCircle(float cx, float cy, float r, Vec3f color)
 
 GameScene3D::GameScene3D()
 {
+	width = SceneManager::getInstance().getWidth();
+	height = SceneManager::getInstance().getHeight();
+	
 	SceneManager::getInstance().switchWindow3D();
-
+	largeFont3D = new Font("font_0.fnt");
 	//init planes
 	initTopPlane();
 	initGroundPlane();
@@ -774,10 +778,19 @@ void GameScene3D::render3D()
 	drawVertexArray(metroLines, GL_LINES, metroLinesPosition.at(0).first, metroLinesPosition.at(metroLinesPosition.size()-1).second);
 
 	glPopMatrix();
-	
+
 	//drawRenderable
 	drawRenderables();
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, width, height, 0, -100, 100);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glColor4f(0, 0, 0, 1);
 	
+	largeFont3D->drawText(time, width - largeFont3D->textLength(time) - 10, 10);
 }
 
 void GameScene3D::render2D() {
@@ -817,6 +830,7 @@ void GameScene3D::render2D() {
 
 void GameScene3D::update()
 {
+
 }
 
 void GameScene3D::onEnter()
@@ -857,13 +871,31 @@ void GameScene3D::onKeyDown(unsigned char key)
 	keys[key] = true;
 }
 
+void GameScene3D::prepareTime(float deltaTime) {
+	Time.seconds += deltaTime;
+	if (Time.seconds > 60) {
+		Time.seconds = 0;
+		Time.minutes++;
+	}
+
+	if (Time.minutes < 10 && Time.seconds < 10)
+		time = "0" + std::to_string(Time.minutes) + ":0" + std::to_string((int)Time.seconds);
+	else if(Time.minutes < 10)
+		time = "0" + std::to_string(Time.minutes) + ":" + std::to_string((int)Time.seconds);
+	else
+		time = std::to_string(Time.minutes) + ":" + std::to_string((int)Time.seconds);
+
+	
+}
+
 void GameScene3D::onIdle()
 {
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	float deltaTime = (currentTime - lastTime) / 1000.0f;
 	lastTime = currentTime;
-
 	rotation += deltaTime * 15;
+
+	prepareTime(deltaTime);
 
 	//update metro
 	int newTime = glutGet(GLUT_ELAPSED_TIME);
