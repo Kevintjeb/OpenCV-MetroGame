@@ -39,11 +39,11 @@ namespace mg_gameLogic
 		inline std::pair<Vec2f, float> findComplementaryPositionAndDistance(float pos);
 
 	public:
-
-		float speed = .50f;
+		static constexpr float scale = 0.60f;
+		float speed = 1.f*scale;
 		static constexpr int   max_size     = 16;
-		static constexpr float train_length = 0.2f;
-		static constexpr float train_spacing = 0.05f;
+		static constexpr float train_length = 0.2f*scale;
+		static constexpr float train_spacing = 0.025f*scale;
 		
 		explicit MetroTrain(Line* line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
 		float getSpeed(float);

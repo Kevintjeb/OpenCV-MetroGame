@@ -68,7 +68,7 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 	const auto prev = [this](int c)->int {return state == State::FORWARD ? c - 1 : c + 1; };
 	const auto is_invalid = [this](int c)->bool {return state == State::FORWARD ?
 												c > line->size() - 1 || c < 0 :
-												c <= 0 || c > line->size()
+												c <= 0 || c > line->size()-1
 											; };
 	const auto back = [this]()->int {return state == State::FORWARD ? 0 : line->size() - 1; };
 
@@ -214,7 +214,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 	{
 		int diff = size - trains.size(); // we need 'diff' new trains
 		for (int i = 0; i < diff; ++i) // we allocate new Renderables 
-			trains.push_back(allocate_renderable(Renderable("models/Metro/metro.obj", Vec3f(0, -90.8f, 0), 0.0f, Vec3f(0, 1, 0), Vec3f(1, 1, 1))));
+			trains.push_back(allocate_renderable(Renderable("models/Metro/metro.obj", Vec3f(0, -90.8f, 0), 0.0f, Vec3f(0, 1, 0), Vec3f(scale, scale, scale))));
 	}
 	else if (trains.size() > size) // if we have to many trains
 	{
@@ -236,23 +236,23 @@ void MetroTrain::Recalculate(float elapsedTime)
 	for (int i = 0; i < size; i++)
 	{
 		auto npos = pos2d_from_pos(tmp_line_pos);
-		//auto cpos = findComplementaryPositionAndDistance(tmp_line_pos);
+		auto cpos = findComplementaryPositionAndDistance(tmp_line_pos);
 
-		/*if (isnan(cpos.second))
+		if (isnan(cpos.second))
 		{
 			cout << "caridge " << i << " is not on the line, breaking" << endl;
 			break;
-		}*/
+		}
 
-		trains[i]->position.x = 1 * 50;//npos.x * 50;
-		trains[i]->position.z = 1 * 50;//npos.y * 50;
-		/*auto y = (npos - cpos.first).y;
+		trains[i]->position.x = npos.x * 50;
+		trains[i]->position.z = npos.y * 50;
+		auto y = (npos - cpos.first).y;
 		auto x = (npos - cpos.first).x;
 		auto at = atan2f(x, y);
-		auto conv = at * 180.f / M_PI - 90;*/
-		//trains[i]->angle = conv;
+		auto conv = at * 180.f / M_PI - 90;
+		trains[i]->angle = conv;
 
-		tmp_line_pos += train_length;//cpos.second;//+ (state == State::FORWARD ? -train_spacing : train_spacing);
+		tmp_line_pos = cpos.second + (state == State::FORWARD ? -train_spacing : train_spacing);
 	}
 
 	//trains[1]->position.x = cpos.first.x * 50;
