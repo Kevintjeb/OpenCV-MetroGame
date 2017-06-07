@@ -21,6 +21,7 @@ namespace mg_gameLogic
 		std::list<MetroStation> connectedStations;
 		MetroStation * parent;
 		bool operator ==(const MetroStation &other) const;
+		bool operator !=(const MetroStation &other) const;
 		bool operator <(const MetroStation &other) const;
 		std::vector<int> paths;
 	private:

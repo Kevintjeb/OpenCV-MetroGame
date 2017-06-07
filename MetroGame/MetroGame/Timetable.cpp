@@ -10,22 +10,22 @@ mg_gameLogic::Timetable::Timetable(std::list<Line *> lines, std::vector<MetroSta
 	{
 		preCalcedDistances.insert(std::pair<MetroStation,float>(station, 999999));
 	}
-	for (MetroStation start : stations) 
+	for (int i = 0; i<stations.size(); i++)
 	{
-		getPaths(start);
+		getPaths(stations[i]);
 	}
 }
 
 void mg_gameLogic::Timetable::getPaths(MetroStation start) 
 {
-	for (MetroStation goal : stations)
+	for (int i = 0; i<stations.size(); i++)
 	{
 		//Find Path
-		auto result = findPath(start, goal);
+		auto result = findPath(start, stations[i]);
 		//Path found
-		if (result.stationID == goal.stationID) 
+		if (result.stationID == stations[i].stationID)
 		{
-			MetroStation * pGoal = &goal;
+			MetroStation * pGoal = &stations[i];
 			while (pGoal->parent->stationID != start.stationID) 
 			{
 				pGoal = pGoal->parent;
