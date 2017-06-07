@@ -18,7 +18,7 @@ MetroStation::~MetroStation()
 	//TODO find someway to fix this
 	//deallocate_renderable(pointer);
 }
-
+//Changes the postition of the MetroStation -> DEPRECATED (this has been replaced in gamelogic branch)
 void mg_gameLogic::MetroStation::setPosition(Vec2f pos)
 {
 	position = pos;

@@ -159,7 +159,7 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 
 	int index = line->getIndexByPosition(line_pos);
 	totalTimeSpend += elapsedTime;
-	for (pair<int, MetroStation> p : line->getStationPosistion())
+	for (pair<int, MetroStation> p : line->getStationIndexes())
 	{
 		int pcompare = p.first - (state == State::FORWARD ? 1 : 2);				// -1 voor eerste punt -2 voor achteruit want fuck flobo
 		if ((pcompare == index /*|| (p.first+1)==index*/) && stopState == 0 && oldIndex != index)	//Eerstvolgende punt is het huidige punt
@@ -287,7 +287,7 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 	float minimumDistance = 9999999;
 	float trainDistance;
 
-	for (int i = 0; i < line->size(); i++)				//Search through all the points of the new line
+	for (int i = 0; i < line->size(); i++)				//Search through all the points of the new line to find the one closest to the train
 	{
 		if (trainPosition.distance(line->operator[](i)) < minimumDistance)
 		{
@@ -297,7 +297,7 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 		}
 	}
 	int seconIndex=0;
-	if (index > 0) 
+	if (index > 0)										//Zoek het op een na dichtsbijzijnde punt. (kon ff geen engels)
 	{
 		if (trainPosition.distance(line->operator[](index-1)) > trainPosition.distance(line->operator[](index+1)))
 		{
@@ -305,14 +305,16 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 		}
 		else { seconIndex = index - 1; }
 	}
+	//IF second index cannot be found it's zero.
 	else 
 	{
 		seconIndex = 1;
 	}
-	trainPosition = line->operator[](index)- trainPosition;
+	trainPosition = line->operator[](index)- trainPosition;					//Get the trainsposition in a local vector
 	Vec2f vectorB = line->operator[](index) - line->operator[](seconIndex); //Vector A is train Vector
 	Vec2f vectorA1((vectorB*(trainPosition.dotProduct(vectorB)))/(vectorB.dotProduct(vectorB)));
 
+	//Calculate the distance based on the length of the vector and the second point
 	if (seconIndex > index) 
 	{
 		trainDistance +=  vectorA1.magnitude();
@@ -323,6 +325,6 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 	}
 	line_pos = trainDistance;
 
-	
+	//set the new line.
 	this->line = line;
 }

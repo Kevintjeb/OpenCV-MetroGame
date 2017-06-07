@@ -6,13 +6,12 @@
 #include "GameScene3D.h"
 
 #include "Vect.h"
-#include "Test.h"
 #include "Line.h"
 #include <math.h>
 #include <cstdio>
 #include <map>
 #include <time.h>
-
+#include "MetroTrain.h"
 #include "VertexClass.h"
 #include "Renderable.h"
 
@@ -41,7 +40,6 @@ std::map<std::string, int>::iterator it;
 GLuint window_db;
 
 LinePointer handle;
-Test test{};
 Renderable testTrain;
 Line *line;
 MetroTrain *train;
