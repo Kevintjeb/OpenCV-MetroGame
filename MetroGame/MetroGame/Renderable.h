@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Vect.h"
-#include "Model.h"
 #include <string>
 #include <vector>
 
