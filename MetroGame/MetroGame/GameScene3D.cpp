@@ -10,7 +10,6 @@ using std::endl;
 #define STEP 0.2f
 
 Font* GameScene3D::largeFont3D = nullptr;
-Font* GameScene3D::smallFont2D = nullptr;
 
 ModelLoader modelLoader;
 
@@ -78,6 +77,7 @@ struct Camera2D
 	float height = -80;
 }camera2D;
 
+//Random scale factor for a city model
 float randScale(float standScale)
 {
 	standScale += 0.1f;
@@ -87,7 +87,8 @@ float randScale(float standScale)
 	return scale;
 }
 
-void createDummyRenderableList()
+//create the 3D city
+void createCityList()
 {
 	srand(time(NULL));
 	Vec3f rot = Vec3f(0.0f, 1.0f, 0.0f);
@@ -161,45 +162,7 @@ void createDummyRenderableList()
 	}
 }
 
-void initTopPlane()
-{
-	//onderste vlak
-	TopPlane.push_back(VertexClass(0, 0, 0, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f));
-	TopPlane.push_back(VertexClass(-50, 0, 50, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f));
-	TopPlane.push_back(VertexClass(0, 0, 100, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f));
-	TopPlane.push_back(VertexClass(50, 0, 50, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f));
-
-	//bovenste vlak
-	TopPlane.push_back(VertexClass(0, 3, 0, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f));
-	TopPlane.push_back(VertexClass(-50, 3, 50, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f));
-	TopPlane.push_back(VertexClass(0, 3, 100, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f));
-	TopPlane.push_back(VertexClass(50, 3, 50, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f));
-
-	//rechtsvoor vlak
-	TopPlane.push_back(VertexClass(0, 3, 0, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(0, 0, 0, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(-50, 0, 50, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(-50, 3, 50, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-
-	//links voor vlak
-	TopPlane.push_back(VertexClass(0, 3, 0, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(0, 0, 0, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(50, 0, 50, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(50, 3, 50, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-
-	//rechts achter vlak
-	TopPlane.push_back(VertexClass(0, 3, 100, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(0, 0, 100, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(-50, 0, 50, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(-50, 3, 50, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-
-	//links achter vlak
-	TopPlane.push_back(VertexClass(0, 3, 100, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(0, 0, 100, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(50, 0, 50, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-	TopPlane.push_back(VertexClass(50, 3, 50, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.6f, 0.2f, 0.2f, 1.0f));
-}
-
+//create the groundplane.
 void initGroundPlane()
 {
 	//onderste vlak
@@ -241,6 +204,8 @@ void initGroundPlane()
 
 }
 
+//methode to draw a vertex array. 
+//GLenum mode -> Could be Quad, Line, Points.
 void drawVertexArray(std::vector<VertexClass> verts, GLenum mode, int start, int end)
 {
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -262,106 +227,21 @@ void drawVertexArray(std::vector<VertexClass> verts, GLenum mode, int start, int
 
 }
 
+//Load a 3D model
 void prepareModel(std::string modelPath)
 {
 	modelLoader.insertModel(modelPath);
 	modelsMap.insert(std::pair<std::string, int>(modelPath, modelsMap.size()));
 }
 
-void drawRail(Vec2f v1, Vec2f vold)
-{
-	glLineWidth(2.5);
-	glBegin(GL_LINES);
-	glVertex2f(v1.x, v1.y);
-	glVertex2f(vold.x, vold.y);
-	glEnd();
-}
-
-void drawTopPlane() {
-	glBegin(GL_QUADS);
-	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-	glVertex3f(0, 0, 0);
-	glVertex3f(-50, 0, 50);
-	glVertex3f(0, 0, 100);
-	glVertex3f(50, 0, 50);
-
-	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-
-	glVertex3f(0, 3, 0);
-	glVertex3f(-50, 3, 50);
-	glVertex3f(0, 3, 100);
-	glVertex3f(50, 3, 50);
-
-	glColor4f(0.6f, 0.2f, 0.2f, 1.0f);
-
-	glVertex3f(0, 3, 0);
-	glVertex3f(0, 0, 0);
-	glVertex3f(-50, 0, 50);
-	glVertex3f(-50, 3, 50);
-
-
-	glVertex3f(0, 3, 0);
-	glVertex3f(0, 0, 0);
-	glVertex3f(50, 0, 50);
-	glVertex3f(50, 3, 50);
-
-	glVertex3f(0, 3, 100);
-	glVertex3f(0, 0, 100);
-	glVertex3f(-50, 0, 50);
-	glVertex3f(-50, 3, 50);
-
-	glVertex3f(0, 3, 100);
-	glVertex3f(0, 0, 100);
-	glVertex3f(50, 0, 50);
-	glVertex3f(50, 3, 50);
-	glEnd();
-}
-
-void drawGroundPlane() {
-	glBegin(GL_QUADS);
-	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-	glVertex3f(0, -50, 0);
-	glVertex3f(-50, -50, 50);
-	glVertex3f(0, -50, 100);
-	glVertex3f(50, -50, 50);
-
-	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-
-	glVertex3f(0, -50 + 3, 0);
-	glVertex3f(-50, -50 + 3, 50);
-	glVertex3f(0, -50 + 3, 100);
-	glVertex3f(50, -50 + 3, 50);
-
-	glColor4f(0.6f, 0.2f, 0.2f, 1.0f);
-
-	glVertex3f(0, -50 + 3, 0);
-	glVertex3f(0, -50, 0);
-	glVertex3f(-50, -50, 50);
-	glVertex3f(-50, -50 + 3, 50);
-
-	glVertex3f(0, -50 + 3, 0);
-	glVertex3f(0, -50, 0);
-	glVertex3f(50, -50, 50);
-	glVertex3f(50, -50 + 3, 50);
-
-	glVertex3f(0, -50 + 3, 100);
-	glVertex3f(0, -50, 100);
-	glVertex3f(-50, -50, 50);
-	glVertex3f(-50, -50 + 3, 50);
-
-	glVertex3f(0, -50 + 3, 100);
-	glVertex3f(0, -50, 100);
-	glVertex3f(50, -50, 50);
-	glVertex3f(50, -50 + 3, 50);
-	glEnd();
-}
-
+//Move the camera. 
 void move(float angle, float fac)
 {
 	camera.posX += (float)cos((camera.rotY + angle) / 180 * M_PI) * fac;
 	camera.posY += (float)sin((camera.rotY + angle) / 180 * M_PI) * fac;
 }
 
+//draw Renderables -> All 3D models.
 void drawRenderables()
 {
 	for (Renderable &renderable : mg_gameLogic::get_renderables())
@@ -390,6 +270,7 @@ void drawRenderables()
 
 }
 
+//draw Renderables for 2D world -> Streetmap
 void draw2DRenderables()
 {
 	for (Renderable &renderable : mg_gameLogic::get_renderables())
@@ -416,6 +297,7 @@ void draw2DRenderables()
 	}
 }
 
+//Get Color for metroline
 Vec3f getLineColor(LineType color)
 {
 	Vec3f lineColor;
@@ -439,6 +321,7 @@ Vec3f getLineColor(LineType color)
 	return lineColor;
 }
 
+//get the metrolines from gamelogic and convert them to vertexclass. So drawVertexArray can draw them in the 3D world.
 void prepare_lines()
 {
 	int position = 0;
@@ -464,6 +347,7 @@ void prepare_lines()
 	}
 }
 
+//get the metrolines from gamelogic and convert them to vertexclass. So drawVertexArray can draw them in the 2D world.
 void prepare_lines2D()
 {
 	int position = 0;
@@ -488,163 +372,6 @@ void prepare_lines2D()
 	}
 }
 
-void drawTrack(float x, float y, float z, Vec2f line)
-{
-	float rot = atan2f(line.x, line.y);
-	rot = rot * 180.0f / M_PI;
-
-	glPushMatrix();
-	glTranslatef(x, y, z);
-	glRotatef(rot, 0, 1, 0);
-	it = modelsMap.find("models/track/track_2.obj");
-	modelLoader.getModel(it->second)->draw();
-	glPopMatrix();
-}
-
-void drawRails()
-{
-	for (int i = 0; i < metroLinesPosition.size(); i++)
-	{
-		volatile int grens = metroLinesPosition.at(i).second;
-
-		for (int b = metroLinesPosition.at(i).first; b < metroLinesPosition.at(i).second; b++)
-		{
-			float deltaX = metroLines.at(b + 1).x - metroLines.at(b).x;
-			float deltaZ = metroLines.at(b + 1).z - metroLines.at(b).z;
-			float rc;
-
-			Vec2f vectorLine = Vec2f(deltaX, deltaZ);
-
-			if (deltaX > 0)
-			{
-				if (deltaZ > 0)
-				{
-					if (deltaX > deltaZ)
-					{
-						rc = deltaX / deltaZ;
-						for (float j = 0; j < deltaZ; j += STEP)
-						{
-							drawTrack(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z + j, vectorLine);
-						}
-					}
-					else
-					{
-						rc = deltaZ / deltaX;
-						for (float j = 0; j < deltaX; j += STEP)
-						{
-							drawTrack(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z + (rc*j), vectorLine);
-						}
-					}
-				}
-				else if (deltaZ < 0)
-				{
-					deltaZ = deltaZ*-1;
-					if (deltaX > deltaZ)
-					{
-						rc = deltaX / deltaZ;
-						for (float j = 0; j < deltaZ; j += STEP)
-						{
-							drawTrack(metroLines.at(b).x + (rc*j), metroLines.at(b).y, metroLines.at(b).z - j, vectorLine);
-						}
-					}
-					else
-					{
-						rc = deltaZ / deltaX;
-						for (float j = 0; j < deltaX; j += STEP)
-						{
-							drawTrack(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z - (rc*j), vectorLine);
-						}
-					}
-				}
-				else
-				{
-					for (float j = 0; j < deltaX; j += STEP)
-					{
-						drawTrack(metroLines.at(b).x + j, metroLines.at(b).y, metroLines.at(b).z, vectorLine);
-					}
-				}
-			}
-			else if (deltaX < 0)
-			{
-				deltaX = deltaX * -1;
-				if (deltaZ > 0)
-				{
-					if (deltaX > deltaZ)
-					{
-						rc = deltaX / deltaZ;
-						for (float j = 0; j < deltaZ; j += STEP)
-						{
-							drawTrack(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z + j, vectorLine);
-						}
-					}
-					else
-					{
-						rc = deltaZ / deltaX;
-						for (float j = 0; j < deltaX; j += STEP)
-						{
-							drawTrack(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z + (rc*j), vectorLine);
-						}
-					}
-				}
-				else if (deltaZ < 0)
-				{
-					deltaZ = deltaZ*-1;
-					if (deltaX > deltaZ)
-					{
-						rc = deltaX / deltaZ;
-						for (float j = 0; j < deltaZ; j += STEP)
-						{
-							drawTrack(metroLines.at(b).x - (rc*j), metroLines.at(b).y, metroLines.at(b).z - j, vectorLine);
-						}
-					}
-					else
-					{
-						rc = deltaZ / deltaX;
-						for (float j = 0; j < deltaX; j += STEP)
-						{
-							drawTrack(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z - (rc*j), vectorLine);
-						}
-					}
-				}
-				else
-				{
-					for (float j = 0; j < deltaX; j += STEP)
-					{
-						drawTrack(metroLines.at(b).x - j, metroLines.at(b).y, metroLines.at(b).z, vectorLine);
-					}
-				}
-			}
-			else
-			{
-				if (deltaZ > 0)
-				{
-					for (float j = 0; j < deltaZ; j += STEP)
-					{
-						drawTrack(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z + j, vectorLine);
-					}
-				}
-				else if (deltaZ < 0)
-				{
-					deltaZ = deltaZ*-1;
-					for (float j = 0; j < deltaZ; j += STEP)
-					{
-						drawTrack(metroLines.at(b).x, metroLines.at(b).y, metroLines.at(b).z - j, vectorLine);
-					}
-				}
-				else
-				{
-				}
-			}
-		}
-	}
-}
-
-void DrawCircle(float cx, float cy, float r, Vec3f color)
-{
-	
-}
-
-
 GameScene3D::GameScene3D()
 {
 	width = SceneManager::getInstance().getWidth();
@@ -652,8 +379,8 @@ GameScene3D::GameScene3D()
 	
 	SceneManager::getInstance().switchWindow3D();
 	largeFont3D = new Font("font_0.fnt");
-	//init planes
-	initTopPlane();
+
+	//init ground plane
 	initGroundPlane();
 
 	//init textures
@@ -667,17 +394,16 @@ GameScene3D::GameScene3D()
 	SceneManager::getInstance().switchWindow2D();
 	prepareModel("models/city2/city2d.obj");
 
-	smallFont2D = new Font("font_0.fnt");
 
-
-	//debug
+	//debug data
+	passengers.clear();
 	passengers.push_back(Passengers(0, 0, Passengers::Priority::LOW, passengers.size(), 25, 25));
 	passengers.push_back(Passengers(-50, 0, Passengers::Priority::HIGH, passengers.size(), -25, -25));
 	passengers.push_back(Passengers(-5, -25, Passengers::Priority::EMERENCY, passengers.size(), -25, 50));
 
 	SceneManager::getInstance().switchWindow3D();
 	//create city
-	createDummyRenderableList();
+	createCityList();
 
 	//debug data
 	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } }, LineType::Red);
@@ -704,6 +430,7 @@ GameScene3D::GameScene3D()
 
 GameScene3D::~GameScene3D()
 {
+	delete largeFont3D;
 }
 
 void GameScene3D::render3D()
@@ -734,7 +461,6 @@ void GameScene3D::render3D()
 	glRotatef(rotation, 0, 1, 0);
 	glTranslatef(0, 0, -50);
 
-	//drawVertexArray(TopPlane);
 	textures[0]->Bind();
 	glEnable(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -781,6 +507,7 @@ void GameScene3D::render2D() {
 
 	glEnable(GL_DEPTH_TEST);
 
+	//set camera
 	glLoadIdentity();
 	glRotatef(camera2D.rotX, 1, 0, 0);
 	glRotatef(camera2D.rotY, 0, 1, 0);
@@ -795,6 +522,7 @@ void GameScene3D::render2D() {
 	glLineWidth(5.0);
 	drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(0).first, metroLinesPosition2D.at(metroLinesPosition2D.size()-1).second);
 
+	//draw passangers and their destination.
 	for (Passengers &p : passengers)
 	{
 		p.draw();
@@ -872,7 +600,7 @@ void GameScene3D::onIdle()
 	prepareTime(deltaTime);
 
 	////TODO
-	////SHOULD BE DELETED HERE. NO WINDOW SPECIFIC UPDATE IN THE IDLE METHODE
+	////FIX THIS! IN COMBINATION WITH 2D WINDOW. 2D LINES NOT RIGHT VISIBLE.
 
 	////update metro
 	//int newTime = glutGet(GLUT_ELAPSED_TIME);
@@ -884,7 +612,7 @@ void GameScene3D::onIdle()
 	//train4->Recalculate(deltaTime2 / 1000.0f);
 	//train5->Recalculate(deltaTime2 / 1000.0f);
 
-
+	//Update passangers
 	for (Passengers &p : passengers)
 	{
 		p.update();

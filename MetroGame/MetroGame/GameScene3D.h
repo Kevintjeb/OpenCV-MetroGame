@@ -40,7 +40,6 @@ class GameScene3D :
 {
 private:
 	static Font* largeFont3D;
-	static Font* smallFont2D;
 
 	string time;
 	struct {
