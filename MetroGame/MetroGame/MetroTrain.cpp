@@ -8,7 +8,7 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-inline Vec2f MetroTrain::pos2d_from_pos(float pos)
+inline Vec2f MetroTrain::pos2d_from_pos1d(float pos)
 {
 	// since the position is on a vector between two points, we first get the points
 
@@ -244,7 +244,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 
 	for (int i = 0; i < size; i++) // we go over all trains
 	{
-		auto npos = pos2d_from_pos(tmp_line_pos); // we convert our position from 1 to 2 D
+		auto npos = pos2d_from_pos1d(tmp_line_pos); // we convert our position from 1 to 2 D
 		auto cpos = findComplementaryPositionAndDistance(tmp_line_pos); // we calculate the second position
 
 		if (isnan(cpos.second)) // @TODO this is a temporary fix, but this should never happen during corners
@@ -282,7 +282,7 @@ void MetroTrain::resize(int nsize)
 
 void mg_gameLogic::MetroTrain::reposistion(Line* line)
 {
-	Vec2f trainPosition = pos2d_from_pos(line_pos);		//Get Vector for current position
+	Vec2f trainPosition = pos2d_from_pos1d(line_pos);		//Get Vector for current position
 	int index = 0;		
 	float minimumDistance = 9999999;
 	float trainDistance;
