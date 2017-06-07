@@ -296,26 +296,26 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 			minimumDistance = trainPosition.distance(line->operator[](i));
 		}
 	}
-	int seconIndex=0;
+	int secondIndex=0;
 	if (index > 0)										//Zoek het op een na dichtsbijzijnde punt. (kon ff geen engels)
 	{
 		if (trainPosition.distance(line->operator[](index-1)) > trainPosition.distance(line->operator[](index+1)))
 		{
-			seconIndex = index + 1;
+			secondIndex = index + 1;
 		}
-		else { seconIndex = index - 1; }
+		else { secondIndex = index - 1; }
 	}
 	//IF second index cannot be found it's zero.
 	else 
 	{
-		seconIndex = 1;
+		secondIndex = 1;
 	}
 	trainPosition = line->operator[](index)- trainPosition;					//Get the trainsposition in a local vector
-	Vec2f vectorB = line->operator[](index) - line->operator[](seconIndex); //Vector A is train Vector
+	Vec2f vectorB = line->operator[](index) - line->operator[](secondIndex); //Vector A is train Vector
 	Vec2f vectorA1((vectorB*(trainPosition.dotProduct(vectorB)))/(vectorB.dotProduct(vectorB)));
 
 	//Calculate the distance based on the length of the vector and the second point
-	if (seconIndex > index) 
+	if (secondIndex > index) 
 	{
 		trainDistance +=  vectorA1.magnitude();
 	}
