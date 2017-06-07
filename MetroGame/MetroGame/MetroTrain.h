@@ -44,6 +44,7 @@ namespace mg_gameLogic
 		static constexpr int   max_size     = 16;
 		static constexpr float train_length = 0.2f*scale;
 		static constexpr float train_spacing = 0.025f*scale;
+		static constexpr bool __debug_output = true;
 		
 		explicit MetroTrain(Line* line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
 		float getSpeed(float);

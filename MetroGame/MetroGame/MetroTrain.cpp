@@ -10,38 +10,46 @@ using namespace std;
 
 inline Vec2f MetroTrain::pos2d_from_pos(float pos)
 {
-	int index = line->getIndexByPosition(pos);
+	// since the position is on a vector between two points, we first get the points
+
+	int index = line->getIndexByPosition(pos); 
 
 	Vec2f far = line->operator[](index+1), close = line->operator[](index);
 
+	// we then calculate the vector between them, and then normalize it
 	Vec2f normal(close.x - far.x, close.y - far.y);
 	float mag = sqrt(normal.x*normal.x + normal.y*normal.y);
 	normal.x /= mag;
 	normal.y /= mag;
 
+	// we then calculate the length of the vector, and scale the vector with it
 	float dist = line->getDistance(index) - pos;
 	normal.x *= dist;
 	normal.y *= dist;
 
+	// we then add the vector the ther close point in order to get the position
 	Vec2f pos2d(close.x + normal.x, close.y + normal.y);
 	return pos2d;
 }
 
 inline float MetroTrain::checkAndSetPosRange(float pos)
 {
+
 	switch (state)
 	{
 	case State::FORWARD:
-		if (pos >= line->getDistance(line->size() - 1))
+		if (pos >= line->getDistance(line->size() - 1)) // if we are off the line
 		{
-			state = State::BACKWARD;
+			state = State::BACKWARD; // we revert our direction
+			// and set our new position, base + total train length
 			return line->getDistance(line->size() - 1) - ((size)*(train_length+train_spacing) - train_spacing);
 		}
 		break;
 	case State::BACKWARD:
-		if (pos <= 0)
+		if (pos <= 0) // if we are off the line 
 		{
-			state = State::FORWARD;
+			state = State::FORWARD; // we revert our position
+			// and set our new psoition, base + total tran length
 			return (size)*(train_length+train_spacing) - train_spacing;
 		}
 		break;
@@ -229,34 +237,36 @@ void MetroTrain::Recalculate(float elapsedTime)
 
 	line_pos = checkAndSetPosRange(line_pos);
 
+	// we initialize tmp_line_pos, so we can do our carrt update in one loop
 	auto tmp_line_pos = line_pos;
 
 	// @TODO to prevent stutering, we could attemt to use the train_spacing as a spring
 
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < size; i++) // we go over all trains
 	{
-		auto npos = pos2d_from_pos(tmp_line_pos);
-		auto cpos = findComplementaryPositionAndDistance(tmp_line_pos);
+		auto npos = pos2d_from_pos(tmp_line_pos); // we convert our position from 1 to 2 D
+		auto cpos = findComplementaryPositionAndDistance(tmp_line_pos); // we calculate the second position
 
-		if (isnan(cpos.second))
+		if (isnan(cpos.second)) // @TODO this is a temporary fix, but this should never happen during corners
 		{
-			cout << "caridge " << i << " is not on the line, breaking" << endl;
+			if (__debug_output) cout << "caridge " << i << " is not on the line, breaking" << endl;
 			break;
 		}
 
+		// we set the position, and convert it to world space
 		trains[i]->position.x = npos.x * 50;
 		trains[i]->position.z = npos.y * 50;
+
+		// we calculate the angle of the train, and set it
 		auto y = (npos - cpos.first).y;
 		auto x = (npos - cpos.first).x;
 		auto at = atan2f(x, y);
 		auto conv = at * 180.f / M_PI - 90;
 		trains[i]->angle = conv;
 
+		// we set the 1D position of the next train
 		tmp_line_pos = cpos.second + (state == State::FORWARD ? -train_spacing : train_spacing);
 	}
-
-	//trains[1]->position.x = cpos.first.x * 50;
-	//trains[1]->position.z = cpos.first.y * 50;
 }
 
 int MetroTrain::get_size() const
