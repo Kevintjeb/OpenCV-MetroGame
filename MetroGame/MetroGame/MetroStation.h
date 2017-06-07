@@ -3,9 +3,10 @@
 #include "Renderable.h"
 #include "RenderableOutput.h"
 #include <vector>
+
 namespace mg_gameLogic 
 {
-
+	class Line;
 	class MetroStation
 	{
 	public:
