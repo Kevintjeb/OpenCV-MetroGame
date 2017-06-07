@@ -362,11 +362,12 @@ void drawRenderables()
 	for (Renderable &renderable : mg_gameLogic::get_renderables())
 	{
 
+		glPushMatrix();
 		if (renderable.model != "models/city/city.obj")
 		{
 			glRotatef(45, 0, 1, 0);
 		}
-		glPushMatrix();
+		
 
 		//zorgen dat het object met de wereld mee draait
 		glRotatef(rotation, 0, 1, 0);
