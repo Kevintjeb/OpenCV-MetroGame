@@ -36,6 +36,6 @@ namespace mg_gameLogic
 		RenderableLine();
 		RenderableLine(const RenderableLine&);
 
-		explicit RenderableLine(const std::vector<Vec2f>&);
+		explicit RenderableLine(const std::vector<Vec2f>&, LineType);
 	};
 }

@@ -64,7 +64,8 @@ int Line::getIndexByPosition(const float position) const
 	// if the position is not in the list we get the point to the 'left' of it
 
 	if (position < 0 ) return 0;
-	if (position >= distances[size() - 1]) return size() - 1;
+	if (position >= distances[size() - 1]) 
+		return size() - 1;
 
 	int l, r;
 	l = 0;

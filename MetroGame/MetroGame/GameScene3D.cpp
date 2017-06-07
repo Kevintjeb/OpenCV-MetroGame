@@ -574,9 +574,9 @@ GameScene3D::GameScene3D()
 	//createdummyRenderable
 	createDummyRenderableList();
 
-	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f } }, {});
-	train = new MetroTrain(line);
-	handle = mg_gameLogic::allocate_line(RenderableLine(line->getLine()));
+	line = new Line({{ -1.f, -1.f }, { 1.f, 0.f }, { 1.f, 1.f }}, {});
+	train = new MetroTrain(line, 2.0f, MetroTrain::State::FORWARD, 2);
+	handle = mg_gameLogic::allocate_line(RenderableLine(line->getLine(), mg_gameLogic::LineType::Blue));
 }
 
 

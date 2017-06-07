@@ -26,15 +26,15 @@ Renderable::~Renderable()
 {
 }
 
-mg_gameLogic::RenderableLine::RenderableLine()
+mg_gameLogic::RenderableLine::RenderableLine() : line(), type(LineType::NO_TYPE)
 {
 }
 
-mg_gameLogic::RenderableLine::RenderableLine(const RenderableLine &)
+mg_gameLogic::RenderableLine::RenderableLine(const RenderableLine & r) : line(r.line), type(r.type)
 {
 }
 
-mg_gameLogic::RenderableLine::RenderableLine(const std::vector<Vec2f>& l)
+mg_gameLogic::RenderableLine::RenderableLine(const std::vector<Vec2f>& l, LineType type) : type(type)
 {
 	line = vector<Vec3f>();
 	for (Vec2f vi : l)
