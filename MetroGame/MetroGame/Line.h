@@ -7,6 +7,7 @@
 #define MARGINY 0.8
 #include <valarray>
 #include "MetroStation.h"
+#include <vector>
 
 namespace mg_gameLogic
 {
@@ -16,8 +17,8 @@ namespace mg_gameLogic
 	class Line
 	{
 	private:
-		std::valarray<float> distances;
-		std::valarray<Vec2f> positions;
+		std::vector<float> distances;
+		std::vector<Vec2f> positions;
 		std::list<MetroStation> metroStations;
 		std::list<std::pair<int, MetroStation>> stationIndex;
 	public:
@@ -28,9 +29,11 @@ namespace mg_gameLogic
 		
 		std::size_t size() const;
 		int getIndexByPosition(float position) const;
-		const std::list<std::pair<int, MetroStation>>  getStationsPosistions() const;
+		const std::list<std::pair<int, MetroStation>>  getStationIndexes() const;
 		float getStationDistance(MetroStation station) const;
 		const Vec2f& operator[](int i) const;
 		float getDistance(int i) const;
+
+		const std::vector<Vec2f> &getLine() const;
 	};
 }

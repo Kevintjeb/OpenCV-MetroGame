@@ -1,45 +1,56 @@
 ﻿#include "MetroTrain.h"
-#include <cmath>
+
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <limits>
+#include <iostream>
 
 using namespace mg_gameLogic;
 using namespace std;
 
 inline Vec2f MetroTrain::pos2d_from_pos(float pos)
 {
-	int index = line->getIndexByPosition(pos);
+	// since the position is on a vector between two points, we first get the points
+
+	int index = line->getIndexByPosition(pos); 
 
 	Vec2f far = line->operator[](index+1), close = line->operator[](index);
 
+	// we then calculate the vector between them, and then normalize it
 	Vec2f normal(close.x - far.x, close.y - far.y);
 	float mag = sqrt(normal.x*normal.x + normal.y*normal.y);
 	normal.x /= mag;
 	normal.y /= mag;
 
+	// we then calculate the length of the vector, and scale the vector with it
 	float dist = line->getDistance(index) - pos;
 	normal.x *= dist;
 	normal.y *= dist;
 
+	// we then add the vector the ther close point in order to get the position
 	Vec2f pos2d(close.x + normal.x, close.y + normal.y);
 	return pos2d;
 }
 
 inline float MetroTrain::checkAndSetPosRange(float pos)
 {
+
 	switch (state)
 	{
 	case State::FORWARD:
-		if (pos >= line->getDistance(line->size() - 1))
+		if (pos >= line->getDistance(line->size() - 1)) // if we are off the line
 		{
-			state = State::BACKWARD;
-			return line->getDistance(line->size() - 1) - (size*train_length);
+			state = State::BACKWARD; // we revert our direction
+			// and set our new position, base + total train length
+			return line->getDistance(line->size() - 1) - ((size)*(train_length+train_spacing) - train_spacing);
 		}
 		break;
 	case State::BACKWARD:
-		if (pos <= 0)
+		if (pos <= 0) // if we are off the line 
 		{
-			state = State::FORWARD;
-			return size*train_length;
+			state = State::FORWARD; // we revert our position
+			// and set our new psoition, base + total tran length
+			return (size)*(train_length+train_spacing) - train_spacing;
 		}
 		break;
 	}
@@ -65,7 +76,7 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 	const auto prev = [this](int c)->int {return state == State::FORWARD ? c - 1 : c + 1; };
 	const auto is_invalid = [this](int c)->bool {return state == State::FORWARD ?
 												c > line->size() - 1 || c < 0 :
-												c <= 0 || c > line->size()
+												c <= 0 || c > line->size()-1
 											; };
 	const auto back = [this]()->int {return state == State::FORWARD ? 0 : line->size() - 1; };
 
@@ -132,8 +143,8 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 			return ret;
 		}
 
-		// if the point isn't on the line, we return a vector of [∞, ∞] and a distance of ∞
-		return pair<Vec2f, float>({ numeric_limits<float>::infinity(), numeric_limits<float>::infinity() }, numeric_limits<float>::infinity());
+		// if the point isn't on the line, we return a vector of [NaN, NaN] and a distance of NaN
+		return pair<Vec2f, float>({ NAN, NAN }, NAN);
 	}
 }
 
@@ -143,16 +154,15 @@ MetroTrain::MetroTrain(Line* line, float init_pos, State state, int size) :
 	
 }
 
-
 float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 {
 
 	int index = line->getIndexByPosition(line_pos);
 	totalTimeSpend += elapsedTime;
-	for (pair<int, MetroStation> p : line->getStationsPosistions())
+	for (pair<int, MetroStation> p : line->getStationIndexes())
 	{
 		int pcompare = p.first - (state == State::FORWARD ? 1 : 2);				// -1 voor eerste punt -2 voor achteruit want fuck flobo
-		if ((pcompare == index /*|| (p.first+1)==index*/)&& stopState==0 && oldIndex != index)	//Eerstvolgende punt is het huidige punt
+		if ((pcompare == index /*|| (p.first+1)==index*/) && stopState == 0 && oldIndex != index)	//Eerstvolgende punt is het huidige punt
 		{
 			//snelheid verminderen als groter dan 0
 			if (speed > 0) {
@@ -165,29 +175,31 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 			totalTimeSpend = 0;
 			stopState = 1;		//bevesigen dat de trein stil staat.
 			oldIndex = index;
-			speed = 0; }
-		if (totalTimeSpend > 3 && stopState ==1) 
+			speed = 0;
+		}
+		if (totalTimeSpend > 3 && stopState == 1)
 		{
 			stopState = 2;		//Toestemming voor optrekken
 		}
 		//Opstrekken
-		if ( stopState ==2)
+		if (stopState == 2)
 		{
-			if (speed <= 0.5f) 
-				{
-					speed += 0.1;
-				}
+			if (speed <= 0.5f)
+			{
+				speed += 0.1;
+			}
 		}//Voorkomen dat snelheid boven max gaat.
-		if (speed >= 0.5f) 
+		if (speed >= 0.5f)
 		{
 			stopState = 0;
 			speed = 0.5f;
 		}
 		//zorgen dat stop niet meerdere keren per traject gebeurt.
-		if (index != pcompare) 
+		if (index != pcompare)
 		{
 			oldIndex = -1;
 		}
+
 		//DEBUG for LINE SWITCHING
 
 		//if (totalTimeSpend > 5 && !called) 
@@ -197,7 +209,7 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 		//	totalTimeSpend = 0;
 		//}
 	}
-	
+
 
 	//snelheid keer tijd zodat gelijk blijft.
 	return speed*elapsedTime;
@@ -205,15 +217,12 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 
 void MetroTrain::Recalculate(float elapsedTime)
 {
-	// DEBUG
-	size = 2;
-
 	// ensuring we have the correct size
 	if (trains.size() < size) // if we have to little trains
 	{
 		int diff = size - trains.size(); // we need 'diff' new trains
 		for (int i = 0; i < diff; ++i) // we allocate new Renderables 
-			trains.push_back(allocate_renderable(Renderable(METRO, Vec3f(0, -92.0f, 0), 0.0f, Vec3f(0, 1, 0), Vec3f(2, 2, 2))));
+			trains.push_back(allocate_renderable(Renderable("models/Metro/metro.obj", Vec3f(0, -90.8f, 0), 0.0f, Vec3f(0, 1, 0), Vec3f(scale, scale, scale))));
 	}
 	else if (trains.size() > size) // if we have to many trains
 	{
@@ -228,20 +237,37 @@ void MetroTrain::Recalculate(float elapsedTime)
 
 	line_pos = checkAndSetPosRange(line_pos);
 
-	auto npos = pos2d_from_pos(line_pos);
-	auto cpos = findComplementaryPositionAndDistance(line_pos);
-	trains[0]->position.x = npos.x*50;
-	trains[0]->position.z = npos.y*50;
-	auto y = (npos - cpos.first).y;
-	auto x = (npos - cpos.first).x;
-	auto at = atan2f(x, y);
-	auto conv = at * 180.0f / 3.14159265358979323846f;
-	trains[0]->angle = conv;
-	trains[1]->position.x = cpos.first.x * 50;
-	trains[1]->position.z = cpos.first.y * 50;
+	// we initialize tmp_line_pos, so we can do our carrt update in one loop
+	auto tmp_line_pos = line_pos;
+
+	// @TODO to prevent stutering, we could attemt to use the train_spacing as a spring
+
+	for (int i = 0; i < size; i++) // we go over all trains
+	{
+		auto npos = pos2d_from_pos(tmp_line_pos); // we convert our position from 1 to 2 D
+		auto cpos = findComplementaryPositionAndDistance(tmp_line_pos); // we calculate the second position
+
+		if (isnan(cpos.second)) // @TODO this is a temporary fix, but this should never happen during corners
+		{
+			if (__debug_output) cout << "caridge " << i << " is not on the line, breaking" << endl;
+			break;
+		}
+
+		// we set the position, and convert it to world space
+		trains[i]->position.x = npos.x * 50;
+		trains[i]->position.z = npos.y * 50;
+
+		// we calculate the angle of the train, and set it
+		auto y = (npos - cpos.first).y;
+		auto x = (npos - cpos.first).x;
+		auto at = atan2f(x, y);
+		auto conv = at * 180.f / M_PI - 90;
+		trains[i]->angle = conv;
+
+		// we set the 1D position of the next train
+		tmp_line_pos = cpos.second + (state == State::FORWARD ? -train_spacing : train_spacing);
+	}
 }
-
-
 
 int MetroTrain::get_size() const
 {
@@ -261,7 +287,7 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 	float minimumDistance = 9999999;
 	float trainDistance;
 
-	for (int i = 0; i < line->size(); i++)				//Search through all the points of the new line
+	for (int i = 0; i < line->size(); i++)				//Search through all the points of the new line to find the one closest to the train
 	{
 		if (trainPosition.distance(line->operator[](i)) < minimumDistance)
 		{
@@ -271,7 +297,7 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 		}
 	}
 	int seconIndex=0;
-	if (index > 0) 
+	if (index > 0)										//Zoek het op een na dichtsbijzijnde punt. (kon ff geen engels)
 	{
 		if (trainPosition.distance(line->operator[](index-1)) > trainPosition.distance(line->operator[](index+1)))
 		{
@@ -279,14 +305,16 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 		}
 		else { seconIndex = index - 1; }
 	}
+	//IF second index cannot be found it's zero.
 	else 
 	{
 		seconIndex = 1;
 	}
-	trainPosition = line->operator[](index)- trainPosition;
+	trainPosition = line->operator[](index)- trainPosition;					//Get the trainsposition in a local vector
 	Vec2f vectorB = line->operator[](index) - line->operator[](seconIndex); //Vector A is train Vector
 	Vec2f vectorA1((vectorB*(trainPosition.dotProduct(vectorB)))/(vectorB.dotProduct(vectorB)));
 
+	//Calculate the distance based on the length of the vector and the second point
 	if (seconIndex > index) 
 	{
 		trainDistance +=  vectorA1.magnitude();
@@ -297,6 +325,6 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 	}
 	line_pos = trainDistance;
 
-	
+	//set the new line.
 	this->line = line;
 }

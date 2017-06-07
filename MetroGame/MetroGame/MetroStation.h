@@ -5,7 +5,6 @@
 #include <vector>
 namespace mg_gameLogic 
 {
-	class Line;
 
 	class MetroStation
 	{
@@ -23,8 +22,7 @@ namespace mg_gameLogic
 		bool operator ==(const MetroStation &other) const;
 		std::vector<MetroStation> path;
 	private:
-		RedenderablePointer pointer;
-	
+		RenderablePointer *pointer;
 	};
 
 

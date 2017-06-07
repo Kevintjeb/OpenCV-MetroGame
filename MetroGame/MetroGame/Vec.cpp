@@ -24,8 +24,6 @@ float& Vec3f::operator [](int index)
 	return v[index];
 }
 
-
-
 Vec2f::Vec2f(float x, float y)
 {
 	this->x = x;

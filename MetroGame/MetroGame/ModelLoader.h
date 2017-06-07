@@ -3,6 +3,7 @@
 #include "ObjModel.h"
 #include <iostream>
 #include <string>
+#include <map>
 
 class ModelLoader
 {

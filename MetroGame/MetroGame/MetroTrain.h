@@ -28,20 +28,23 @@ namespace mg_gameLogic
 		int stopState = 0;	//0= normaal rijden // 1 = gestopt // 2 = optrekken 
 		int oldIndex = -1;  //zorgt voor de eerste check zodat niet meerdere keren stopt.
 
-		std::vector<RedenderablePointer> trains;
+		std::vector<RenderablePointer> trains;
 		int size;
 
 		inline Vec2f pos2d_from_pos(float pos);
 		inline float checkAndSetPosRange(float pos);
 
 		// return: position and the position's distance
-		// error : [∞, ∞], ∞
+		// error : [NaN, Nan], Nan
 		inline std::pair<Vec2f, float> findComplementaryPositionAndDistance(float pos);
 
 	public:
-		float speed = .50f;
+		static constexpr float scale = 0.60f;
+		float speed = 1.f*scale;
 		static constexpr int   max_size     = 16;
-		static constexpr float train_length = 0.25f;
+		static constexpr float train_length = 0.2f*scale;
+		static constexpr float train_spacing = 0.025f*scale;
+		static constexpr bool __debug_output = true;
 		
 		explicit MetroTrain(Line* line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
 		float getSpeed(float);

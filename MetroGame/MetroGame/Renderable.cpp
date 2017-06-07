@@ -1,8 +1,9 @@
 #include "Renderable.h"
 
 using namespace mg_gameLogic;
+using namespace std;
 
-Renderable::Renderable() : model(METRO), position(Vec3f()), rotation(Vec3f()), scale(Vec3f())
+Renderable::Renderable() : model("models/Metro/metro.obj"), position(Vec3f()), rotation(Vec3f()), scale(Vec3f())
 {
 
 }
@@ -13,7 +14,7 @@ Renderable::Renderable(const Renderable& render) : model(render.model), angle(re
 }
 
 
-Renderable::Renderable(Model model, Vec3f pos ,float angle, Vec3f rot, Vec3f scale) : model(model), position(pos), rotation(rot), scale(scale), angle(angle)
+Renderable::Renderable(std::string model, Vec3f pos ,float angle, Vec3f rot, Vec3f scale) : model(model), position(pos), rotation(rot), scale(scale), angle(angle)
 {
 }
 
@@ -23,4 +24,19 @@ Renderable::Renderable(Vec3f pos, float angle, Vec3f rot, Vec3f scale) : positio
 
 Renderable::~Renderable()
 {
+}
+
+mg_gameLogic::RenderableLine::RenderableLine() : line(), type(LineType::NO_TYPE)
+{
+}
+
+mg_gameLogic::RenderableLine::RenderableLine(const RenderableLine & r) : line(r.line), type(r.type)
+{
+}
+
+mg_gameLogic::RenderableLine::RenderableLine(const std::vector<Vec2f>& l, LineType type) : type(type)
+{
+	line = vector<Vec3f>();
+	for (Vec2f vi : l)
+		line.push_back(Vec3f(vi.x, vi.y, 0));
 }

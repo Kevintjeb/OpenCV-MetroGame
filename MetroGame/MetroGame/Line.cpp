@@ -9,6 +9,8 @@ using namespace std;
 
 mg_gameLogic::Line::Line(std::list<Vec2f> line, std::list<MetroStation> stations): positions(line.size()+stations.size()), distances(line.size() + stations.size()), metroStations(stations)
 {
+
+	//Getting and Setting the index of every station. Each Station is stored with its index in stationIndex
 	for (MetroStation &station : stations) {
 		station.connectedLines.push_back(this);
 		pair<int, MetroStation> currentStation =  make_pair(-1, station);
@@ -66,11 +68,26 @@ int Line::getIndexByPosition(const float position) const
 	// standard binary tree with interpolation
 	// if the position is not in the list we get the point to the 'left' of it
 
+	if (position < 0 ) return 0;
+	if (position >= distances[size() - 1]) 
+		return size() - 2;
+
 	int l, r;
 	l = 0;
 	r = size() - 1;
+
+#ifdef _DEBUG
+	constexpr int max_iter = 10;
+			  int     iter =  0;
+#endif
+
 	while (true)
 	{
+#ifdef _DEBUG
+		if (iter++ >= max_iter) 
+			throw "invalid position";
+#endif
+
 		int m = (l + r) / 2;
 		if (distances[m] < position) // we are lower than our position
 		{
@@ -89,7 +106,8 @@ int Line::getIndexByPosition(const float position) const
 	}
 }
 
-const std::list<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationsPosistions() const
+//Returns the list of pairs with statins and indexes
+const std::list<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationIndexes() const
 {
 	return stationIndex;
 }
@@ -117,6 +135,12 @@ float mg_gameLogic::Line::getDistance(int i) const
 	return distances[i];
 }
 
+const std::vector<Vec2f>& mg_gameLogic::Line::getLine() const
+{
+	return positions;
+}
+
+//Converts the Data from a list to one with only relevant. 
 list<Vec2f> mg_gameLogic::filterData(const list<Vec2f> &data)
 {
 	std::list<Vec2f >  filtered;
@@ -133,6 +157,7 @@ list<Vec2f> mg_gameLogic::filterData(const list<Vec2f> &data)
 	return filtered;
 }
 
+//Compares two points and returns true if they are exceeding Margins and therefore are relevant.
 bool mg_gameLogic::compareVector(Vec2f &v1,Vec2f &v2)
 {
 
