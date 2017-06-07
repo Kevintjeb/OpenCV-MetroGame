@@ -3,8 +3,6 @@
 #include "Renderable.h"
 #include "Line.h"
 #include "RenderableOutput.h"
-
-
 #include <vector>
 #include <tuple>
 
