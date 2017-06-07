@@ -161,25 +161,25 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 	totalTimeSpend += elapsedTime;
 	for (pair<int, MetroStation> p : line->getStationIndexes())
 	{
-		int pcompare = p.first - (state == State::FORWARD ? 1 : 2);				// -1 voor eerste punt -2 voor achteruit want fuck flobo
-		if ((pcompare == index /*|| (p.first+1)==index*/) && stopState == 0 && oldIndex != index)	//Eerstvolgende punt is het huidige punt
+		int pcompare = p.first - (state == State::FORWARD ? 1 : 2);				// -1 for the first point -2 for reverse
+		if ((pcompare == index /*|| (p.first+1)==index*/) && stopState == 0 && oldIndex != index)	//Nextpoint = currentPoint
 		{
-			//snelheid verminderen als groter dan 0
+			//Decrease speed while it's greater than 0
 			if (speed > 0) {
 				speed -= 0.01;
 			}
 		}
-		//bevestigen dat de snelheid niet negatief wordt.
+		//Preventing the train from going in reverse
 		if (speed < 0) {
-			//Tijd resetten zodat stilstaan bij 0 begint.
+			//Time Resetten when the train stopped
 			totalTimeSpend = 0;
-			stopState = 1;		//bevesigen dat de trein stil staat.
+			stopState = 1;		//confirm that the train stopped
 			oldIndex = index;
 			speed = 0;
 		}
 		if (totalTimeSpend > 3 && stopState == 1)
 		{
-			stopState = 2;		//Toestemming voor optrekken
+			stopState = 2;		//Permission to continue
 		}
 		//Opstrekken
 		if (stopState == 2)
@@ -188,13 +188,13 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 			{
 				speed += 0.1;
 			}
-		}//Voorkomen dat snelheid boven max gaat.
+		}//Preventing the speed from going over the safetylimit
 		if (speed >= 0.5f)
 		{
 			stopState = 0;
 			speed = 0.5f;
 		}
-		//zorgen dat stop niet meerdere keren per traject gebeurt.
+		//preventing from stopping again for the same station.
 		if (index != pcompare)
 		{
 			oldIndex = -1;
@@ -209,10 +209,7 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 		//	totalTimeSpend = 0;
 		//}
 	}
-
-
-	//snelheid keer tijd zodat gelijk blijft.
-	return speed*elapsedTime;
+	return speed*elapsedTime;	//keeping speed the same
 }
 
 void MetroTrain::Recalculate(float elapsedTime)
