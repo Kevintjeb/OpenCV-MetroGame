@@ -8,20 +8,20 @@ MetroStation::MetroStation()
 {
 }
 
-mg_gameLogic::MetroStation::MetroStation(Vec2f pos, int id) : position(pos), stationID(id)
+mg_gameLogic::MetroStation::MetroStation(Vec2f pos, int id) :
+	position(pos), stationID(id),
+	pointer(allocate_renderable(Renderable("models/city/city.obj", {pos.x, -78, pos.y}, 0, {0, 1, 0}, {0.1f, 0.1f, 0.1f} )))
 {
-	
+
 }
 
 MetroStation::~MetroStation()
 {
-	//TODO find someway to fix this
-	//deallocate_renderable(pointer);
+	deallocate_renderable(pointer);
 }
 //Changes the postition of the MetroStation -> DEPRECATED (this has been replaced in gamelogic branch)
 void mg_gameLogic::MetroStation::setPosition(Vec2f pos)
 {
 	position = pos;
-	RenderablePointer p = *pointer;
-	p->position = Vec3f(pos.x*50,-92,pos.y*50);
+	pointer->position = Vec3f(pos.x*50,-92,pos.y*50);
 }

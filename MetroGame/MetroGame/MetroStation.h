@@ -16,7 +16,7 @@ namespace mg_gameLogic
 		void setPosition(Vec2f pos);
 		int stationID;
 	private:
-		RenderablePointer *pointer;
+		RenderablePointer pointer;
 	};
 
 
