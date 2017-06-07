@@ -1,30 +1,4 @@
-#include <GL\freeglut.h>
-#include "system.h"
-#include "iostream"
-#include "ModelLoader.h"
-#define _USE_MATH_DEFINES
 #include "GameScene3D.h"
-
-#include "Vect.h"
-#include "Test.h"
-#include "Line.h"
-#include <math.h>
-#include <cstdio>
-#include <map>
-#include <time.h>
-
-#include "VertexClass.h"
-#include "Renderable.h"
-
-#include "Model.h"
-#include "Texture.h"
-
-#include "stb_image.h"
-#include "RenderableOutput.h"
-
-#include "SceneManager.h"
-#include "MainMenuScene.h"
-#include "Passengers.h"
 
 using namespace mg_system;
 using namespace mg_gameLogic;
@@ -33,9 +7,10 @@ using std::endl;
 
 #define WIDTH 600
 #define HEIGHT 600
-
 #define STEP 0.2f
+
 Font* GameScene3D::largeFont3D = nullptr;
+Font* GameScene3D::smallFont2D = nullptr;
 
 ModelLoader modelLoader;
 
@@ -66,6 +41,16 @@ LinePointer handle5;
 Line *line5;
 MetroTrain *train5;
 
+std::vector <VertexClass> TopPlane;
+std::vector <VertexClass> GroundPlane;
+std::vector <VertexClass> metroLines;
+std::vector <std::pair<int, int>> metroLinesPosition;
+std::vector <VertexClass> metroLines2D;
+std::vector <std::pair<int, int>> metroLinesPosition2D;
+std::vector<Texture*> textures;
+std::vector<RenderablePointer> renderablePointers;
+std::vector<Passengers> passengers;
+
 int oldTime = -1;
 
 int lastTime;
@@ -93,20 +78,10 @@ struct Camera2D
 	float height = -80;
 }camera2D;
 
-std::vector <VertexClass> TopPlane;
-std::vector <VertexClass> GroundPlane;
-std::vector <VertexClass> metroLines;
-std::vector <std::pair<int, int>> metroLinesPosition;
-std::vector <VertexClass> metroLines2D;
-std::vector <std::pair<int, int>> metroLinesPosition2D;
-std::vector<Texture*> textures;
-std::vector<RenderablePointer> renderablePointers;
-std::vector<Passengers> passengers;
-
 float randScale(float standScale)
 {
 	standScale += 0.1f;
-
+	
 	float randNum = 0 + (rand() % (int)(10 - 0 + 1));
 	float scale = (randNum / 10.0f) * standScale;
 	return scale;
@@ -692,14 +667,13 @@ GameScene3D::GameScene3D()
 	SceneManager::getInstance().switchWindow2D();
 	prepareModel("models/city2/city2d.obj");
 
+	smallFont2D = new Font("font_0.fnt");
+
 
 	//debug
-	passengers.push_back(Passengers(0, 0, Passengers::Priority::LOW));
-	passengers.push_back(Passengers(-50, 0, Passengers::Priority::HIGH));
-	passengers.push_back(Passengers(50, 50, Passengers::Priority::HIGH));
-	passengers.push_back(Passengers(40, 10, Passengers::Priority::LOW));
-	passengers.push_back(Passengers(-5, -25, Passengers::Priority::EMERENCY));
-	passengers.push_back(Passengers(20, -25, Passengers::Priority::HIGH));
+	passengers.push_back(Passengers(0, 0, Passengers::Priority::LOW, passengers.size(), 25, 25));
+	passengers.push_back(Passengers(-50, 0, Passengers::Priority::HIGH, passengers.size(), -25, -25));
+	passengers.push_back(Passengers(-5, -25, Passengers::Priority::EMERENCY, passengers.size(), -25, 50));
 
 	SceneManager::getInstance().switchWindow3D();
 	//create city
@@ -897,15 +871,18 @@ void GameScene3D::onIdle()
 
 	prepareTime(deltaTime);
 
-	//update metro
-	int newTime = glutGet(GLUT_ELAPSED_TIME);
-	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
-	oldTime = newTime;
-	train->Recalculate(deltaTime2 / 1000.0f);
-	train2->Recalculate(deltaTime2 / 1000.0f);
-	train3->Recalculate(deltaTime2 / 1000.0f);
-	train4->Recalculate(deltaTime2 / 1000.0f);
-	train5->Recalculate(deltaTime2 / 1000.0f);
+	////TODO
+	////SHOULD BE DELETED HERE. NO WINDOW SPECIFIC UPDATE IN THE IDLE METHODE
+
+	////update metro
+	//int newTime = glutGet(GLUT_ELAPSED_TIME);
+	//int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
+	//oldTime = newTime;
+	//train->Recalculate(deltaTime2 / 1000.0f);
+	//train2->Recalculate(deltaTime2 / 1000.0f);
+	//train3->Recalculate(deltaTime2 / 1000.0f);
+	//train4->Recalculate(deltaTime2 / 1000.0f);
+	//train5->Recalculate(deltaTime2 / 1000.0f);
 
 
 	for (Passengers &p : passengers)
