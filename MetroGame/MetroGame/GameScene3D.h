@@ -26,6 +26,7 @@
 #include "SceneManager.h"
 #include "MainMenuScene.h"
 #include "Passengers.h"
+#include "Color.h"
 
 using namespace mg_system;
 using namespace mg_gameLogic;
@@ -45,7 +46,7 @@ private:
 	void move(float angle, float fac);
 	void drawRenderables();
 	void draw2DRenderables();
-	Vec3f getLineColor(LineType color);
+	Color getLineColor(LineType color);
 	void prepare_lines();
 	void prepare_lines2D();
 	ModelLoader modelLoader;

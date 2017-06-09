@@ -176,6 +176,7 @@
     <ClCompile Include="VertexClass.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameScene3D.h" />
     <ClInclude Include="IScene.h" />

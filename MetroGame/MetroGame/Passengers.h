@@ -1,5 +1,5 @@
 #pragma once
-#include "Vect.h"
+#include "Color.h"
 #include <GL\freeglut.h>
 #include <math.h>
 #include <vector>
@@ -17,7 +17,7 @@ public:
 		LOW, HIGH, EMERENCY
 	};
 
-	Passengers(float x, float y, Passengers::Priority people, int nmb, float destX, float z);
+	Passengers(float x, float y, Passengers::Priority people, float destX, float z);
 	~Passengers();
 	void draw();
 	void update();
@@ -28,10 +28,10 @@ private:
 	//TODO do something with destination
 	int destCounter = 0;
 	bool drawDest = true;
-	Vec3f color;
-	float x, z, radius1 = 0, radius2 = 3, radius3 = 6, radius4 = 9, step = 0.2f, max = 10.0f, destinationX, destinationZ;
+	Color color = Color(0.0f,0.0f,0.0f);
+	float x, z, radius1 = 0, radius2 = 3, radius3 = 6, radius4 = 9, step = 0.05f, max = 10.0f, destinationX, destinationZ;
 	Passengers::Priority people;
-	void DrawCircle(float cx, float cy, float r, Vec3f color);
-	void DrawDestination(float x, float z, Vec3f color);
+	void DrawCircle(float cx, float cy, float r, Color color);
+	void DrawDestination(float x, float z, Color color);
 };
 

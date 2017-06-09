@@ -2,7 +2,7 @@
 
 
 
-Passengers::Passengers(float x, float z, Passengers::Priority people, int number, float destX, float destY) : x(x), z(z), people(people), destinationX(destX), destinationZ(destY)
+Passengers::Passengers(float x, float z, Passengers::Priority people, float destX, float destY) : x(x), z(z), people(people), destinationX(destX), destinationZ(destY)
 {
 	switch (people)
 	{
@@ -16,46 +16,6 @@ Passengers::Passengers(float x, float z, Passengers::Priority people, int number
 		max = 12;
 		break;
 	default:
-		break;
-	}
-
-	switch (number)
-	{
-	case 0:
-		color = Vec3f(1.0f, 0.5f, 0.0f);
-		break;
-	case 1:
-		color = Vec3f(0.0f, 0.3f, 1.0f);
-		break;
-	case 2:
-		color = Vec3f(1.0f, 1.0f, 0.0f);
-		break;
-	case 3:
-		color = Vec3f(1.0f, 0.0f, 1.0f);
-		break;
-	case 4:
-		color = Vec3f(1.0f, 0.5f, 0.5f);
-		break;
-	case 5:
-		color = Vec3f(0.0f, 1.0f, 1.0f);
-		break;
-	case 6:
-		color = Vec3f(0.5f, 0.5f, 1.0f);
-		break;
-	case 7:
-		color = Vec3f(0.5f, 1.0f, 0.5f);
-		break;
-	case 8:
-		color = Vec3f(1.0f, 0.3f, 0.0f);
-		break;
-	case 9:
-		color = Vec3f(0.0f, 1.0f, 0.3f);
-		break;
-	case 10:
-		color = Vec3f(0.3f, 0.0f, 1.0f);
-		break;
-	default:
-		color = Vec3f(0.3f, 0.3f, 0.3f);
 		break;
 	}
 }
@@ -151,11 +111,11 @@ Passengers::Priority Passengers::getPriority()
 	return people;
 }
 
-void Passengers::DrawCircle(float cx, float cy, float r, Vec3f color)
+void Passengers::DrawCircle(float cx, float cy, float r, Color color)
 {
 	glBegin(GL_LINE_LOOP);
 	glEnable(GL_COLOR);
-	glColor3f(color.x, color.y, color.z);
+	glColor3f(color.r, color.g, color.b);
 	for (int ii = 0; ii < 360; ii++)
 	{
 		float theta = 2.0f * 3.1415926f * float(ii) / float(360);//get the current angle
@@ -170,7 +130,7 @@ void Passengers::DrawCircle(float cx, float cy, float r, Vec3f color)
 	glDisable(GL_COLOR);
 }
 
-void Passengers::DrawDestination(float x, float z, Vec3f color)
+void Passengers::DrawDestination(float x, float z, Color color)
 {
 	/*glEnable(GL_COLOR);
 	glPointSize(30.0f);
