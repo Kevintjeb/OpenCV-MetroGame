@@ -224,8 +224,8 @@ void GameScene3D::draw2DRenderables()
 		}
 		else
 		{
+			glPopMatrix();
 			continue;
-			it = modelsMap.find(renderable.model);
 		}
 
 		modelLoader.getModel(it->second)->draw();
@@ -250,7 +250,7 @@ Vec3f GameScene3D::getLineColor(LineType color)
 		lineColor = Vec3f(0.0f, 0.0f, 1.0f);
 		break;
 	default:
-		lineColor = Vec3f(1.0f, 1.0f, 0.0f);
+		lineColor = Vec3f(0.0f, 0.0f, 0.0f);
 		break;
 	}
 
@@ -465,11 +465,6 @@ void GameScene3D::render2D() {
 
 	if (metroLinesPosition2D.size() > 0)
 	{
-		glBegin(GL_LINES);
-		glVertex3f(20.0f, 20.0f, 30.0f);
-		glVertex3f(20.0f, 20.0f, 30.0f);
-		glEnd();
-
 		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(0).first, metroLinesPosition2D.at(metroLinesPosition2D.size() - 1).second);
 	}
 
@@ -555,6 +550,19 @@ void GameScene3D::onIdle()
 	rotation += deltaTime * 15;
 
 	prepareTime(deltaTime);
+
+	////TODO
+	////FIX THIS! IN COMBINATION WITH 2D WINDOW. 2D LINES NOT RIGHT VISIBLE.
+
+	////update metro
+	/*int newTime = glutGet(GLUT_ELAPSED_TIME);
+	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
+	oldTime = newTime;
+	train->Recalculate(deltaTime2 / 1000.0f);
+	train2->Recalculate(deltaTime2 / 1000.0f);
+	train3->Recalculate(deltaTime2 / 1000.0f);
+	train4->Recalculate(deltaTime2 / 1000.0f);
+	train5->Recalculate(deltaTime2 / 1000.0f);*/
 
 	//Update passangers
 	for (Passengers &p : passengers)
