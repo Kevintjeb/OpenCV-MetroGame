@@ -163,7 +163,7 @@ void Passengers::DrawCircle(float cx, float cy, float r, Vec3f color)
 		float x = r * cosf(theta);//calculate the x component
 		float y = r * sinf(theta);//calculate the y component
 
-		glVertex3f(x + cx, 9.0f, y + cy);//output vertex
+		glVertex3f(x + cx, 4.5f, y + cy);//output vertex
 
 	}
 	glEnd();
@@ -172,11 +172,11 @@ void Passengers::DrawCircle(float cx, float cy, float r, Vec3f color)
 
 void Passengers::DrawDestination(float x, float z, Vec3f color)
 {
-	glEnable(GL_COLOR);
+	/*glEnable(GL_COLOR);
 	glPointSize(30.0f);
 	glBegin(GL_POINTS);
 	glColor3f(color.x, color.y, color.z);
-	glVertex3f(x, 9.5f, z);
+	glVertex3f(x, 4.5f, z);
 	glEnd();
-	glDisable(GL_COLOR);
+	glDisable(GL_COLOR);*/
 }
