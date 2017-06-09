@@ -213,6 +213,8 @@ void GameScene3D::draw2DRenderables()
 	{
 		glPushMatrix();
 
+		glRotatef(45,0,1,0);
+
 		glTranslatef(renderable.position.x, renderable.position.y, renderable.position.z);
 		glRotatef(renderable.angle, renderable.rotation.x, renderable.rotation.y, renderable.rotation.z);
 
@@ -298,10 +300,10 @@ void GameScene3D::prepare_lines2D()
 		{
 			if (index > 0 && index < Rline.line.size() - 1)
 			{
-				metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 10.0f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+				metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 4.5f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
 				position++;
 			}
-			metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 10.0f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+			metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 4.5f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
 			position++;
 		}
 		metroLinesPosition2D.push_back(std::make_pair(start, position));
@@ -333,9 +335,10 @@ GameScene3D::GameScene3D()
 
 	//debug data
 	passengers.clear();
-	passengers.push_back(Passengers(0, 0, Passengers::Priority::LOW, passengers.size(), 25, 25));
-	passengers.push_back(Passengers(-50, 0, Passengers::Priority::HIGH, passengers.size(), -25, -25));
-	passengers.push_back(Passengers(-5, -25, Passengers::Priority::EMERENCY, passengers.size(), -25, 50));
+	passengers.push_back(Passengers(50, 50, Passengers::Priority::LOW, passengers.size(), 25, 25));
+	passengers.push_back(Passengers(-50, -50, Passengers::Priority::HIGH, passengers.size(), -25, -25));
+	passengers.push_back(Passengers(-50, 50, Passengers::Priority::EMERENCY, passengers.size(), -25, 50));
+	passengers.push_back(Passengers(50, -50, Passengers::Priority::EMERENCY, passengers.size(), -25, 50));
 
 	SceneManager::getInstance().switchWindow3D();
 	//create city
@@ -442,7 +445,8 @@ void GameScene3D::render2D() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	gluPerspective(90.0f, WIDTH / (float)HEIGHT, 0.1f, 5000.0f);
+	glOrtho(-75,75,-75,75,-100,100);
+	//gluPerspective(90.0f, WIDTH / (float)HEIGHT, 0.1f, 5000.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glMatrixMode(GL_MODELVIEW);
 
@@ -455,14 +459,14 @@ void GameScene3D::render2D() {
 	glTranslatef(camera2D.posX, camera2D.height, camera2D.posY);
 
 	//draw map and lines
-	glRotatef(45, 0, 1, 0);
+	//glRotatef(45, 0, 1, 0);
 	draw2DRenderables();
 
 	glDisable(GL_TEXTURE_2D);
-	glRotatef(45, 0, 1, 0);
+	//glRotatef(45, 0, 1, 0);
 	prepare_lines2D();
 	glLineWidth(5.0);
-
+	glScalef(1.4f, 1.0f, 1.4f);
 	if (metroLinesPosition2D.size() > 0)
 	{
 		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(0).first, metroLinesPosition2D.at(metroLinesPosition2D.size() - 1).second);
