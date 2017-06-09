@@ -287,8 +287,8 @@ void draw2DRenderables()
 		}
 		else
 		{
+			glPopMatrix();
 			continue;
-			it = modelsMap.find(renderable.model);
 		}
 
 		modelLoader.getModel(it->second)->draw();
@@ -313,7 +313,7 @@ Vec3f getLineColor(LineType color)
 		lineColor = Vec3f(0.0f, 0.0f, 1.0f);
 		break;
 	default:
-		lineColor = Vec3f(1.0f, 1.0f, 0.0f);
+		lineColor = Vec3f(0.0f, 0.0f, 0.0f);
 		break;
 	}
 
@@ -608,14 +608,14 @@ void GameScene3D::onIdle()
 	////FIX THIS! IN COMBINATION WITH 2D WINDOW. 2D LINES NOT RIGHT VISIBLE.
 
 	////update metro
-	/*int newTime = glutGet(GLUT_ELAPSED_TIME);
+	int newTime = glutGet(GLUT_ELAPSED_TIME);
 	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
 	oldTime = newTime;
 	train->Recalculate(deltaTime2 / 1000.0f);
 	train2->Recalculate(deltaTime2 / 1000.0f);
 	train3->Recalculate(deltaTime2 / 1000.0f);
 	train4->Recalculate(deltaTime2 / 1000.0f);
-	train5->Recalculate(deltaTime2 / 1000.0f);*/
+	train5->Recalculate(deltaTime2 / 1000.0f);
 
 	//Update passangers
 	for (Passengers &p : passengers)

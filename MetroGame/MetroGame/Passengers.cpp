@@ -65,6 +65,8 @@ Passengers::~Passengers()
 {
 }
 
+
+//draw passangers and destination
 void Passengers::draw()
 {
 	switch (people)
@@ -94,6 +96,7 @@ void Passengers::draw()
 			break;
 	}
 }
+
 
 void Passengers::update()
 {
