@@ -430,6 +430,8 @@ void GameScene3D::render3D()
 	glColor4f(0, 0, 0, 1);
 	
 	largeFont3D->drawText(timeString, width - largeFont3D->textLength(timeString) - 10, 10);
+	largeFont3D->drawText(fps, width - largeFont3D->textLength(fps) - 10, 40);
+
 }
 
 void GameScene3D::render2D() {
@@ -455,12 +457,19 @@ void GameScene3D::render2D() {
 	//draw map and lines
 	glRotatef(45, 0, 1, 0);
 	draw2DRenderables();
+
 	glDisable(GL_TEXTURE_2D);
 	glRotatef(45, 0, 1, 0);
 	prepare_lines2D();
 	glLineWidth(5.0);
+
 	if (metroLinesPosition2D.size() > 0)
 	{
+		glBegin(GL_LINES);
+		glVertex3f(20.0f, 20.0f, 30.0f);
+		glVertex3f(20.0f, 20.0f, 30.0f);
+		glEnd();
+
 		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(0).first, metroLinesPosition2D.at(metroLinesPosition2D.size() - 1).second);
 	}
 
@@ -469,17 +478,23 @@ void GameScene3D::render2D() {
 	{
 		p.draw();
 	}
+	glEnable(GL_TEXTURE_2D);
 
 }
 
 void GameScene3D::update()
 {
-
+	train->Recalculate(deltaTime);
+	train2->Recalculate(deltaTime);
+	train3->Recalculate(deltaTime);
+	train4->Recalculate(deltaTime);
+	train5->Recalculate(deltaTime);
 }
 
 void GameScene3D::onEnter()
 {
 	lastTime = glutGet(GLUT_ELAPSED_TIME);
+	setAllKeysFalse();
 }
 
 void GameScene3D::setAllKeysFalse() {
@@ -494,7 +509,6 @@ void GameScene3D::onExit()
 {
 	/*delete train;
 	delete line;*/
-	setAllKeysFalse();
 	clear_renderables();
 }
 
@@ -535,24 +549,12 @@ void GameScene3D::prepareTime(float deltaTime) {
 void GameScene3D::onIdle()
 {
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
-	float deltaTime = (currentTime - lastTime) / 1000.0f;
+	deltaTime = (currentTime - lastTime) / 1000.0f;
 	lastTime = currentTime;
+
 	rotation += deltaTime * 15;
 
 	prepareTime(deltaTime);
-
-	////TODO
-	////FIX THIS! IN COMBINATION WITH 2D WINDOW. 2D LINES NOT RIGHT VISIBLE.
-
-	////update metro
-	/*int newTime = glutGet(GLUT_ELAPSED_TIME);
-	int deltaTime2 = oldTime >= 0 ? newTime - oldTime : 0;
-	oldTime = newTime;
-	train->Recalculate(deltaTime2 / 1000.0f);
-	train2->Recalculate(deltaTime2 / 1000.0f);
-	train3->Recalculate(deltaTime2 / 1000.0f);
-	train4->Recalculate(deltaTime2 / 1000.0f);
-	train5->Recalculate(deltaTime2 / 1000.0f);*/
 
 	//Update passangers
 	for (Passengers &p : passengers)
@@ -573,8 +575,7 @@ void GameScene3D::onIdle()
 	if (shiftActive) {
 		camera.height += 5 * deltaTime;
 	}
-
-	cout << "FPS:" << (int)(1 / deltaTime) << endl;
+	fps = std::to_string((int)(1 / deltaTime));
 }
 
 void GameScene3D::onSpecialFunc(int)

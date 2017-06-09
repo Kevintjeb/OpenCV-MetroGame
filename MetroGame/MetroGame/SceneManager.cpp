@@ -205,6 +205,7 @@ void SceneManager::onKeyDown(unsigned char key)
 void SceneManager::onIdle()
 {
 	if (isInit) {
+		tick();
 		currentScene->onIdle();
 
 		glutSetWindow(window3D);
