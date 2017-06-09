@@ -335,10 +335,10 @@ GameScene3D::GameScene3D()
 
 	//debug data
 	passengers.clear();
-	passengers.push_back(Passengers(50, 50, Passengers::Priority::LOW, 25, 25));
-	passengers.push_back(Passengers(-50, -50, Passengers::Priority::HIGH, -25, -25));
-	passengers.push_back(Passengers(-50, 50, Passengers::Priority::EMERENCY, -25, 50));
-	passengers.push_back(Passengers(50, -50, Passengers::Priority::EMERENCY, -25, 50));
+	passengers.push_back(Passengers(50, 50, Passengers::Priority::LOW));
+	passengers.push_back(Passengers(-50, -50, Passengers::Priority::HIGH));
+	passengers.push_back(Passengers(-50, 50, Passengers::Priority::EMERENCY));
+	passengers.push_back(Passengers(50, -50, Passengers::Priority::EMERENCY));
 
 	SceneManager::getInstance().switchWindow3D();
 	//create city

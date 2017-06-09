@@ -2,7 +2,7 @@
 
 
 
-Passengers::Passengers(float x, float z, Passengers::Priority people, float destX, float destY) : x(x), z(z), people(people), destinationX(destX), destinationZ(destY)
+Passengers::Passengers(float x, float z, Passengers::Priority people) : x(x), z(z), people(people)
 {
 	switch (people)
 	{
@@ -34,23 +34,17 @@ void Passengers::draw()
 		case Priority::LOW:
 			DrawCircle(x, z, radius1, color);
 			DrawCircle(x, z, radius2, color);
-			if(drawDest)
-				DrawDestination(destinationX, destinationZ, color);
 			break;
 		case Priority::HIGH:
 			DrawCircle(x, z, radius1, color);
 			DrawCircle(x, z, radius2, color);
 			DrawCircle(x, z, radius3, color);
-			if (drawDest)
-				DrawDestination(destinationX, destinationZ, color);
 			break;
 		case Priority::EMERENCY:
 			DrawCircle(x, z, radius1, color);
 			DrawCircle(x, z, radius2, color);
 			DrawCircle(x, z, radius3, color);
 			DrawCircle(x, z, radius4, color);
-			if (drawDest)
-				DrawDestination(destinationX, destinationZ, color);
 			break;
 		default:
 			break;
@@ -73,13 +67,6 @@ void Passengers::update()
 		radius3 = 0;
 	if (radius4 > max)
 		radius4 = 0;
-
-	destCounter++;
-	if (destCounter > MAXCOUNTER)
-	{
-		drawDest = !drawDest;
-		destCounter = 0;
-	}
 }
 
 void Passengers::updatePriority(Priority newPriority)
@@ -128,15 +115,4 @@ void Passengers::DrawCircle(float cx, float cy, float r, Color color)
 	}
 	glEnd();
 	glDisable(GL_COLOR);
-}
-
-void Passengers::DrawDestination(float x, float z, Color color)
-{
-	/*glEnable(GL_COLOR);
-	glPointSize(30.0f);
-	glBegin(GL_POINTS);
-	glColor3f(color.x, color.y, color.z);
-	glVertex3f(x, 4.5f, z);
-	glEnd();
-	glDisable(GL_COLOR);*/
 }
