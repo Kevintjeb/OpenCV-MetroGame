@@ -32,8 +32,6 @@ using namespace mg_gameLogic;
 using std::cout;
 using std::endl;
 
-
-
 class GameScene3D :
 	public IScene
 {
@@ -91,12 +89,14 @@ private:
 
 	int oldTime = -1;
 
-	int lastTime;
-	float rotation;
+	int lastTime = 0;
+	float rotation = 0.0f;
 
 	int speed = 25;
 	bool keys[255];
 	bool shiftActive = false;
+	string fps = "";
+	float deltaTime = 0.0f;
 
 	struct Camera
 	{
