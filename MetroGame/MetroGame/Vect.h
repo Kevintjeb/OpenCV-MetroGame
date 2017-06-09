@@ -32,7 +32,14 @@ namespace GameLogic {
 		Vec2f(float x, float y);
 		Vec2f(const Vec2f &other);
 		float& operator [](int);
+		Vec2f operator -(const Vec2f &other) const;
+		Vec2f operator +(const Vec2f &other) const;
+		Vec2f operator *(const float s) const;
+		Vec2f operator /(const float s) const;
 
-		float distance(const Vec2f &other);
+		float dotProduct(const Vec2f &other) const;
+		float distance(const Vec2f &other) const;
+		float magnitude() const;
+		Vec2f unit() const;
 	};
 }

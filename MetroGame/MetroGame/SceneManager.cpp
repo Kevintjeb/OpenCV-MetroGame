@@ -2,7 +2,7 @@
 #include "MainMenuScene.h"
 #include "system.h"
 #include <functional>
-
+#include "PauseScene.h"
 SceneManager::SceneManager(const SceneManager &other)
 {
 	this->currentScene = other.currentScene;
@@ -12,6 +12,17 @@ SceneManager::SceneManager(const SceneManager &other)
 */
 SceneManager::SceneManager()
 {
+}
+
+void mg_system::init(int &argc, char ** argv)
+{
+	glutInit( &argc, argv);
+	SceneManager::getInstance().init();
+}
+
+void mg_system::start()
+{
+	glutMainLoop();
 }
 
 /*
@@ -30,7 +41,11 @@ void SceneManager::init() {
 		}
 		this->width = 800;
 		this->height = 600;
+#ifdef _DEBUG
 		this->currentScene = new MainMenuScene();
+#elif
+		this->currentScene = new MainMenuScene();
+#endif
 		isInit = true;
 	}
 	else {
@@ -55,6 +70,29 @@ void SceneManager::loadScene(IScene *newScene)
 		delete currentScene; //remove it
 		currentScene = newScene;
 		currentScene->onEnter();
+	}
+	else return;
+}
+
+void SceneManager::pauseScene()
+{
+	if (isInit && !isPaused) {
+		isPaused = true;
+		pausedScene = currentScene;
+		
+		currentScene = new PauseScene();
+		currentScene->onEnter();
+	}
+	else return;
+}
+
+void SceneManager::unPauseScene() {
+	if (isInit && isPaused) {
+		isPaused = false;
+		delete currentScene;
+		currentScene = pausedScene;
+		currentScene->onEnter();
+		pausedScene = nullptr;
 	}
 	else return;
 }
@@ -141,6 +179,11 @@ void SceneManager::switchWindow2D()
 void SceneManager::switchWindow3D()
 {
 	glutSetWindow(window3D);
+}
+
+GLuint SceneManager::getWindow3D()
+{
+	return window3D;
 }
 
 void SceneManager::onKeyUp(unsigned char key)

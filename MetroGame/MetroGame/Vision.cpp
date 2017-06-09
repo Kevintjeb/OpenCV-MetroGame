@@ -67,33 +67,56 @@ void Vision::calibrate()
 	createTrackbar("High Blue", "TrackBars", &high_b, 255, on_high_b_thresh_trackbar);
 
 	setTrackbarPos("Low Hue", "TrackBars", 0);
-	setTrackbarPos("High Hue", "TrackBars", 11);
-	setTrackbarPos("Low Saturation", "TrackBars", 10);
-	setTrackbarPos("High Saturation", "TrackBars", 202);
-	setTrackbarPos("Low Value", "TrackBars", 75);
-	setTrackbarPos("High Value", "TrackBars", 255);
+	setTrackbarPos("High Hue", "TrackBars", 3);
+	setTrackbarPos("Low Saturation", "TrackBars", 72);
+	setTrackbarPos("High Saturation", "TrackBars", 241);
+	setTrackbarPos("Low Value", "TrackBars", 143);
+	setTrackbarPos("High Value", "TrackBars", 247);
 
-	setTrackbarPos("Low Red", "TrackBars", 208);
+	setTrackbarPos("Low Red", "TrackBars", 232);
 	setTrackbarPos("High Red", "TrackBars", 255);
 	setTrackbarPos("Low Green", "TrackBars", 0);
-	setTrackbarPos("High Green", "TrackBars", 227);
+	setTrackbarPos("High Green", "TrackBars", 111);
 	setTrackbarPos("Low Blue", "TrackBars", 31);
 	setTrackbarPos("High Blue", "TrackBars", 142);
 	redSettings = colourCalibrate();
 
-	low_v = 254, low_s = 161, low_h = 77;
-	high_v = 255, high_s = 255, high_h = 126;
+	setTrackbarPos("Low Hue", "TrackBars", 0); //77
+	setTrackbarPos("High Hue", "TrackBars", 121); //126
+	setTrackbarPos("Low Saturation", "TrackBars", 143); //161
+	setTrackbarPos("High Saturation", "TrackBars", 206); //255
+	setTrackbarPos("Low Value", "TrackBars", 124); //254
+	setTrackbarPos("High Value", "TrackBars", 184); //255
 
-	low_r = 0, low_g = 235, low_b = 188;
-	high_r = 97, high_g = 255, high_b = 247;
+	setTrackbarPos("Low Red", "TrackBars", 232); //0
+	setTrackbarPos("High Red", "TrackBars", 255); //97
+	setTrackbarPos("Low Green", "TrackBars", 144); //235
+	setTrackbarPos("High Green", "TrackBars", 255); //255
+	setTrackbarPos("Low Blue", "TrackBars", 113); //188
+	setTrackbarPos("High Blue", "TrackBars", 142); //247
 	greenSettings = colourCalibrate();
 
-	low_v = 51, low_s = 144, low_h = 35;
-	high_v = 222, high_s = 255, high_h = 136;
+	setTrackbarPos("Low Hue", "TrackBars", 33);
+	setTrackbarPos("High Hue", "TrackBars", 220);
+	setTrackbarPos("Low Saturation", "TrackBars", 10);
+	setTrackbarPos("High Saturation", "TrackBars", 255);
+	setTrackbarPos("Low Value", "TrackBars", 115);
+	setTrackbarPos("High Value", "TrackBars", 208);
 
-	low_r = 0, low_g = 0, low_b = 99;
-	high_r = 255, high_g = 99, high_b = 255;
+	setTrackbarPos("Low Red", "TrackBars", 0);
+	setTrackbarPos("High Red", "TrackBars", 255);
+	setTrackbarPos("Low Green", "TrackBars", 13);
+	setTrackbarPos("High Green", "TrackBars", 128);
+	setTrackbarPos("Low Blue", "TrackBars", 127);
+	setTrackbarPos("High Blue", "TrackBars", 255);
+
 	blueSettings = colourCalibrate();
+	cvDestroyWindow("Video Capture");
+	cvDestroyWindow("TrackBars");
+	cvDestroyWindow("RGB");
+	cvDestroyWindow("HSV");
+	cvDestroyWindow("Cut out");
+	cvDestroyWindow("Combined");
 }
 
 Vision::ColourSettings Vision::colourCalibrate()
@@ -116,8 +139,8 @@ Vision::ColourSettings Vision::colourCalibrate()
 		cvtColor(frame, hsv_image, CV_BGR2HSV);
 		inRange(hsv_image, Scalar(low_h, low_s, low_v), Scalar(high_h, high_s, high_v), frame_threshold);
 		inRange(frame, Scalar(low_b, low_g, low_r), Scalar(high_b, high_g, high_r), frame_rgb);
-		int dilation_size = 7;
-		int erosion_size = 5;
+		int dilation_size = 9;//7
+		int erosion_size = 7;//5
 
 		Mat element = getStructuringElement(MORPH_ELLIPSE,
 			Size(2 * dilation_size + 1, 2 * dilation_size + 1),
@@ -125,6 +148,7 @@ Vision::ColourSettings Vision::colourCalibrate()
 		Mat element2 = getStructuringElement(MORPH_ELLIPSE,
 			Size(2 * erosion_size + 1, 2 * erosion_size + 1),
 			Point(erosion_size, erosion_size));
+
 		imshow("Video Capture", hsv_image);
 		dilate(frame_threshold, frame_threshold, element);
 		erode(frame_threshold, frame_threshold, element2);
@@ -167,18 +191,28 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 {
 	Mat image;
 	//image = imread("line.png");
-	cap.open(1);
+	//cap.open(1);
 	cap >> image;
+	if (image.empty())
+		cout << "GEEN IMAGE" << endl;
+
+	Mat mask;
+	Mat cutout;
+	mask = imread("mask2.png");
+	image.copyTo(cutout, mask);
+	//imshow("Cut out", cutout);
+	cutout.copyTo(image);
+
 	// De afbeelding converteren naar een grijswaarde afbeelding
 	Mat hsv_image;
 	cvtColor(image, hsv_image, CV_BGR2HSV);
-
+	//imshow("LINE_HSV Image", hsv_image);
 	//namedWindow("HSV image", WINDOW_AUTOSIZE);
 	//imshow("HSV image", hsv_image);
 
 	// Seperate Colors with inRange
-	cv::Mat lower_red_hue_range;
-	cv::Mat upper_red_hue_range;
+	/*cv::Mat lower_red_hue_range;
+	cv::Mat upper_red_hue_range;*/
 	//cv::inRange(hsv_image, cv::Scalar(0, 10, 100), cv::Scalar(10, 255, 255), lower_red_hue_range); // 0 10
 	//cv::inRange(hsv_image, cv::Scalar(160, 10, 100), cv::Scalar(179, 255, 255), upper_red_hue_range); // 160 179
 
@@ -192,7 +226,7 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 	cv::inRange(hsv_image, cv::Scalar(blueSettings.low_h, blueSettings.low_s, blueSettings.low_v), cv::Scalar(blueSettings.high_h, blueSettings.high_s, blueSettings.high_v), blue_hue_image);
 	
 	cv::Mat green_hue_image;
-	cv::inRange(hsv_image, cv::Scalar(greenSettings.low_h, greenSettings.low_s, greenSettings.low_v), cv::Scalar(blueSettings.high_h, blueSettings.high_s, blueSettings.high_v), green_hue_image);
+	cv::inRange(hsv_image, cv::Scalar(greenSettings.low_h, greenSettings.low_s, greenSettings.low_v), cv::Scalar(greenSettings.high_h, greenSettings.high_s, greenSettings.high_v), green_hue_image);
 
 	//RGB
 	cv::Mat red_rgb_image;
@@ -202,10 +236,10 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 	cv::inRange(image, cv::Scalar(blueSettings.low_b, blueSettings.low_g, blueSettings.low_r), cv::Scalar(blueSettings.high_b, blueSettings.high_g, blueSettings.high_r), blue_rgb_image);
 
 	cv::Mat green_rgb_image;
-	cv::inRange(image, cv::Scalar(greenSettings.low_b, greenSettings.low_g, greenSettings.low_r), cv::Scalar(blueSettings.high_b, blueSettings.high_g, blueSettings.high_r), green_rgb_image);
+	cv::inRange(image, cv::Scalar(greenSettings.low_b, greenSettings.low_g, greenSettings.low_r), cv::Scalar(greenSettings.high_b, greenSettings.high_g, greenSettings.high_r), green_rgb_image);
 
-	int dilation_size = 7;
-	int erosion_size = 5;
+	int dilation_size = 9;//7
+	int erosion_size = 7;//5
 	Mat element = getStructuringElement(MORPH_ELLIPSE,
 		Size(2 * dilation_size + 1, 2 * dilation_size + 1),
 		Point(dilation_size, dilation_size));
@@ -232,7 +266,10 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 	combined_red = red_rgb_image.mul(red_hue_image);
 	combined_green = green_rgb_image.mul(green_hue_image);
 	combined_blue = blue_rgb_image.mul(blue_hue_image);
-	
+	namedWindow("Combined Blue", WINDOW_AUTOSIZE);
+	imshow("LINE_Combined Blue", combined_red);
+	//imshow("LINE_HSV Blue", blue_hue_image);
+	//imshow("LINE_RGB Blue", blue_rgb_image);
 	//Threshold to get Binary image
 	Mat binaryImage_red;
 	threshold(combined_red, binaryImage_red, 254, 1, CV_THRESH_BINARY);
@@ -270,17 +307,82 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 	default:
 		break;
 	}
+	//imshow("Blue blob", labeledImageBlue * 254);
 	std::list<GameLogic::Vec2f> lines;
+	std::vector<GameLogic::Vec2f> test;
 	if (coords.size() > 0)
 	{
-		for (int i = 0; i < coords[0].size(); i++)
+		for (int j = 0; j < coords.size() - 1; j++)
 		{
-			GameLogic::Vec2f vector = GameLogic::Vec2f(((coords[0][i]->x / (image.cols / 2.0f)) - 1.0f), (coords[0][i]->y / (image.rows / 2.0f)) - 1.0f);
-			lines.push_back(vector);
+			for (int i = 0; i < coords[j].size(); i++)
+			{
+				GameLogic::Vec2f vector = GameLogic::Vec2f((((coords[j][i]->x - 260) / ((image.cols - 500) / 2.0f)) - 1.0f), ((coords[j][i]->y - 60) / ((image.rows - 180) / 2.0f)) - 1.0f);
+				lines.push_back(vector);
+				test.push_back(vector);
+			}
 		}
+
 	}
-	Line* pLine = new Line({ { -0.2f, -0.3f },{ 0.3f, -0.7f } });
+	//test.push_back(GameLogic::Vec2f(-1.0f, -1.0f));
+	//test.push_back(GameLogic::Vec2f(1.0f, 1.0f));
+	RenderableLine pLine;
+	switch (linecolour)
+	{
+	case LINE_RED:
+		pLine = RenderableLine(test, LineType::Red);
+		break;
+	case LINE_GREEN:
+		pLine = RenderableLine(test, LineType::Green);
+		break;
+	case LINE_BLUE:
+		pLine = RenderableLine(test, LineType::Blue);
+		break;
+	default:
+		break;
+	}
 	allocate_line(pLine);
+	Mat redLines, greenLines, blueLines;
+	switch (linecolour)
+	{
+	case LINE_RED:
+		redLines = image.clone();
+		for (int i = 0; i < coords.size(); i++)
+		{
+			for (int y = 1; y < coords[i].size(); y++)
+			{
+				line(redLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
+			}
+		}
+		namedWindow("RedLines", WINDOW_AUTOSIZE);
+		imshow("RedLines", redLines);
+		break;
+	case LINE_GREEN:
+		greenLines = image.clone();
+		for (int i = 0; i < coords.size(); i++)
+		{
+			for (int y = 1; y < coords[i].size(); y++)
+			{
+				line(greenLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
+			}
+		}
+		namedWindow("GreenLines", WINDOW_AUTOSIZE);
+		imshow("GreenLines", greenLines);
+		break;
+	case LINE_BLUE:
+		blueLines = image.clone();
+		for (int i = 0; i < coords.size(); i++)
+		{
+			for (int y = 1; y < coords[i].size(); y++)
+			{
+				line(blueLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
+			}
+		}
+		namedWindow("BlueLines", WINDOW_AUTOSIZE);
+		imshow("BlueLines", blueLines);
+		break;
+	default:
+		break;
+	}
 	return lines;
 }
 

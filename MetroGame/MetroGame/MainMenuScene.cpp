@@ -7,7 +7,7 @@ Font* MainMenuScene::largeFont2D = nullptr;
 Font* MainMenuScene::smallFont2D = nullptr;
 Font* MainMenuScene::largeFont3D = nullptr;
 Font* MainMenuScene::smallFont3D = nullptr;
-
+float lastTime = 0;
 
 void MainMenuScene::drawStrings()
 {
@@ -97,6 +97,12 @@ void MainMenuScene::update()
 
 void MainMenuScene::onIdle()
 {
+
+	int currentTime = glutGet(GLUT_ELAPSED_TIME);
+	float deltaTime = (currentTime - lastTime) / 1000.0f;
+	lastTime = currentTime;
+
+	std::cout << "FPS:" << (int)(1 / deltaTime) << std::endl;
 	glutPostRedisplay();
 }
 

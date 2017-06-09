@@ -2,6 +2,7 @@
 #include <string>
 #include "GL/freeglut.h"
 #include <vector>
+#include "GameScene3D.h"
 
 class IScene;
 
@@ -9,6 +10,8 @@ class SceneManager
 {
 public:
 	void loadScene(IScene *);
+	void pauseScene();
+	void unPauseScene();
 	IScene& getCurrentScene();
 	int getWidth();
 	int getHeight();
@@ -16,6 +19,7 @@ public:
 	static SceneManager& getInstance();
 	void switchWindow2D();
 	void switchWindow3D();
+	GLuint getWindow3D();
 
 private:
 	int width, height;
@@ -35,6 +39,8 @@ private:
 	void render2D();
 	void tick();
 	IScene* currentScene;
+	bool isPaused;
+	IScene* pausedScene;
 };
 
 

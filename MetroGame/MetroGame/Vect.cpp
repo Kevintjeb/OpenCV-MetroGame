@@ -48,7 +48,43 @@ float& GameLogic::Vec2f::operator [](int index)
 	return v[index];
 }
 
-float GameLogic::Vec2f::distance(const GameLogic::Vec2f & other)
+Vec2f Vec2f::operator-(const Vec2f & other) const
+{
+	return Vec2f(x - other.x, y - other.y);
+}
+
+ Vec2f Vec2f::operator+(const Vec2f & other) const
+{
+	return Vec2f(x + other.x, y + other.y);
+}
+
+ Vec2f Vec2f::operator*(const float s) const
+{
+	return Vec2f(x*s, y*s);
+}
+
+ Vec2f Vec2f::operator/(const float s) const
+ {
+	 return Vec2f(x/s, y/s);
+ }
+
+ float Vec2f::dotProduct(const Vec2f & other) const
+ {
+	 return this->x*other.x + this->y*other.y;
+ }
+
+ float Vec2f::distance(const Vec2f & other) const
 {
 	return sqrtf(powf(other.x - this->x, 2) + powf(other.y - this->y, 2));
+}
+
+ float Vec2f::magnitude() const
+{
+	return sqrtf(powf(x, 2) + powf(y, 2));
+}
+
+Vec2f Vec2f::unit() const
+{
+	auto mag = magnitude();
+	return Vec2f(x / mag, y / mag);
 }
