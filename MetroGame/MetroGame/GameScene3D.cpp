@@ -214,6 +214,8 @@ void GameScene3D::draw2DRenderables()
 	{
 		glPushMatrix();
 
+		glRotatef(45,0,1,0);
+
 		glTranslatef(renderable.position.x, renderable.position.y, renderable.position.z);
 		glRotatef(renderable.angle, renderable.rotation.x, renderable.rotation.y, renderable.rotation.z);
 
@@ -235,23 +237,23 @@ void GameScene3D::draw2DRenderables()
 }
 
 //Get Color for metroline
-Vec3f GameScene3D::getLineColor(LineType color)
+Color GameScene3D::getLineColor(LineType color)
 {
-	Vec3f lineColor;
+	Color lineColor = Color(0.0f, 0.0f, 0.0f);
 
 	switch (color)
 	{
 	case LineType::Red:
-		lineColor = Vec3f(1.0f, 0.0f, 0.0f);
+		lineColor = Color(1.0f, 0.0f, 0.0f);
 		break;
 	case LineType::Green:
-		lineColor = Vec3f(0.0f, 1.0f, 0.0f);
+		lineColor = Color(0.0f, 1.0f, 0.0f);
 		break;
 	case LineType::Blue:
-		lineColor = Vec3f(0.0f, 0.0f, 1.0f);
+		lineColor = Color(0.0f, 0.0f, 1.0f);
 		break;
 	default:
-		lineColor = Vec3f(0.0f, 0.0f, 0.0f);
+		lineColor = Color(0.0f, 0.0f, 0.0f);
 		break;
 	}
 
@@ -267,17 +269,17 @@ void GameScene3D::prepare_lines()
 	for (RenderableLine Rline : mg_gameLogic::get_lines())
 	{
 
-		Vec3f color = getLineColor(Rline.type);
+		Color color = getLineColor(Rline.type);
 
 		int start = position;
 		for (int index = 0; index < Rline.line.size(); index++)
 		{
 			if (index > 0 && index < Rline.line.size() - 1)
 			{
-				metroLines.push_back(VertexClass(Rline.line[index].x * 25, -50 + 3.1f, Rline.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+				metroLines.push_back(VertexClass(Rline.line[index].x * 25, -50 + 3.1f, Rline.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.r, color.g, color.b, 1.0f));
 				position++;
 			}
-			metroLines.push_back(VertexClass(Rline.line[index].x * 25, -50 + 3.1f, Rline.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+			metroLines.push_back(VertexClass(Rline.line[index].x * 25, -50 + 3.1f, Rline.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.r, color.g, color.b, 1.0f));
 			position++;
 		}
 		metroLinesPosition.push_back(std::make_pair(start, position));
@@ -292,17 +294,17 @@ void GameScene3D::prepare_lines2D()
 	metroLinesPosition2D.clear();
 	for (RenderableLine Rline : mg_gameLogic::get_lines())
 	{
-		Vec3f color = getLineColor(Rline.type);
+		Color color = getLineColor(Rline.type);
 
 		int start = position;
 		for (int index = 0; index < Rline.line.size(); index++)
 		{
 			if (index > 0 && index < Rline.line.size() - 1)
 			{
-				metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 10.0f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+				metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 4.5f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.r, color.g, color.b, 1.0f));
 				position++;
 			}
-			metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 10.0f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+			metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 4.5f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.r, color.g, color.b, 1.0f));
 			position++;
 		}
 		metroLinesPosition2D.push_back(std::make_pair(start, position));
@@ -334,9 +336,10 @@ GameScene3D::GameScene3D()
 
 	//debug data
 	passengers.clear();
-	passengers.push_back(Passengers(0, 0, Passengers::Priority::LOW, passengers.size(), 25, 25));
-	passengers.push_back(Passengers(-50, 0, Passengers::Priority::HIGH, passengers.size(), -25, -25));
-	passengers.push_back(Passengers(-5, -25, Passengers::Priority::EMERENCY, passengers.size(), -25, 50));
+	passengers.push_back(Passengers(50, 50, Passengers::Priority::LOW));
+	passengers.push_back(Passengers(-50, -50, Passengers::Priority::HIGH));
+	passengers.push_back(Passengers(-50, 50, Passengers::Priority::EMERENCY));
+	passengers.push_back(Passengers(50, -50, Passengers::Priority::EMERENCY));
 
 	SceneManager::getInstance().switchWindow3D();
 	//create city
@@ -344,23 +347,23 @@ GameScene3D::GameScene3D()
 
 	//debug data
 	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } }, {});
-	train = new MetroTrain(line);
+	train = new MetroTrain(line, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 5);
 	handle = mg_gameLogic::allocate_line(RenderableLine(line->getLine(), LineType::Red));
 
 	line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } }, {});
-	train2 = new MetroTrain(line2);
+	train2 = new MetroTrain(line2, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 2);
 	handle2 = mg_gameLogic::allocate_line(RenderableLine(line2->getLine(), LineType::Green));
 
 	line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } }, {});
-	train3 = new MetroTrain(line3);
+	train3 = new MetroTrain(line3, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 3);
 	handle3 = mg_gameLogic::allocate_line(RenderableLine(line3->getLine(), LineType::Blue));
 
 	line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } }, {});
-	train4 = new MetroTrain(line4);
+	train4 = new MetroTrain(line4,0.0f,mg_gameLogic::MetroTrain::State::FORWARD, 4);
 	handle4 = mg_gameLogic::allocate_line(RenderableLine(line4->getLine(), LineType::Red));
 
 	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, {});
-	train5 = new MetroTrain(line5);
+	train5 = new MetroTrain(line5, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 2);
 	handle5 = mg_gameLogic::allocate_line(RenderableLine(line5->getLine(), LineType::Green));
 
 
@@ -440,13 +443,14 @@ void GameScene3D::render3D()
 
 void GameScene3D::render2D() {
 	
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	gluPerspective(90.0f, WIDTH / (float)HEIGHT, 0.1f, 5000.0f);
+	glOrtho(-75,75,-75,75,-100,100);
+	//gluPerspective(90.0f, WIDTH / (float)HEIGHT, 0.1f, 5000.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glMatrixMode(GL_MODELVIEW);
 
@@ -459,18 +463,18 @@ void GameScene3D::render2D() {
 	glTranslatef(camera2D.posX, camera2D.height, camera2D.posY);
 
 	//draw map and lines
-	glRotatef(45, 0, 1, 0);
+	//glRotatef(45, 0, 1, 0);
 	draw2DRenderables();
 
 	glDisable(GL_TEXTURE_2D);
-	glRotatef(45, 0, 1, 0);
-	prepare_lines2D();
-	glLineWidth(5.0);
-
-	if (metroLinesPosition2D.size() > 0)
+	//glRotatef(45, 0, 1, 0);
+	//prepare_lines2D();
+	//glLineWidth(5.0);
+	glScalef(1.4f, 1.0f, 1.4f);
+	/*if (metroLinesPosition2D.size() > 0)
 	{
 		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(0).first, metroLinesPosition2D.at(metroLinesPosition2D.size() - 1).second);
-	}
+	}*/
 
 	//draw passangers and their destination.
 	for (Passengers &p : passengers)
