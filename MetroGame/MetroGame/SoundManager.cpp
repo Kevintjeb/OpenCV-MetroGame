@@ -17,7 +17,7 @@ SoundManager::~SoundManager()
 //playsound till sound is over.
 void SoundManager::playSound(Sound sound)
 {
-	if (soundEngine->play2D(sound.file.c_str()) != 0)
+	if (soundEngine->play2D(sound.file.c_str(), true) != 0)
 	{
 		cout << "Error: Could not play " << sound.name << endl;
 		return;
