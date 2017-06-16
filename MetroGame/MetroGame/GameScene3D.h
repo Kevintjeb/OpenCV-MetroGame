@@ -57,7 +57,7 @@ private:
 		bool is_game_over;
 	}score = { 0, false };
 
-	mg_gameLogic::MetroStation::Callback cb;
+	mg_gameLogic::MetroTrain::Callback cb;
 
 	std::map<std::string, int> modelsMap;
 	std::map<std::string, int>::iterator it;

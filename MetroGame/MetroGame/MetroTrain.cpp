@@ -148,7 +148,7 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 	}
 }
 
-MetroTrain::MetroTrain(Line* line, float init_pos, State state, int size) :
+MetroTrain::MetroTrain(Callback cb, Line* line, float init_pos, State state, int size) :cb(cb),
 	line(line), line_pos(init_pos), state(state), size(size), trains(0)
 {
 
@@ -217,6 +217,8 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 
 void MetroTrain::Recalculate(float elapsedTime)
 {
+	cb.OnPointIncrease(1);
+
 	// ensuring we have the correct size
 	if (trains.size() < size) // if we have to little trains
 	{
@@ -331,8 +333,8 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 
 void mg_gameLogic::MetroTrain::unloadPassengers(MetroStation &station)
 {
+	cb.OnPointIncrease(passengers[station.stationID]);
 	passengers[station.stationID] = 0;
-	//TODO CALLBACK FLOBO
 	auto stationIndexes = line->getStationIndexes();
 	MetroStation &nextStation = station;
 

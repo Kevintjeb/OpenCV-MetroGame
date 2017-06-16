@@ -11,14 +11,10 @@ namespace mg_gameLogic
 	class MetroStation
 	{
 	public:	
-		struct Callback
-		{
-			std::function<void(size_t)> OnPointIncrease;
-			std::function<void()>		OnGameOver;
-		};
+
 
 		MetroStation();
-		MetroStation(Callback cb, Vec2f pos, int id = -1); //TODO Vervangen door echte waarde
+		MetroStation(Vec2f pos, int id = -1); //TODO Vervangen door echte waarde
 		~MetroStation();
 		Vec2f position;
 		void setPosition(Vec2f pos);
@@ -40,7 +36,7 @@ namespace mg_gameLogic
 		int getAmountOfPassengers(std::vector<int> passengers);
 		std::vector<int>getPassengers(int nextStationID,int freeSeats);
 	private:
-		Callback cb;
+
 
 		RenderablePointer pointer;
 		float elapseTime = 0;
