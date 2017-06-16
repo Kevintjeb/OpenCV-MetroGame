@@ -1,15 +1,20 @@
 #pragma once
 #include "Font.h"
 #include "IScene.h"
+#include "Texture.h"
 class PauseScene : public IScene
 {
 	static Font *largeFont3D;
 	static Font *largeFont2D;
+	Texture logoTexture = Texture("logo.png");
 	const string pauseString = "Game Paused!";
+
+	int textY, textX = 0;
 
 public:
 	PauseScene();
 	~PauseScene();
+	void renderLogo();
 
 	// Inherited via IScene
 	 void render2D() override;

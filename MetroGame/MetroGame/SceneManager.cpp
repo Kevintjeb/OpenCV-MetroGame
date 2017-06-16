@@ -3,9 +3,13 @@
 #include "system.h"
 #include <functional>
 #include "PauseScene.h"
+
+IScene* SceneManager::pauseSceneVar = nullptr;
+
 SceneManager::SceneManager(const SceneManager &other)
 {
 	this->currentScene = other.currentScene;
+	
 }
 /*
 	Constructor to initialize a SceneManager.
@@ -30,22 +34,31 @@ void mg_system::start()
 */
 void SceneManager::init() {
 	if (!isInit) {
-		window3D = createWindow(800, 600, "3D window", []() {SceneManager::getInstance().render3D(); });
+		window3D = createWindow(1920, 1080, "3D window", []() {SceneManager::getInstance().render3D(); });
 		HGLRC context3D = wglGetCurrentContext();
-		window2D = createWindow(800, 600, "2D window", []() {SceneManager::getInstance().render2D(); });
+		glutFullScreen();
+
+		window2D = createWindow(1920, 1080, "2D window", []() {SceneManager::getInstance().render2D(); });
 		HGLRC context2D = wglGetCurrentContext();
+		glutFullScreen();
 
 		if (!wglShareLists(context3D, context2D))
 		{
 			printf("Error sharing lists\n");
-		}
-		this->width = 800;
-		this->height = 600;
+		}	
+
+		this->width = 1920;
+		this->height = 1080;
+
 #ifdef _DEBUG
 		this->currentScene = new MainMenuScene();
 #elif
 		this->currentScene = new MainMenuScene();
 #endif
+
+
+		if (!pauseSceneVar)
+			pauseSceneVar = new PauseScene();
 		isInit = true;
 	}
 	else {
@@ -79,8 +92,7 @@ void SceneManager::pauseScene()
 	if (isInit && !isPaused) {
 		isPaused = true;
 		pausedScene = currentScene;
-		
-		currentScene = new PauseScene();
+		currentScene = pauseSceneVar;
 		currentScene->onEnter();
 	}
 	else return;
@@ -89,7 +101,6 @@ void SceneManager::pauseScene()
 void SceneManager::unPauseScene() {
 	if (isInit && isPaused) {
 		isPaused = false;
-		delete currentScene;
 		currentScene = pausedScene;
 		currentScene->onEnter();
 		pausedScene = nullptr;
@@ -159,6 +170,8 @@ GLuint SceneManager::createWindow(int width, int height, std::string name, void(
 	{
 		SceneManager::getInstance().onSpecialUpFunc(key);
 	});
+
+	glutSetIconTitle(name.c_str());
 
 	return windowID;
 }
