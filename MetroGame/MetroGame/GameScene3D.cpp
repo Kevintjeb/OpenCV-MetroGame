@@ -314,6 +314,10 @@ void GameScene3D::prepare_lines2D()
 GameScene3D::GameScene3D()
 {
 	////play sound
+	//first a sound
+	//create in the whole project 1 soundmanager.
+	//use playSound() methode
+
 	//Sound soundTrack = Sound("soundTrack", "sound\\Kedengkedeng.mp3");
 	//SoundManager sm = SoundManager();
 	//sm.playSound(soundTrack);
