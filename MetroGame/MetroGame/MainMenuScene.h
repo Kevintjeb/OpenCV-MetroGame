@@ -21,7 +21,7 @@ private:
 	std::vector<Text> text;
 	Texture logoTexture = Texture("logo.png");
 	float lastTime = 0;
-
+	float deltaTime = 0;
 	static IScene* gameInstance;
 	bool reversing = false;
 

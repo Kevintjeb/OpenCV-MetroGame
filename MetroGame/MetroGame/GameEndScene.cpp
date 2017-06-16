@@ -18,14 +18,9 @@ GameEndScene::GameEndScene()
 	if (!largeFont2D)
 		largeFont2D = new Font("font_72.fnt");
 	SceneManager::getInstance().switchWindow3D();
+	logoTexture = new Texture("logo.png");
 	if (!smallFont3D)
 		smallFont3D = new Font("font_0.fnt");
-
-	this->width = SceneManager::getInstance().getWidth();
-	this->height = SceneManager::getInstance().getHeight();
-
-	//appendText(Text(width/2 - largeFont3D->textLength("Main Menu")/2, height / 3, largeFont3D, "Main Menu"));
-	appendText(Text(width / 2 - smallFont3D->textLength("Thanks for playing!") / 2, height - 200, smallFont3D, "Thanks for playing!"));
 }
 
 GameEndScene::~GameEndScene()
@@ -58,7 +53,7 @@ void GameEndScene::renderLogo()
 	glColor4f(1, 1, 1, 1);
 
 	glEnable(GL_TEXTURE_2D);
-	logoTexture.Bind();
+	logoTexture->Bind();
 	glBegin(GL_QUADS);
 	glTexCoord2f(0, 0); glVertex3f(0, 0, 0);
 	glTexCoord2f(0, 1);	glVertex3f(0, height, 0);
@@ -114,26 +109,28 @@ void GameEndScene::render2D()
 	glDisable(GL_DEPTH_TEST);
 
 	glColor4f(0, 0, 0, 1);
-	largeFont2D->drawText("2D view", width / 2 - largeFont2D->textLength("2D view") / 2, height / 2);
+	largeFont2D->drawText("Thanks for playing!", width / 2 - largeFont2D->textLength("Thanks for playing!") / 2, height / 2);
 	glEnable(GL_DEPTH_TEST);
 }
 
 void GameEndScene::onEnter() {
-	//Do some onEnter stuff, maybe intro animation?
-	std::cout << "Entered endScreen" << std::endl;
+	this->width = SceneManager::getInstance().getWidth();
+	this->height = SceneManager::getInstance().getHeight();
+	lastTime = glutGet(GLUT_ELAPSED_TIME);
+
+	appendText(Text(width, height - 200, smallFont3D, "Thanks for playing!"));
 }
 
 void GameEndScene::update()
 {
-	std::cout << "Update MainMenuScene" << std::endl;
 	if (this->text.at(0).getX() >= 200 && this->text.at(0).getX() <= 1400 && !reversing)
 	{
-		this->text.at(0).setX(text.at(0).getX() + 1);
+		this->text.at(0).setX(text.at(0).getX() + 100 * deltaTime);
 	}
 	else
 	{
 		reversing = true;
-		this->text.at(0).setX(text.at(0).getX() - 1);
+		this->text.at(0).setX(text.at(0).getX() - 100 * deltaTime);
 		if (this->text.at(0).getX() <= 800)
 			reversing = false;
 	}
@@ -143,11 +140,8 @@ void GameEndScene::onIdle()
 {
 
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
-	float deltaTime = (currentTime - lastTime) / 1000.0f;
+	deltaTime = (currentTime - lastTime) / 1000.0f;
 	lastTime = currentTime;
-
-	std::cout << "FPS:" << (int)(1 / deltaTime) << std::endl;
-	glutPostRedisplay();
 }
 
 void GameEndScene::onKeyUP(unsigned char key)

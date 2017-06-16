@@ -4,12 +4,14 @@
 #include "Texture.h"
 class PauseScene : public IScene
 {
-	static Font *largeFont3D;
+	static Font *smallFont3D;
 	static Font *largeFont2D;
-	Texture logoTexture = Texture("logo.png");
+	Texture* logoTexture;
 	const string pauseString = "Game Paused!";
-
-	int textY, textX = 0;
+	float deltaTime = 0;
+	float lastTime = 0;
+	float textY = 0, textX = 0;
+	bool reversing = false;
 
 public:
 	PauseScene();
