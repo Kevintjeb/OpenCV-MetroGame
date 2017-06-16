@@ -2,6 +2,8 @@
 #include "RenderableOutput.h"
 using namespace mg_gameLogic;
 
+bool debug = true;
+
 int low_v = 30, low_s = 30, low_h = 30;
 int high_v = 100, high_s = 100, high_h = 100;
 
@@ -79,6 +81,22 @@ void Vision::calibrate()
 	setTrackbarPos("High Green", "TrackBars", 101);
 	setTrackbarPos("Low Blue", "TrackBars", 31);
 	setTrackbarPos("High Blue", "TrackBars", 142);
+	if (debug) //DEBUG ONLY
+	{
+		setTrackbarPos("Low Hue", "TrackBars", 150);
+		setTrackbarPos("High Hue", "TrackBars", 255);
+		setTrackbarPos("Low Saturation", "TrackBars", 72);
+		setTrackbarPos("High Saturation", "TrackBars", 255);
+		setTrackbarPos("Low Value", "TrackBars", 255);
+		setTrackbarPos("High Value", "TrackBars", 255);
+
+		setTrackbarPos("Low Red", "TrackBars", 232);
+		setTrackbarPos("High Red", "TrackBars", 255);
+		setTrackbarPos("Low Green", "TrackBars", 0);
+		setTrackbarPos("High Green", "TrackBars", 101);
+		setTrackbarPos("Low Blue", "TrackBars", 0);
+		setTrackbarPos("High Blue", "TrackBars", 142);
+	}
 	redSettings = colourCalibrate();
 
 	setTrackbarPos("Low Hue", "TrackBars", 25); //77
@@ -94,6 +112,22 @@ void Vision::calibrate()
 	setTrackbarPos("High Green", "TrackBars", 255); //255
 	setTrackbarPos("Low Blue", "TrackBars", 54); //188
 	setTrackbarPos("High Blue", "TrackBars", 255); //247
+	if (debug) //DEBUG ONLY
+	{
+		setTrackbarPos("Low Hue", "TrackBars", 0);
+		setTrackbarPos("High Hue", "TrackBars", 75);
+		setTrackbarPos("Low Saturation", "TrackBars", 200);
+		setTrackbarPos("High Saturation", "TrackBars", 255);
+		setTrackbarPos("Low Value", "TrackBars", 200);
+		setTrackbarPos("High Value", "TrackBars", 255);
+
+		setTrackbarPos("Low Red", "TrackBars", 70);
+		setTrackbarPos("High Red", "TrackBars", 155);
+		setTrackbarPos("Low Green", "TrackBars", 170);
+		setTrackbarPos("High Green", "TrackBars", 255);
+		setTrackbarPos("Low Blue", "TrackBars", 0);
+		setTrackbarPos("High Blue", "TrackBars", 255);
+	}
 	greenSettings = colourCalibrate();
 
 	setTrackbarPos("Low Hue", "TrackBars", 33);
@@ -109,8 +143,24 @@ void Vision::calibrate()
 	setTrackbarPos("High Green", "TrackBars", 128);
 	setTrackbarPos("Low Blue", "TrackBars", 127);
 	setTrackbarPos("High Blue", "TrackBars", 255);
+	if (debug) //DEBUG ONLY
+	{
+		setTrackbarPos("Low Hue", "TrackBars", 90);
+		setTrackbarPos("High Hue", "TrackBars", 150);
+		setTrackbarPos("Low Saturation", "TrackBars", 180);
+		setTrackbarPos("High Saturation", "TrackBars", 255);
+		setTrackbarPos("Low Value", "TrackBars", 255);
+		setTrackbarPos("High Value", "TrackBars", 255);
 
+		setTrackbarPos("Low Red", "TrackBars", 0);
+		setTrackbarPos("High Red", "TrackBars", 160);
+		setTrackbarPos("Low Green", "TrackBars", 0);
+		setTrackbarPos("High Green", "TrackBars", 120);
+		setTrackbarPos("Low Blue", "TrackBars", 180);
+		setTrackbarPos("High Blue", "TrackBars", 255);
+	}
 	blueSettings = colourCalibrate();
+
 	cvDestroyWindow("Video Capture");
 	cvDestroyWindow("TrackBars");
 	cvDestroyWindow("RGB");
@@ -124,10 +174,17 @@ Vision::ColourSettings Vision::colourCalibrate()
 	Mat frame, frame_threshold, frame_rgb;
 
 	while ((char)waitKey(1) != 'q') {
-		cap >> frame;
-		if (frame.empty())
-			break;
 
+		if (debug)
+		{
+			frame = imread("metro_test.png");
+		}
+		else
+		{
+			cap >> frame;
+			if (frame.empty())
+				break;
+		}
 		Mat mask;
 		Mat cutout;
 		mask = imread("mask.png");
@@ -195,6 +252,11 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 	cap >> image;
 	if (image.empty())
 		cout << "GEEN IMAGE" << endl;
+
+	if (debug)
+	{
+		image = imread("metro_test.png");
+	}
 
 	Mat mask;
 	Mat cutout;
@@ -390,6 +452,10 @@ std::list<Vision::CV_Station> Vision::getStations()
 {
 	Mat frame;
 	cap >> frame;
+	if (debug)
+	{
+		frame = imread("metro_test.png");
+	}
 	Mat grey;
 	cvtColor(frame, grey, CV_BGR2GRAY);
 	int width = frame.cols;
