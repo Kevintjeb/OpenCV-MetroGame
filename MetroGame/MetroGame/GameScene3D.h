@@ -52,6 +52,13 @@ private:
 	ModelLoader modelLoader;
 	void setAllKeysFalse();
 
+	struct {
+		size_t points;
+		bool is_game_over;
+	}score = { 0, false };
+
+	mg_gameLogic::MetroStation::Callback cb;
+
 	std::map<std::string, int> modelsMap;
 	std::map<std::string, int>::iterator it;
 	std::list<MetroStation *> metroStations;

@@ -312,6 +312,8 @@ void GameScene3D::prepare_lines2D()
 
 GameScene3D::GameScene3D()
 {
+	cb.OnPointIncrease = [this](size_t p) {this->score.points += p; };
+	cb.OnGameOver = [this]() {this->score.is_game_over = true; };
 	width = SceneManager::getInstance().getWidth();
 	height = SceneManager::getInstance().getHeight();
 	

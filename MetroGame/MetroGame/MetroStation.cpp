@@ -4,7 +4,7 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-MetroStation::MetroStation()
+MetroStation::MetroStation() : cb()
 {
 	addPassengers(rand() % 100 + 50);
 	PPS = rand() % 5 + 1;				//Passenggers Per Second
@@ -12,7 +12,8 @@ MetroStation::MetroStation()
 
 
 
-mg_gameLogic::MetroStation::MetroStation(Vec2f pos, int id) :
+mg_gameLogic::MetroStation::MetroStation(Callback cb, Vec2f pos, int id) : 
+	cb(cb),
 	position(pos), stationID(id),
 	pointer(allocate_renderable(Renderable("models/city/city.obj", {pos.x, -78, pos.y}, 0, {0, 1, 0}, {0.1f, 0.1f, 0.1f} )))
 {
