@@ -29,10 +29,11 @@ namespace mg_gameLogic
 		void addPassengers(int amountToAdd);
 		void addPassengers(int amountToAdd, int id);
 		int PPS;
-		
+		bool qrCodePlaced;
+
 		bool operator !=(const MetroStation &other) const;
 		bool operator <(const MetroStation &other) const;
-		void update(float deltaTime);
+		void update(float deltaTime, std::vector<Vec2f> qrcodes);
 		int getAmountOfPassengers(std::vector<int> passengers);
 		std::vector<int>getPassengers(int nextStationID,int freeSeats);
 	private:

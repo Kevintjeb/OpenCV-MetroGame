@@ -74,8 +74,18 @@ bool mg_gameLogic::MetroStation::operator<(const MetroStation & other) const
 	return false;
 }
 
-void mg_gameLogic::MetroStation::update(float deltaTime)
+void mg_gameLogic::MetroStation::update(float deltaTime, std::vector<Vec2f> qrcodes)
 {
+	qrCodePlaced = false;
+	float marge = 0.001;
+	for (Vec2f vec : qrcodes) 
+	{
+		if (vec.x > position.x - marge && vec.x < position.x + marge && vec.y > position.y - marge && vec.y < position.y + marge) 
+		{
+			qrCodePlaced = true;
+		}
+	}
+
 	elapseTime += deltaTime/1000;
 	if (deltaTime > 1) 
 	{
