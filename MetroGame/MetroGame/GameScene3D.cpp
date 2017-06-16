@@ -436,7 +436,7 @@ void GameScene3D::render3D()
 	
 	largeFont3D->drawText(timeString, width - largeFont3D->textLength(timeString) - 10, 10);
 	largeFont3D->drawText(fps, width - largeFont3D->textLength(fps) - 10, 40);
-
+	largeFont3D->drawText("score: " + std::to_string(this->score.points), width - 160, 70);
 }
 
 void GameScene3D::render2D() {
