@@ -3,8 +3,10 @@
 #include "system.h"
 #include <functional>
 #include "PauseScene.h"
+#include "HelpScene.h"
 
 IScene* SceneManager::pauseSceneVar = nullptr;
+IScene* SceneManager::helpScene = nullptr;
 
 SceneManager::SceneManager(const SceneManager &other)
 {
@@ -59,6 +61,8 @@ void SceneManager::init() {
 
 		if (!pauseSceneVar)
 			pauseSceneVar = new PauseScene();
+		if (!helpScene)
+			helpScene = new HelpScene();
 		isInit = true;
 	}
 	else {
@@ -146,6 +150,26 @@ int SceneManager::getHeight()
 	return height;
 }
 
+void SceneManager::showHelp()
+{
+	if (isInit && !inHelp) {
+		inHelp = true;
+		pausedScene = currentScene;
+		currentScene = helpScene;
+		currentScene->onEnter();
+	}
+	else return;
+}
+
+void SceneManager::backFromHelp()
+{
+	if (isInit && inHelp) {
+		currentScene = pausedScene;
+		currentScene->onEnter();
+		inHelp = false;
+	}
+	else return;
+}
 GLuint SceneManager::createWindow(int width, int height, std::string name, void(* callback)())
 {
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
@@ -202,7 +226,10 @@ GLuint SceneManager::getWindow3D()
 void SceneManager::onKeyUp(unsigned char key)
 {
 	if (isInit) {
-		currentScene->onKeyUP(key);
+		if (key == 'h' && !isPaused)
+			showHelp();
+		else
+			currentScene->onKeyUP(key);
 	}
 	else throw "Scenemanager not initialized";
 }
@@ -210,6 +237,10 @@ void SceneManager::onKeyUp(unsigned char key)
 void SceneManager::onKeyDown(unsigned char key)
 {
 	if (isInit) {
+		if (key == 'h')
+			return;
+			//Do nothing. Its reserved for help.
+
 		currentScene->onKeyDown(key);
 	}
 	else throw "Scenemanager not initialized";

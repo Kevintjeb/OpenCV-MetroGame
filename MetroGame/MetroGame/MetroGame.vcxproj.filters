@@ -25,6 +25,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vect.cpp" />
     <ClCompile Include="VertexClass.cpp" />
+    <ClCompile Include="HelpScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
@@ -51,5 +52,6 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vect.h" />
     <ClInclude Include="VertexClass.h" />
+    <ClInclude Include="HelpScene.h" />
   </ItemGroup>
 </Project>

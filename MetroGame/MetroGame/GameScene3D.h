@@ -128,6 +128,7 @@ private:
 	void prepareTime(float deltaTime);
 
 	static IScene* endScene;
+	static IScene* helpScene;
 public:
 	GameScene3D();
 	~GameScene3D();
