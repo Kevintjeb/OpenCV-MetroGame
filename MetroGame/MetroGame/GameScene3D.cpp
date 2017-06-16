@@ -346,23 +346,23 @@ GameScene3D::GameScene3D()
 
 	//debug data
 	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } }, {});
-	train = new MetroTrain(line);
+	train = new MetroTrain(line, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 5);
 	handle = mg_gameLogic::allocate_line(RenderableLine(line->getLine(), LineType::Red));
 
 	line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } }, {});
-	train2 = new MetroTrain(line2);
+	train2 = new MetroTrain(line2, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 2);
 	handle2 = mg_gameLogic::allocate_line(RenderableLine(line2->getLine(), LineType::Green));
 
 	line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } }, {});
-	train3 = new MetroTrain(line3);
+	train3 = new MetroTrain(line3, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 3);
 	handle3 = mg_gameLogic::allocate_line(RenderableLine(line3->getLine(), LineType::Blue));
 
 	line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } }, {});
-	train4 = new MetroTrain(line4);
+	train4 = new MetroTrain(line4,0.0f,mg_gameLogic::MetroTrain::State::FORWARD, 4);
 	handle4 = mg_gameLogic::allocate_line(RenderableLine(line4->getLine(), LineType::Red));
 
 	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, {});
-	train5 = new MetroTrain(line5);
+	train5 = new MetroTrain(line5, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 2);
 	handle5 = mg_gameLogic::allocate_line(RenderableLine(line5->getLine(), LineType::Green));
 }
 
