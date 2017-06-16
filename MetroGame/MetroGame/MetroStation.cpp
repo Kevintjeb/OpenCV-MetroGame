@@ -93,24 +93,17 @@ int mg_gameLogic::MetroStation::getAmountOfPassengers(std::vector<int> passenger
 	}
 	return amountOfPassengers;
 }
-
+//Returns the Vector of Passengers availeble for transfer
 std::vector<int> mg_gameLogic::MetroStation::getPassengers(int nextStationID, int freeSeats)
 {
 	std::vector<int> passengersToShip;
-	std::vector<int> correctTarget;
-	for (int i = 0; i < paths.size(); i++) 
-	{
-		if (paths[i] == nextStationID) 
-		{
-			correctTarget.push_back(i);
-		}
-	}
 	int i = 0;
 	while (i < freeSeats)
 	{
-		int target = rand() % correctTarget.size();
-		passengers[correctTarget[i]]--;
-		passengersToShip[correctTarget[i]]++;
+		int target = rand() % paths.size();
+		if(paths[target] == nextStationID)
+		passengers[target]--;
+		passengersToShip[target]++;
 		i++;
 	}
 

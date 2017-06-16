@@ -332,6 +332,7 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 void mg_gameLogic::MetroTrain::unloadPassengers(MetroStation &station)
 {
 	passengers[station.stationID] = 0;
+	//TODO CALLBACK FLOBO
 	auto stationIndexes = line->getStationIndexes();
 	MetroStation &nextStation = station;
 
