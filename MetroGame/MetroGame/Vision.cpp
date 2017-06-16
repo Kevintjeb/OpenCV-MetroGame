@@ -67,33 +67,33 @@ void Vision::calibrate()
 	createTrackbar("High Blue", "TrackBars", &high_b, 255, on_high_b_thresh_trackbar);
 
 	setTrackbarPos("Low Hue", "TrackBars", 0);
-	setTrackbarPos("High Hue", "TrackBars", 3);
+	setTrackbarPos("High Hue", "TrackBars", 19);
 	setTrackbarPos("Low Saturation", "TrackBars", 72);
-	setTrackbarPos("High Saturation", "TrackBars", 241);
-	setTrackbarPos("Low Value", "TrackBars", 143);
-	setTrackbarPos("High Value", "TrackBars", 247);
+	setTrackbarPos("High Saturation", "TrackBars", 255);
+	setTrackbarPos("Low Value", "TrackBars", 255);
+	setTrackbarPos("High Value", "TrackBars", 255);
 
 	setTrackbarPos("Low Red", "TrackBars", 232);
 	setTrackbarPos("High Red", "TrackBars", 255);
 	setTrackbarPos("Low Green", "TrackBars", 0);
-	setTrackbarPos("High Green", "TrackBars", 111);
+	setTrackbarPos("High Green", "TrackBars", 101);
 	setTrackbarPos("Low Blue", "TrackBars", 31);
 	setTrackbarPos("High Blue", "TrackBars", 142);
 	redSettings = colourCalibrate();
 
-	setTrackbarPos("Low Hue", "TrackBars", 0); //77
-	setTrackbarPos("High Hue", "TrackBars", 121); //126
-	setTrackbarPos("Low Saturation", "TrackBars", 143); //161
-	setTrackbarPos("High Saturation", "TrackBars", 206); //255
-	setTrackbarPos("Low Value", "TrackBars", 124); //254
-	setTrackbarPos("High Value", "TrackBars", 184); //255
+	setTrackbarPos("Low Hue", "TrackBars", 25); //77
+	setTrackbarPos("High Hue", "TrackBars", 91); //126
+	setTrackbarPos("Low Saturation", "TrackBars", 28); //161
+	setTrackbarPos("High Saturation", "TrackBars", 115); //255
+	setTrackbarPos("Low Value", "TrackBars", 171); //254
+	setTrackbarPos("High Value", "TrackBars", 204); //255
 
-	setTrackbarPos("Low Red", "TrackBars", 232); //0
-	setTrackbarPos("High Red", "TrackBars", 255); //97
-	setTrackbarPos("Low Green", "TrackBars", 144); //235
+	setTrackbarPos("Low Red", "TrackBars", 51); //0
+	setTrackbarPos("High Red", "TrackBars", 98); //97
+	setTrackbarPos("Low Green", "TrackBars", 0); //235
 	setTrackbarPos("High Green", "TrackBars", 255); //255
-	setTrackbarPos("Low Blue", "TrackBars", 113); //188
-	setTrackbarPos("High Blue", "TrackBars", 142); //247
+	setTrackbarPos("Low Blue", "TrackBars", 54); //188
+	setTrackbarPos("High Blue", "TrackBars", 255); //247
 	greenSettings = colourCalibrate();
 
 	setTrackbarPos("Low Hue", "TrackBars", 33);

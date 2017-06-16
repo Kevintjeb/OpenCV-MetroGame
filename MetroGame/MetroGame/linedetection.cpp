@@ -510,7 +510,7 @@ int labelIter(Mat & admin, int row, int col, int blobNr, vector<vector<Point2d *
 	int x = row, y = col;
 	setEntryImage(admin, x, y, blobNr * 10 + 8);
 	vector<Point2d *> points;
-	coords.push_back(points);
+	
 
 	int next1 = -999;
 	int area = 1;
@@ -528,15 +528,15 @@ int labelIter(Mat & admin, int row, int col, int blobNr, vector<vector<Point2d *
 
 			if (next1 >= 0) {
 				setEntryImage(admin, x, y, blobNr * 10 + next1);
-				if (coords[blobNr].size() > 0)
+				if (points.size() > 0)
 				{
-					int xdiff = coords[blobNr][coords[blobNr].size() - 1]->y > x ? coords[blobNr][coords[blobNr].size() - 1]->y - x : x - coords[blobNr][coords[blobNr].size() - 1]->y;
-					int ydiff = coords[blobNr][coords[blobNr].size() - 1]->x > y ? coords[blobNr][coords[blobNr].size() - 1]->x - y : y - coords[blobNr][coords[blobNr].size() - 1]->x;
+					int xdiff = points[points.size() - 1]->y > x ? points[points.size() - 1]->y - x : x - points[points.size() - 1]->y;
+					int ydiff = points[points.size() - 1]->x > y ? points[points.size() - 1]->x - y : y - points[points.size() - 1]->x;
 					if (xdiff > 2 || ydiff > 2)
-						coords[blobNr].push_back(new Point2d(y, x));
+						points.push_back(new Point2d(y, x));
 				}
 				else {
-					coords[blobNr].push_back(new Point2d(y, x));
+					points.push_back(new Point2d(y, x));
 				}
 				area++;
 			}
@@ -557,6 +557,9 @@ int labelIter(Mat & admin, int row, int col, int blobNr, vector<vector<Point2d *
 			} // else
 		}  // while
 	} // while (more)
+	if(area > 500 && area < 10000)
+		coords.push_back(points);
+	std::cout << "Area:" << area << std::endl;
 	return area;
 } // labelIter
 

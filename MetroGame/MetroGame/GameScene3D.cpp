@@ -676,7 +676,7 @@ void GameScene3D::onIdle()
 		camera.height += 5 * deltaTime;
 	}
 
-	cout << "FPS:" << (int)(1 / deltaTime) << endl;
+	
 }
 
 void GameScene3D::onSpecialFunc(int)
