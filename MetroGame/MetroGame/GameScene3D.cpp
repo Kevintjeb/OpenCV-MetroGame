@@ -313,6 +313,7 @@ void GameScene3D::prepare_lines2D()
 
 GameScene3D::GameScene3D()
 {
+	
 	width = SceneManager::getInstance().getWidth();
 	height = SceneManager::getInstance().getHeight();
 
@@ -580,10 +581,10 @@ void GameScene3D::onIdle()
 	}
 	
 
-	if (keys['a']) move(0, deltaTime*speed);
+	/*if (keys['a']) move(0, deltaTime*speed);
 	if (keys['d']) move(180, deltaTime*speed);
 	if (keys['w']) move(90, deltaTime*speed);
-	if (keys['s']) move(270, deltaTime*speed);
+	if (keys['s']) move(270, deltaTime*speed);*/
 	if (keys['q']) {
 		SceneManager::getInstance().loadScene(endScene);
 		return;
@@ -593,10 +594,10 @@ void GameScene3D::onIdle()
 		return;
 	}
 
-	if (keys[' ']) camera.height -= 25 * deltaTime;
+	/*if (keys[' ']) camera.height -= 25 * deltaTime;
 	if (shiftActive) {
 		camera.height += 5 * deltaTime;
-	}
+	}*/
 	fps = std::to_string((int)(1 / deltaTime));
 }
 
