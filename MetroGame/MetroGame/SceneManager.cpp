@@ -2,8 +2,7 @@
 #include "MainMenuScene.h"
 #include "system.h"
 #include <functional>
-#include "GameScene3D.h"
-
+#include "PauseScene.h"
 SceneManager::SceneManager(const SceneManager &other)
 {
 	this->currentScene = other.currentScene;
@@ -31,11 +30,19 @@ void mg_system::start()
 */
 void SceneManager::init() {
 	if (!isInit) {
-		createWindow(800, 600, "3D window", []() {SceneManager::getInstance().render3D(); });
+		window3D = createWindow(800, 600, "3D window", []() {SceneManager::getInstance().render3D(); });
+		HGLRC context3D = wglGetCurrentContext();
+		window2D = createWindow(800, 600, "2D window", []() {SceneManager::getInstance().render2D(); });
+		HGLRC context2D = wglGetCurrentContext();
+
+		if (!wglShareLists(context3D, context2D))
+		{
+			printf("Error sharing lists\n");
+		}
 		this->width = 800;
 		this->height = 600;
 #ifdef _DEBUG
-		this->currentScene = new GameScene3D();
+		this->currentScene = new MainMenuScene();
 #elif
 		this->currentScene = new MainMenuScene();
 #endif
@@ -63,6 +70,29 @@ void SceneManager::loadScene(IScene *newScene)
 		delete currentScene; //remove it
 		currentScene = newScene;
 		currentScene->onEnter();
+	}
+	else return;
+}
+
+void SceneManager::pauseScene()
+{
+	if (isInit && !isPaused) {
+		isPaused = true;
+		pausedScene = currentScene;
+		
+		currentScene = new PauseScene();
+		currentScene->onEnter();
+	}
+	else return;
+}
+
+void SceneManager::unPauseScene() {
+	if (isInit && isPaused) {
+		isPaused = false;
+		delete currentScene;
+		currentScene = pausedScene;
+		currentScene->onEnter();
+		pausedScene = nullptr;
 	}
 	else return;
 }
@@ -105,11 +135,11 @@ int SceneManager::getHeight()
 	return height;
 }
 
-void SceneManager::createWindow(int width, int height, std::string name, void(* callback)())
+GLuint SceneManager::createWindow(int width, int height, std::string name, void(* callback)())
 {
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(width, height);
-	windowID = glutCreateWindow(name.c_str());
+	GLuint windowID = glutCreateWindow(name.c_str());
 	glEnable(GL_DEPTH_TEST);
 	glutDisplayFunc(callback);
 	glutInitErrorFunc(mg_system::_internal::OnGlutError);
@@ -129,6 +159,8 @@ void SceneManager::createWindow(int width, int height, std::string name, void(* 
 	{
 		SceneManager::getInstance().onSpecialUpFunc(key);
 	});
+
+	return windowID;
 }
 
 void SceneManager::tick()
@@ -137,6 +169,21 @@ void SceneManager::tick()
 		currentScene->update();
 	}
 	else throw "Scenemanager not initialized";
+}
+
+void SceneManager::switchWindow2D()
+{
+	glutSetWindow(window2D);
+}
+
+void SceneManager::switchWindow3D()
+{
+	glutSetWindow(window3D);
+}
+
+GLuint SceneManager::getWindow3D()
+{
+	return window3D;
 }
 
 void SceneManager::onKeyUp(unsigned char key)
@@ -158,8 +205,15 @@ void SceneManager::onKeyDown(unsigned char key)
 void SceneManager::onIdle()
 {
 	if (isInit) {
+		tick();
 		currentScene->onIdle();
+
+		glutSetWindow(window3D);
 		glutPostRedisplay();
+
+		glutSetWindow(window2D);
+		glutPostRedisplay();
+		
 	}
 	else throw "Scenemanager not initialized";
 }
