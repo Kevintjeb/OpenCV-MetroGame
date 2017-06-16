@@ -136,15 +136,14 @@ void MainMenuScene::onEnter() {
 
 void MainMenuScene::update()
 {
-	std::cout << "Update MainMenuScene" << std::endl;
 	if (this->text.at(0).getX() >= 200 && this->text.at(0).getX() <= 1400 && !reversing)
 	{
-		this->text.at(0).setX(text.at(0).getX() + 1);
+		this->text.at(0).setX(text.at(0).getX() + 100 * deltaTime);
 	}
 	else
 	{
 		reversing = true;
-		this->text.at(0).setX(text.at(0).getX() - 1);
+		this->text.at(0).setX(text.at(0).getX() - 100 * deltaTime);
 		if(this->text.at(0).getX() <= 800)
 			reversing = false;
 	}
@@ -152,13 +151,9 @@ void MainMenuScene::update()
 
 void MainMenuScene::onIdle()
 {
-
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
-	float deltaTime = (currentTime - lastTime) / 1000.0f;
+	deltaTime = (currentTime - lastTime) / 1000.0f;
 	lastTime = currentTime;
-
-	std::cout << "FPS:" << (int)(1 / deltaTime) << std::endl;
-	glutPostRedisplay();
 }
 
 void MainMenuScene::onKeyUP(unsigned char key)

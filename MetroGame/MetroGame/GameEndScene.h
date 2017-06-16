@@ -9,8 +9,9 @@ private:
 	void drawStrings();
 	float scalex = 1.0f, scaley = 1.0f, scalez = 1.0f;
 	std::vector<Text> text;
-	Texture logoTexture = Texture("logo.png");
+	Texture* logoTexture;
 	float lastTime = 0;
+	float deltaTime = 0;
 	bool reversing = false;
 
 public:

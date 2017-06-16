@@ -1,23 +1,19 @@
 #include "PauseScene.h"
 #include "SceneManager.h"
 
-Font* PauseScene::largeFont3D = nullptr;
+Font* PauseScene::smallFont3D = nullptr;
 Font* PauseScene::largeFont2D = nullptr;
 
 PauseScene::PauseScene()
 {
 	SceneManager::getInstance().switchWindow3D();
-	if (!largeFont3D)
-		largeFont3D = new Font("font_72.fnt");
+	logoTexture = new Texture("logo.png");
+	if (!smallFont3D)
+		smallFont3D = new Font("font_0.fnt");
 	SceneManager::getInstance().switchWindow2D();
 	if (!largeFont2D)
 		largeFont2D = new Font("font_72.fnt");
 
-	this->width = SceneManager::getInstance().getWidth();
-	this->height = SceneManager::getInstance().getHeight();
-
-	textY = height - 200;
-	textX = width / 2 - largeFont2D->textLength(pauseString) / 2;
 }
 
 PauseScene::~PauseScene()
@@ -46,7 +42,7 @@ void PauseScene::renderLogo()
 	glColor4f(1, 1, 1, 1);
 
 	glEnable(GL_TEXTURE_2D);
-	logoTexture.Bind();
+	logoTexture->Bind();
 	glBegin(GL_QUADS);
 	glTexCoord2f(0, 0); glVertex3f(0, 0, 0);
 	glTexCoord2f(0, 1);	glVertex3f(0, height, 0);
@@ -85,7 +81,7 @@ void PauseScene::render3D()
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-	glMatrixMode(GL_PROJECTION);
+	glMatrixMode(GL_PROJECTION); 
 	glLoadIdentity();
 	glOrtho(0, width, height, 0, -100, 100);
 	glMatrixMode(GL_MODELVIEW);
@@ -96,30 +92,33 @@ void PauseScene::render3D()
 	renderLogo();
 
 	glColor4f(0, 0, 0, 1);
-	largeFont2D->drawText(pauseString, textX, textY);
+	smallFont3D->drawText(pauseString, textX, textY);
 	glEnable(GL_DEPTH_TEST);
 }
 
-bool reversingp = false;
 void PauseScene::update()
 {
-	std::cout << "Update MainMenuScene" << std::endl;
-	if (textX >= 200 && textX <= 1400 && !reversingp)
+	if (textX >= 200 && textX <= 1400 && !reversing)
 	{
-		textX += 1;
+		textX = textX + 100 * deltaTime;
 	}
 	else
 	{
-		reversingp = true;
-		textX -= 1;
-
+		reversing = true;
+		textX = textX - 100 * deltaTime;
 		if (textX <= 800)
-			reversingp = false;
+			reversing = false;
 	}
 }
 
 void PauseScene::onEnter()
 {
+	this->width = SceneManager::getInstance().getWidth();
+	this->height = SceneManager::getInstance().getHeight();
+	lastTime = glutGet(GLUT_ELAPSED_TIME);
+
+	textY = height - 200;
+	textX = width;
 }
 
 void PauseScene::onExit()
@@ -139,6 +138,9 @@ void PauseScene::onKeyDown(unsigned char)
 
 void PauseScene::onIdle()
 {
+	int currentTime = glutGet(GLUT_ELAPSED_TIME);
+	deltaTime = (currentTime - lastTime) / 1000.0f;
+	lastTime = currentTime;
 }
 
 void PauseScene::onSpecialFunc(int)
