@@ -84,4 +84,37 @@ void mg_gameLogic::MetroStation::update(float deltaTime)
 	}
 }
 
+int mg_gameLogic::MetroStation::getAmountOfPassengers(std::vector<int> passengers)
+{
+	int amountOfPassengers = 0;
+	for (int i = 0; i < passengers.size(); i++)
+	{
+		amountOfPassengers += passengers[i];
+	}
+	return amountOfPassengers;
+}
+
+std::vector<int> mg_gameLogic::MetroStation::getPassengers(int nextStationID, int freeSeats)
+{
+	std::vector<int> passengersToShip;
+	std::vector<int> correctTarget;
+	for (int i = 0; i < paths.size(); i++) 
+	{
+		if (paths[i] == nextStationID) 
+		{
+			correctTarget.push_back(i);
+		}
+	}
+	int i = 0;
+	while (i < freeSeats)
+	{
+		int target = rand() % correctTarget.size();
+		passengers[correctTarget[i]]--;
+		passengersToShip[correctTarget[i]]++;
+		i++;
+	}
+
+	return passengersToShip;
+}
+
 
