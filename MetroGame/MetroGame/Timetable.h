@@ -18,7 +18,7 @@ namespace mg_gameLogic
 		float getWeight(MetroStation& current,MetroStation& target);
 		MetroStation findPath(MetroStation& start,MetroStation& goal);
 
-		mg_gameLogic::MetroStation getMin(std::map<mg_gameLogic::MetroStation, float> mymap);
+		mg_gameLogic::MetroStation getMin(std::map<mg_gameLogic::MetroStation, float> mymap, std::vector<MetroStation>);
 		
 		/////DEPRECATED
 		//void createTimeTable(MetroStation station);
@@ -34,7 +34,7 @@ namespace mg_gameLogic
 		};
 	private:
 		std::list<Line*> lines;
-		std::vector<MetroStation> stations;
+		std::vector<MetroStation> tstations;
 		std::map<MetroStation, float> preCalcedDistances;
 
 	};

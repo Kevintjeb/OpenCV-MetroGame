@@ -24,8 +24,8 @@ namespace mg_gameLogic
 		MetroStation * parent;
 		bool operator==(const MetroStation &other) const;
 	
-		std::vector<int> paths;
-		std::array<int, stationCount> passengers;
+		std::array<int, stationCount> paths{0};
+		std::array<int, stationCount> passengers{0};
 		int maxPassengers = 200;
 		void addPassengers(int amountToAdd);
 		void addPassengers(int amountToAdd, int id);
@@ -35,7 +35,7 @@ namespace mg_gameLogic
 		bool operator <(const MetroStation &other) const;
 		void update(float deltaTime, std::vector<Vec2f> qrcodes);
 		int getAmountOfPassengers(std::vector<int> passengers);
-		std::vector<int>getPassengers(int nextStationID,int freeSeats);
+		std::array<int, MetroStation::stationCount> getPassengers(int nextStationID,int freeSeats);
 	private:
 		RenderablePointer pointer;
 		float elapseTime = 0;

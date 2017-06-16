@@ -14,9 +14,10 @@ MetroStation::MetroStation()
 
 mg_gameLogic::MetroStation::MetroStation( Vec2f pos, int id) : 
 	position(pos), stationID(id),passengers(),
-	pointer(allocate_renderable(Renderable("models/city/city.obj", {pos.x, -78, pos.y}, 0, {0, 1, 0}, {0.1f, 0.1f, 0.1f} )))
+	pointer(allocate_renderable(Renderable("models/city/city.obj", {pos.x*50, -92, pos.y*50}, 0, {0, 1, 0}, {0.1f, 0.1f, 0.1f} )))
 {
-	
+	paths = { 0 };
+	passengers = { 0 };
 	addPassengers(rand() % 100 + 50);
 	PPS = rand() % 5 + 1;
 }
@@ -97,9 +98,9 @@ int mg_gameLogic::MetroStation::getAmountOfPassengers(std::vector<int> passenger
 	return amountOfPassengers;
 }
 //Returns the Vector of Passengers availeble for transfer
-std::vector<int> mg_gameLogic::MetroStation::getPassengers(int nextStationID, int freeSeats)
+std::array<int, MetroStation::stationCount> mg_gameLogic::MetroStation::getPassengers(int nextStationID, int freeSeats)
 {
-	std::vector<int> passengersToShip;
+	std::array<int,MetroStation::stationCount> passengersToShip;
 	int i = 0;
 	while (i < freeSeats)
 	{

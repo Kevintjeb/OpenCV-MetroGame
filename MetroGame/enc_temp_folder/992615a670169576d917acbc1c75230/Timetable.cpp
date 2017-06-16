@@ -21,7 +21,7 @@ void mg_gameLogic::Timetable::getPaths(MetroStation& start)
 {
 	for (int i = 0; i<tstations.size(); i++)
 	{
-		//Find Path		//Dit gaat mis of in de regels code hieronder
+		//Find Path
 		auto result = findPath(start, tstations[i]);
 		//Path found
 		if (result.stationID == tstations[i].stationID)

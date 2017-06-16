@@ -342,16 +342,18 @@ GameScene3D::GameScene3D()
 	passengers.push_back(Passengers(-50, 50, Passengers::Priority::EMERENCY));
 	passengers.push_back(Passengers(50, -50, Passengers::Priority::EMERENCY));
 
-	MetroStation m1 = MetroStation(Vec2f(0.5f, 0.5f), 1);
-	MetroStation m2 = MetroStation(Vec2f(0.25f, 0.25f), 2);
-	MetroStation m3 = MetroStation(Vec2f(0.75f, 0.75f), 2);
+
 
 	SceneManager::getInstance().switchWindow3D();
 	//create city
 	createCityList();
 
+	MetroStation m1 = MetroStation(Vec2f(0.5f,	0.5f), 1);
+	MetroStation m2 = MetroStation(Vec2f(0.25f, 0.25f), 2);
+	MetroStation m3 = MetroStation(Vec2f(0.75f, 0.75f), 3);
+
 	//debug data
-	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } }, {m1});
+	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } }, {m1,m2,m3});
 	train = new MetroTrain(cb, line);
 	handle = mg_gameLogic::allocate_line(RenderableLine(line->getLine(), LineType::Red));
 
@@ -373,6 +375,8 @@ GameScene3D::GameScene3D()
 	std::list<Line*> lines = {line, line2, line3, line4, line5 };
 	std::vector<MetroStation> stations = { m1,m2,m3 };
 	Timetable t = Timetable(lines, stations);
+
+
 }
 
 
