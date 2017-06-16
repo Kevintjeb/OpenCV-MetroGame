@@ -2,7 +2,7 @@
 #include "RenderableOutput.h"
 using namespace mg_gameLogic;
 
-bool debug = true;
+bool debug = false;
 
 int low_v = 30, low_s = 30, low_h = 30;
 int high_v = 100, high_s = 100, high_h = 100;
@@ -47,6 +47,23 @@ void Vision::start()
 
 void Vision::calibrate()
 {	
+	string value;
+	ifstream readFile("thresholds.txt");
+	if (readFile.is_open())
+	{
+		getline(readFile, value); redSettings.high_r = atoi(value.c_str()); getline(readFile, value); redSettings.high_g = atoi(value.c_str()); getline(readFile, value); redSettings.high_b = atoi(value.c_str()); getline(readFile, value); redSettings.high_h = atoi(value.c_str()); getline(readFile, value); redSettings.high_s = atoi(value.c_str()); getline(readFile, value); redSettings.high_v = atoi(value.c_str());
+		getline(readFile, value); redSettings.low_r = atoi(value.c_str()); getline(readFile, value); redSettings.low_g = atoi(value.c_str()); getline(readFile, value); redSettings.low_b = atoi(value.c_str()); getline(readFile, value); redSettings.low_h = atoi(value.c_str()); getline(readFile, value); redSettings.low_s = atoi(value.c_str()); getline(readFile, value); redSettings.low_v = atoi(value.c_str());
+
+		getline(readFile, value); greenSettings.high_r = atoi(value.c_str()); getline(readFile, value); greenSettings.high_g = atoi(value.c_str()); getline(readFile, value); greenSettings.high_b = atoi(value.c_str()); getline(readFile, value); greenSettings.high_h = atoi(value.c_str()); getline(readFile, value); greenSettings.high_s = atoi(value.c_str()); getline(readFile, value); greenSettings.high_v = atoi(value.c_str());
+		getline(readFile, value); greenSettings.low_r = atoi(value.c_str()); getline(readFile, value); greenSettings.low_g = atoi(value.c_str()); getline(readFile, value); greenSettings.low_b = atoi(value.c_str()); getline(readFile, value); greenSettings.low_h = atoi(value.c_str()); getline(readFile, value); greenSettings.low_s = atoi(value.c_str()); getline(readFile, value); greenSettings.low_v = atoi(value.c_str());
+
+		getline(readFile, value); blueSettings.high_r = atoi(value.c_str()); getline(readFile, value); blueSettings.high_g = atoi(value.c_str()); getline(readFile, value); blueSettings.high_b = atoi(value.c_str()); getline(readFile, value); blueSettings.high_h = atoi(value.c_str()); getline(readFile, value); blueSettings.high_s = atoi(value.c_str()); getline(readFile, value); blueSettings.high_v = atoi(value.c_str());
+		getline(readFile, value); blueSettings.low_r = atoi(value.c_str()); getline(readFile, value); blueSettings.low_g = atoi(value.c_str()); getline(readFile, value); blueSettings.low_b = atoi(value.c_str()); getline(readFile, value); blueSettings.low_h = atoi(value.c_str()); getline(readFile, value); blueSettings.low_s = atoi(value.c_str()); getline(readFile, value); blueSettings.low_v = atoi(value.c_str());
+
+		readFile.close();
+	}
+
+
 	namedWindow("Video Capture", WINDOW_NORMAL);
 	namedWindow("TrackBars", WINDOW_NORMAL);
 	namedWindow("RGB", WINDOW_NORMAL);
@@ -68,19 +85,19 @@ void Vision::calibrate()
 	createTrackbar("Low Blue", "TrackBars", &low_b, 255, on_low_b_thresh_trackbar);
 	createTrackbar("High Blue", "TrackBars", &high_b, 255, on_high_b_thresh_trackbar);
 
-	setTrackbarPos("Low Hue", "TrackBars", 0);
-	setTrackbarPos("High Hue", "TrackBars", 19);
-	setTrackbarPos("Low Saturation", "TrackBars", 72);
-	setTrackbarPos("High Saturation", "TrackBars", 255);
-	setTrackbarPos("Low Value", "TrackBars", 255);
-	setTrackbarPos("High Value", "TrackBars", 255);
+	setTrackbarPos("Low Hue", "TrackBars", redSettings.low_h);
+	setTrackbarPos("High Hue", "TrackBars", redSettings.high_h);
+	setTrackbarPos("Low Saturation", "TrackBars", redSettings.low_s);
+	setTrackbarPos("High Saturation", "TrackBars", redSettings.high_s);
+	setTrackbarPos("Low Value", "TrackBars", redSettings.low_v);
+	setTrackbarPos("High Value", "TrackBars", redSettings.high_v);
 
-	setTrackbarPos("Low Red", "TrackBars", 232);
-	setTrackbarPos("High Red", "TrackBars", 255);
-	setTrackbarPos("Low Green", "TrackBars", 0);
-	setTrackbarPos("High Green", "TrackBars", 101);
-	setTrackbarPos("Low Blue", "TrackBars", 31);
-	setTrackbarPos("High Blue", "TrackBars", 142);
+	setTrackbarPos("Low Red", "TrackBars", redSettings.low_r);
+	setTrackbarPos("High Red", "TrackBars", redSettings.high_r);
+	setTrackbarPos("Low Green", "TrackBars", redSettings.low_g);
+	setTrackbarPos("High Green", "TrackBars", redSettings.high_g);
+	setTrackbarPos("Low Blue", "TrackBars", redSettings.low_b);
+	setTrackbarPos("High Blue", "TrackBars", redSettings.high_b);
 	if (debug) //DEBUG ONLY
 	{
 		setTrackbarPos("Low Hue", "TrackBars", 150);
@@ -99,19 +116,19 @@ void Vision::calibrate()
 	}
 	redSettings = colourCalibrate();
 
-	setTrackbarPos("Low Hue", "TrackBars", 25); //77
-	setTrackbarPos("High Hue", "TrackBars", 91); //126
-	setTrackbarPos("Low Saturation", "TrackBars", 28); //161
-	setTrackbarPos("High Saturation", "TrackBars", 115); //255
-	setTrackbarPos("Low Value", "TrackBars", 171); //254
-	setTrackbarPos("High Value", "TrackBars", 204); //255
+	setTrackbarPos("Low Hue", "TrackBars", greenSettings.low_h);
+	setTrackbarPos("High Hue", "TrackBars", greenSettings.high_h);
+	setTrackbarPos("Low Saturation", "TrackBars", greenSettings.low_s);
+	setTrackbarPos("High Saturation", "TrackBars", greenSettings.high_s);
+	setTrackbarPos("Low Value", "TrackBars", greenSettings.low_v);
+	setTrackbarPos("High Value", "TrackBars", greenSettings.high_v);
 
-	setTrackbarPos("Low Red", "TrackBars", 51); //0
-	setTrackbarPos("High Red", "TrackBars", 98); //97
-	setTrackbarPos("Low Green", "TrackBars", 0); //235
-	setTrackbarPos("High Green", "TrackBars", 255); //255
-	setTrackbarPos("Low Blue", "TrackBars", 54); //188
-	setTrackbarPos("High Blue", "TrackBars", 255); //247
+	setTrackbarPos("Low Red", "TrackBars", greenSettings.low_r);
+	setTrackbarPos("High Red", "TrackBars", greenSettings.high_r);
+	setTrackbarPos("Low Green", "TrackBars", greenSettings.low_g);
+	setTrackbarPos("High Green", "TrackBars", greenSettings.high_g);
+	setTrackbarPos("Low Blue", "TrackBars", greenSettings.low_b);
+	setTrackbarPos("High Blue", "TrackBars", greenSettings.high_b);
 	if (debug) //DEBUG ONLY
 	{
 		setTrackbarPos("Low Hue", "TrackBars", 0);
@@ -130,19 +147,20 @@ void Vision::calibrate()
 	}
 	greenSettings = colourCalibrate();
 
-	setTrackbarPos("Low Hue", "TrackBars", 33);
-	setTrackbarPos("High Hue", "TrackBars", 220);
-	setTrackbarPos("Low Saturation", "TrackBars", 10);
-	setTrackbarPos("High Saturation", "TrackBars", 255);
-	setTrackbarPos("Low Value", "TrackBars", 115);
-	setTrackbarPos("High Value", "TrackBars", 208);
+	setTrackbarPos("Low Hue", "TrackBars", blueSettings.low_h);
+	setTrackbarPos("High Hue", "TrackBars", blueSettings.high_h);
+	setTrackbarPos("Low Saturation", "TrackBars", blueSettings.low_s);
+	setTrackbarPos("High Saturation", "TrackBars", blueSettings.high_s);
+	setTrackbarPos("Low Value", "TrackBars", blueSettings.low_v);
+	setTrackbarPos("High Value", "TrackBars", blueSettings.high_v);
 
-	setTrackbarPos("Low Red", "TrackBars", 0);
-	setTrackbarPos("High Red", "TrackBars", 255);
-	setTrackbarPos("Low Green", "TrackBars", 13);
-	setTrackbarPos("High Green", "TrackBars", 128);
-	setTrackbarPos("Low Blue", "TrackBars", 127);
-	setTrackbarPos("High Blue", "TrackBars", 255);
+	setTrackbarPos("Low Red", "TrackBars", blueSettings.low_r);
+	setTrackbarPos("High Red", "TrackBars", blueSettings.high_r);
+	setTrackbarPos("Low Green", "TrackBars", blueSettings.low_g);
+	setTrackbarPos("High Green", "TrackBars", blueSettings.high_g);
+	setTrackbarPos("Low Blue", "TrackBars", blueSettings.low_b);
+	setTrackbarPos("High Blue", "TrackBars", blueSettings.high_b);
+
 	if (debug) //DEBUG ONLY
 	{
 		setTrackbarPos("Low Hue", "TrackBars", 90);
@@ -161,12 +179,30 @@ void Vision::calibrate()
 	}
 	blueSettings = colourCalibrate();
 
+	blueSettings = colourCalibrate();
 	cvDestroyWindow("Video Capture");
 	cvDestroyWindow("TrackBars");
 	cvDestroyWindow("RGB");
 	cvDestroyWindow("HSV");
 	cvDestroyWindow("Cut out");
 	cvDestroyWindow("Combined");
+
+	ofstream writeFile("thresholds.txt");
+	if (writeFile.is_open())
+	{
+		writeFile << redSettings.high_r << "\n"; writeFile << redSettings.high_g << "\n"; writeFile << redSettings.high_b << "\n"; writeFile << redSettings.high_h << "\n"; writeFile << redSettings.high_s << "\n"; writeFile << redSettings.high_v << "\n";
+		writeFile << redSettings.low_r << "\n"; writeFile << redSettings.low_g << "\n"; writeFile << redSettings.low_b << "\n"; writeFile << redSettings.low_h << "\n"; writeFile << redSettings.low_s << "\n"; writeFile << redSettings.low_v << "\n";
+
+		writeFile << greenSettings.high_r << "\n"; writeFile << greenSettings.high_g << "\n"; writeFile << greenSettings.high_b << "\n"; writeFile << greenSettings.high_h << "\n"; writeFile << greenSettings.high_s << "\n"; writeFile << greenSettings.high_v << "\n";
+		writeFile << greenSettings.low_r << "\n"; writeFile << greenSettings.low_g << "\n"; writeFile << greenSettings.low_b << "\n"; writeFile << greenSettings.low_h << "\n"; writeFile << greenSettings.low_s << "\n"; writeFile << greenSettings.low_v << "\n";
+
+		writeFile << blueSettings.high_r << "\n"; writeFile << blueSettings.high_g << "\n"; writeFile << blueSettings.high_b << "\n"; writeFile << blueSettings.high_h << "\n"; writeFile << blueSettings.high_s << "\n"; writeFile << blueSettings.high_v << "\n";
+		writeFile << blueSettings.low_r << "\n"; writeFile << blueSettings.low_g << "\n"; writeFile << blueSettings.low_b << "\n"; writeFile << blueSettings.low_h << "\n"; writeFile << blueSettings.low_s << "\n"; writeFile << blueSettings.low_v << "\n";
+
+		writeFile.close();
+	}
+	else cout << "Unable to open file";
+
 }
 
 Vision::ColourSettings Vision::colourCalibrate()
