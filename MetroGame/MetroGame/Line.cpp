@@ -112,11 +112,11 @@ const std::vector<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationIn
 	return stationIndex;
 }
 
-float mg_gameLogic::Line::getStationDistance(MetroStation station) const
+float mg_gameLogic::Line::getStationDistance(MetroStation * station) const
 {
 	for (std::pair<int, MetroStation> p : stationIndex)
 	{
-		if (p.second.stationID == station.stationID) 
+		if (p.second.stationID == station->stationID) 
 		{
 			return getDistance(p.first);
 		}

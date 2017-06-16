@@ -4,9 +4,10 @@ mg_gameLogic::Timetable::Timetable(std::list<Line *> lines, std::vector<MetroSta
 {
 	for (MetroStation &s : stations) 
 	{
+		s.parent = nullptr;
 		setWalkableNodes(s);
 	}
-	for (MetroStation station : stations)
+	for (MetroStation& station : stations)
 	{
 		preCalcedDistances.insert(std::pair<MetroStation,float>(station, 999999));
 	}
@@ -16,7 +17,7 @@ mg_gameLogic::Timetable::Timetable(std::list<Line *> lines, std::vector<MetroSta
 	}
 }
 
-void mg_gameLogic::Timetable::getPaths(MetroStation start) 
+void mg_gameLogic::Timetable::getPaths(MetroStation& start) 
 {
 	for (int i = 0; i<stations.size(); i++)
 	{
@@ -26,9 +27,11 @@ void mg_gameLogic::Timetable::getPaths(MetroStation start)
 		if (result.stationID == stations[i].stationID)
 		{
 			MetroStation * pGoal = &stations[i];
-			while (pGoal->parent->stationID != start.stationID) 
-			{
-				pGoal = pGoal->parent;
+			if (pGoal->parent) {
+				while (pGoal->parent->stationID != start.stationID)
+				{
+					pGoal = pGoal->parent;
+				}
 			}
 			start.paths[start.stationID] = pGoal->stationID;
 
@@ -43,7 +46,7 @@ void mg_gameLogic::Timetable::getPaths(MetroStation start)
 
 
 
-void mg_gameLogic::Timetable::setWalkableNodes(MetroStation stationToSet) 
+void mg_gameLogic::Timetable::setWalkableNodes(MetroStation& stationToSet) 
 {
 	std::list<MetroStation> connectedNodes(0);
 	for (MetroStation &station : stations)
@@ -61,7 +64,7 @@ void mg_gameLogic::Timetable::setWalkableNodes(MetroStation stationToSet)
 
 }
 
-float mg_gameLogic::Timetable::getWeight(MetroStation current, MetroStation target) 
+float mg_gameLogic::Timetable::getWeight(MetroStation& current, MetroStation& target) 
 {
 	Line * matchingLine;
 	for (Line * line : current.connectedLines) 
@@ -73,15 +76,15 @@ float mg_gameLogic::Timetable::getWeight(MetroStation current, MetroStation targ
 			break;
 		}
 	}
-	return abs(matchingLine->getStationDistance(current) - matchingLine->getStationDistance(target));
+	return abs(matchingLine->getStationDistance(&current) - matchingLine->getStationDistance(&target));
 }
 
-mg_gameLogic::MetroStation mg_gameLogic::Timetable::findPath(MetroStation start, MetroStation goal)
+mg_gameLogic::MetroStation mg_gameLogic::Timetable::findPath(MetroStation &start, MetroStation &goal)
 {
 	std::map<MetroStation, float> distances;
 	distances.insert(preCalcedDistances.begin(), preCalcedDistances.end());
 	std::vector<MetroStation> unexploredStations = stations;
-	for (MetroStation station : unexploredStations) 
+	for (MetroStation& station : unexploredStations) 
 	{
 		station.parent = nullptr;
 	}
@@ -95,7 +98,7 @@ mg_gameLogic::MetroStation mg_gameLogic::Timetable::findPath(MetroStation start,
 		}
 
 		unexploredStations.erase(std::remove(unexploredStations.begin(), unexploredStations.end(), current), unexploredStations.end());
-		for (MetroStation st : current.connectedStations) 
+		for (MetroStation &st : current.connectedStations) 
 		{
 			float dist = distances[current] + getWeight(current, st);
 			if (dist < distances[st]) 

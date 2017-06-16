@@ -149,7 +149,7 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 }
 
 MetroTrain::MetroTrain(Callback cb, Line* line, float init_pos, State state, int size) :cb(cb),
-	line(line), line_pos(init_pos), state(state), size(size), trains(0)
+	line(line), line_pos(init_pos), state(state), size(size), trains(0),passengers()
 {
 
 }
@@ -344,11 +344,17 @@ void mg_gameLogic::MetroTrain::unloadPassengers(MetroStation &station)
 		{
 			if (state == State::FORWARD)
 			{
-				nextStation = stationIndexes[i + 1].second;
+				if ((i + 1) < stationIndexes.size()) {
+					nextStation = stationIndexes[i + 1].second;
+				}
+				else if( i!=0) { nextStation = stationIndexes[i - 1].second; }
 			}
 			else
 			{
+				if (i != 0)
 				nextStation = stationIndexes[i - 1].second;
+				else if ((i + 1) < stationIndexes.size()) 
+					nextStation = stationIndexes[i + 1].second;
 			}
 		}
 
@@ -368,7 +374,7 @@ void mg_gameLogic::MetroTrain::unloadPassengers(MetroStation &station)
 	}
 }
 
-int mg_gameLogic::MetroTrain::getAmountOfPassengers(std::vector<int> passengers)
+int mg_gameLogic::MetroTrain::getAmountOfPassengers(std::array<int, MetroStation::stationCount> passengers)
 {
 	int amountOfPassengers = 0;
 	for (int i = 0; i < passengers.size(); i++) 

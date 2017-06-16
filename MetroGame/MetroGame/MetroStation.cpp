@@ -7,21 +7,23 @@ using namespace std;
 MetroStation::MetroStation()
 {
 	addPassengers(rand() % 100 + 50);
-	PPS = rand() % 5 + 1;				//Passenggers Per Second
+	PPS = rand() % 5 + 1;		//Passenggers Per Second
 }
 
 
 
 mg_gameLogic::MetroStation::MetroStation( Vec2f pos, int id) : 
-	position(pos), stationID(id),
+	position(pos), stationID(id),passengers(),
 	pointer(allocate_renderable(Renderable("models/city/city.obj", {pos.x, -78, pos.y}, 0, {0, 1, 0}, {0.1f, 0.1f, 0.1f} )))
 {
-
+	
+	addPassengers(rand() % 100 + 50);
+	PPS = rand() % 5 + 1;
 }
 
 MetroStation::~MetroStation()
 {
-	deallocate_renderable(pointer);
+	//deallocate_renderable(pointer);
 }
 //Changes the postition of the MetroStation -> DEPRECATED (this has been replaced in gamelogic branch)
 void mg_gameLogic::MetroStation::setPosition(Vec2f pos)
@@ -32,12 +34,9 @@ void mg_gameLogic::MetroStation::setPosition(Vec2f pos)
 
 bool mg_gameLogic::MetroStation::operator==(const MetroStation & other) const
 {
-	if (this->stationID == stationID) 
-	{
-		return true;
-	}
-	return false;
+	return this->stationID == other.stationID;
 }
+
 
 void mg_gameLogic::MetroStation::addPassengers(int amountToAdd)
 {
@@ -45,7 +44,7 @@ void mg_gameLogic::MetroStation::addPassengers(int amountToAdd)
 	{
 		int stationToAddTo = stationID;
 		while (stationToAddTo == stationID) {
-			stationToAddTo = rand() % passengers.size();
+			stationToAddTo = rand() % stationCount;
 		}
 		passengers[stationToAddTo]++;
 	}
@@ -58,20 +57,14 @@ void mg_gameLogic::MetroStation::addPassengers(int amountToAdd, int id)
 
 bool mg_gameLogic::MetroStation::operator!=(const MetroStation & other) const
 {
-	if (this->stationID != stationID)
-	{
-		return true;
-	}
-	return false;
+
+
+	return this->stationID != other.stationID;
 }
 
 bool mg_gameLogic::MetroStation::operator<(const MetroStation & other) const
 {
-	if (this->stationID < stationID) 
-	{
-		return true;
-	}
-	return false;
+	return this->stationID < other.stationID;
 }
 
 void mg_gameLogic::MetroStation::update(float deltaTime, std::vector<Vec2f> qrcodes)

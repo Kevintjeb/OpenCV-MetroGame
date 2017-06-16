@@ -12,18 +12,18 @@ namespace mg_gameLogic
 	{
 	public:
 		Timetable(std::list<Line*> lines, std::vector<MetroStation> stations);
-		void getPaths(MetroStation goals);
-		void setWalkableNodes(MetroStation stationToSet);
+		void getPaths(MetroStation& goals);
+		void setWalkableNodes(MetroStation &stationToSet);
 
-		float getWeight(MetroStation current, MetroStation target);
-		MetroStation findPath(MetroStation start, MetroStation goal);
+		float getWeight(MetroStation& current,MetroStation& target);
+		MetroStation findPath(MetroStation& start,MetroStation& goal);
 
 		mg_gameLogic::MetroStation getMin(std::map<mg_gameLogic::MetroStation, float> mymap);
 		
 		/////DEPRECATED
 		//void createTimeTable(MetroStation station);
-		//std::list<int> findSecondary(int stationID, MetroStation startStation);
-		//std::list<int> pathFinder(int stationID, MetroStation startStation, std::list<int> path, int i);
+		//std::list<int> findSecondary(int stationID,MetroStation& startStation);
+		//std::list<int> pathFinder(int stationID,MetroStation& startStation, std::list<int> path, int i);
 		typedef std::pair<mg_gameLogic::MetroStation, float> MyPairType;
 		struct CompareSecond
 		{
