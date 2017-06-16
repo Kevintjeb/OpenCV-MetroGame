@@ -332,13 +332,16 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 void mg_gameLogic::MetroTrain::unloadPassengers(MetroStation station)
 {
 	passengers[station.stationID] = 0;
-	std::list<pair<int, MetroStation> > stationIndexes = line->getStationIndexes();
+	std::vector<pair<int, MetroStation> > stationIndexes = line->getStationIndexes();
 	MetroStation nextStation;
 	if (state == State::FORWARD) 
 	{
 		for(pair<int,MetroStation> p : stationIndexes)
-		{
-
+		{	
+			if (p.second == station)
+			{
+			}
+			nextStation = p.second;
 		}
 	}
 

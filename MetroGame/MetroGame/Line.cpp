@@ -107,7 +107,7 @@ int Line::getIndexByPosition(const float position) const
 }
 
 //Returns the list of pairs with statins and indexes
-const std::list<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationIndexes() const
+const std::vector<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationIndexes() const
 {
 	return stationIndex;
 }
