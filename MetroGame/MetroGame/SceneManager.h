@@ -41,6 +41,9 @@ private:
 	IScene* currentScene;
 	bool isPaused;
 	IScene* pausedScene;
+
+	static IScene* pauseSceneVar;
+
 };
 
 

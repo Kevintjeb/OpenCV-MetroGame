@@ -155,6 +155,7 @@
   <ItemGroup>
     <ClCompile Include="errors.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="GameEndScene.cpp" />
     <ClCompile Include="GameScene3D.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
@@ -177,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Font.h" />
+    <ClInclude Include="GameEndScene.h" />
     <ClInclude Include="GameScene3D.h" />
     <ClInclude Include="IScene.h" />
     <ClInclude Include="MetroStation.h" />

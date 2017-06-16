@@ -1,4 +1,5 @@
 #include "GameScene3D.h"
+#include "GameEndScene.h"
 
 using namespace mg_system;
 using namespace mg_gameLogic;
@@ -10,7 +11,7 @@ using std::endl;
 #define STEP 0.2f
 
 Font* GameScene3D::largeFont3D = nullptr;
-
+IScene* GameScene3D::endScene = nullptr;
 
 
 //Random scale factor for a city model
@@ -312,10 +313,10 @@ GameScene3D::GameScene3D()
 {
 	width = SceneManager::getInstance().getWidth();
 	height = SceneManager::getInstance().getHeight();
-	
+
 	SceneManager::getInstance().switchWindow3D();
 	largeFont3D = new Font("font_0.fnt");
-
+	endScene = new GameEndScene();
 	//init ground plane
 	initGroundPlane();
 
@@ -326,7 +327,7 @@ GameScene3D::GameScene3D()
 	prepareModel("models/Metro/metro.obj");
 	prepareModel("models/city/city.obj");
 	prepareModel("models/track/track_2.obj");
-	
+
 	SceneManager::getInstance().switchWindow2D();
 	prepareModel("models/city2/city2d.obj");
 
@@ -361,6 +362,9 @@ GameScene3D::GameScene3D()
 	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, {});
 	train5 = new MetroTrain(line5);
 	handle5 = mg_gameLogic::allocate_line(RenderableLine(line5->getLine(), LineType::Green));
+
+
+	MetroStation* station = new MetroStation(Vec2f(20, 20), 20);
 }
 
 
@@ -512,14 +516,15 @@ void GameScene3D::onKeyUP(unsigned char key)
 {
 	keys[key] = false;
 	/*if (key == ' ') {
-		SceneManager::getInstance().pauseScene();
+		SceneManager::getInstance().pauseSceneVar();
 	}*/
 }
 
 void GameScene3D::onKeyDown(unsigned char key)
 {
 	if (key == 27) {
-		exit(0);
+		SceneManager::getInstance().loadScene(endScene);
+		return;
 	}
 	keys[key] = true;
 }
@@ -576,7 +581,12 @@ void GameScene3D::onIdle()
 	if (keys['w']) move(90, deltaTime*speed);
 	if (keys['s']) move(270, deltaTime*speed);
 	if (keys['q']) {
-		SceneManager::getInstance().loadScene(new MainMenuScene());
+		SceneManager::getInstance().loadScene(endScene);
+		return;
+	}
+	if (keys['p']) {
+		SceneManager::getInstance().pauseScene();
+		return;
 	}
 
 	if (keys[' ']) camera.height -= 25 * deltaTime;
