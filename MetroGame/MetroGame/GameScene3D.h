@@ -28,9 +28,6 @@
 #include "Passengers.h"
 #include "Color.h"
 
-
-#include "SoundManager.h"
-
 using namespace mg_system;
 using namespace mg_gameLogic;
 using std::cout;
