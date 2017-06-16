@@ -51,6 +51,7 @@ namespace mg_gameLogic
 		int get_size() const;
 		void resize(int nsize);
 		void reposistion(Line* line);
-		void unloadPassengers(MetroStation station);
+		void unloadPassengers(MetroStation &station);
+		int getAmountOfPassengers(std::vector<int> passengers);
 	};
 }

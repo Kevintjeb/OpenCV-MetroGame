@@ -37,7 +37,8 @@ namespace mg_gameLogic
 		bool operator !=(const MetroStation &other) const;
 		bool operator <(const MetroStation &other) const;
 		void update(float deltaTime);
-
+		int getAmountOfPassengers(std::vector<int> passengers);
+		std::vector<int>getPassengers(int nextStationID,int freeSeats);
 	private:
 		Callback cb;
 
