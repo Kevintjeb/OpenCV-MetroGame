@@ -330,6 +330,7 @@ GameScene3D::GameScene3D()
 	prepareModel("models/Metro/metro.obj");
 	prepareModel("models/city/city.obj");
 	prepareModel("models/track/track_2.obj");
+	prepareModel("models/station/station.obj");
 
 	SceneManager::getInstance().switchWindow2D();
 	prepareModel("models/city2/city2d.obj");
