@@ -312,6 +312,12 @@ void GameScene3D::prepare_lines2D()
 
 GameScene3D::GameScene3D()
 {
+	////play sound
+	//Sound soundTrack = Sound("soundTrack", "sound\\Kedengkedeng.mp3");
+	//SoundManager sm = SoundManager();
+	//sm.playSound(soundTrack);
+
+
 	width = SceneManager::getInstance().getWidth();
 	height = SceneManager::getInstance().getHeight();
 	
@@ -575,18 +581,18 @@ void GameScene3D::onIdle()
 	}
 	
 
-	if (keys['a']) move(0, deltaTime*speed);
+	/*if (keys['a']) move(0, deltaTime*speed);
 	if (keys['d']) move(180, deltaTime*speed);
 	if (keys['w']) move(90, deltaTime*speed);
-	if (keys['s']) move(270, deltaTime*speed);
+	if (keys['s']) move(270, deltaTime*speed);*/
 	if (keys['q']) {
 		SceneManager::getInstance().loadScene(new MainMenuScene());
 	}
 
-	if (keys[' ']) camera.height -= 25 * deltaTime;
+	/*if (keys[' ']) camera.height -= 25 * deltaTime;
 	if (shiftActive) {
 		camera.height += 5 * deltaTime;
-	}
+	}*/
 	fps = std::to_string((int)(1 / deltaTime));
 }
 
