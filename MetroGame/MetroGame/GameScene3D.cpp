@@ -483,6 +483,8 @@ void GameScene3D::render2D() {
 
 void GameScene3D::update()
 {
+	//TIMETABLE AANMAKEN EN OPNIEUW ALLE PADEN BEREKENEN. 
+	//CALL UPDATE FOR EVERY STATION
 	train->Recalculate(deltaTime);
 	train2->Recalculate(deltaTime);
 	train3->Recalculate(deltaTime);

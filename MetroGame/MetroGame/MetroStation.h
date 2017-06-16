@@ -9,8 +9,7 @@ namespace mg_gameLogic
 	class Line;
 	class MetroStation
 	{
-	public:
-		
+	public:		
 		MetroStation();
 		MetroStation(Vec2f pos, int id = -1); //TODO Vervangen door echte waarde
 		~MetroStation();
@@ -21,11 +20,21 @@ namespace mg_gameLogic
 		std::list<MetroStation> connectedStations;
 		MetroStation * parent;
 		bool operator ==(const MetroStation &other) const;
+		std::vector<int> paths;
+		std::vector<int> passengers;
+		int maxPassengers = 200;
+		void addPassengers(int amountToAdd);
+		void addPassengers(int amountToAdd, int id);
+		int PPS;
+		
 		bool operator !=(const MetroStation &other) const;
 		bool operator <(const MetroStation &other) const;
-		std::vector<int> paths;
+		void update(float deltaTime);
+
 	private:
 		RenderablePointer pointer;
+		float elapseTime = 0;
+
 	};
 
 

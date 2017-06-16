@@ -54,7 +54,7 @@ private:
 
 	std::map<std::string, int> modelsMap;
 	std::map<std::string, int>::iterator it;
-
+	std::list<MetroStation *> metroStations;
 	GLuint window_db;
 
 	LinePointer handle;

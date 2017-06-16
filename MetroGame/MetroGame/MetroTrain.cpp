@@ -176,10 +176,13 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 			stopState = 1;		//confirm that the train stopped
 			oldIndex = index;
 			speed = 0;
+		
 		}
 		if (totalTimeSpend > 3 && stopState == 1)
 		{
+			unloadPassengers(p.second);
 			stopState = 2;		//Permission to continue
+
 		}
 		//Opstrekken
 		if (stopState == 2)
@@ -324,4 +327,22 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 
 	//set the new line.
 	this->line = line;
+}
+
+void mg_gameLogic::MetroTrain::unloadPassengers(MetroStation station)
+{
+	passengers[station.stationID] = 0;
+	std::list<pair<int, MetroStation> > stationIndexes = line->getStationIndexes();
+	MetroStation nextStation;
+	if (state == State::FORWARD) 
+	{
+		for(pair<int,MetroStation> p : stationIndexes)
+		{
+
+		}
+	}
+
+	else 
+	{
+	}
 }

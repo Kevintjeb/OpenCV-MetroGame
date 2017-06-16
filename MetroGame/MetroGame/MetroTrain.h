@@ -43,12 +43,14 @@ namespace mg_gameLogic
 		static constexpr float train_length = 0.2f*scale;
 		static constexpr float train_spacing = 0.025f*scale;
 		static constexpr bool __debug_output = false;
-		
+		std::vector<int> passengers;
+		int maxPassengers = 25;
 		explicit MetroTrain(Line* line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
 		float getSpeed(float);
 		void Recalculate(float elapsedTime);
 		int get_size() const;
 		void resize(int nsize);
 		void reposistion(Line* line);
+		void unloadPassengers(MetroStation station);
 	};
 }
