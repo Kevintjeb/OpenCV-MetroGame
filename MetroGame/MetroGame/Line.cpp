@@ -32,8 +32,14 @@ mg_gameLogic::Line::Line(std::list<Vec2f> line, std::list<MetroStation> stations
 			}
 		}
 
-		line.insert(itr, currentStation.second.position);
-		stationIndex.push_back(currentStation);
+
+		if (previousDistance < 0.5) {							//0.5 is the margin of a station distance minimum
+			line.insert(itr, currentStation.second.position);
+			stationIndex.push_back(currentStation);
+		}
+		else { 
+			stations.remove(currentStation.second); 
+		}
 	}
 
 	int index = 0;
