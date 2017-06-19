@@ -12,7 +12,7 @@ MetroStation::MetroStation()
 
 mg_gameLogic::MetroStation::MetroStation(GameLogic::Vec2f pos, int id) :
 	position(pos), stationID(id), passengers(),
-	pointer(allocate_renderable(Renderable("models/station/station.obj", { pos.x * 50, -92, pos.y * 50 }, 0, { 0, 1, 0 }, { 0.1f, 0.1f, 0.1f })))
+	pointer(allocate_renderable(Renderable("models/station/station.obj", { pos.x*50, -100, pos.y*50 }, 0, { 0, 1, 0 }, { 1.0f, 75.0f, 1.0f })))
 {
 	paths = { 0 };
 	passengers = { 0 };

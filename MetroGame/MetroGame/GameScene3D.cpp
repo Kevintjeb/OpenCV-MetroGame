@@ -509,8 +509,8 @@ void GameScene3D::update()
 			delete green;*/
 
 		red = new Line(redlines, metroStations);
-		green = new Line(greenlines, metroStations);
-		blue = new Line(bluelines, metroStations);
+		green = new Line(greenlines, {});
+		blue = new Line(bluelines, {});
 
 		vector<GameLogic::Vec2f> redLineVec{};
 		for (auto l : redlines)

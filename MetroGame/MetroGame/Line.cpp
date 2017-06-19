@@ -21,7 +21,7 @@ mg_gameLogic::Line::Line(std::list<GameLogic::Vec2f> line, std::list<MetroStatio
 			if (v.distance(currentStation.second.position) < previousDistance)
 			{
 				itr = line.begin();
-				for (int j = 0; j <= i; j++)
+				for (int j = 0; j <= i-1; j++)
 				{
 					itr++;
 				}
