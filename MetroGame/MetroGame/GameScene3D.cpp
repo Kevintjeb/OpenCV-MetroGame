@@ -350,33 +350,33 @@ GameScene3D::GameScene3D()
 	//create city
 	createCityList();
 
-	MetroStation m1 = MetroStation(Vec2f(0.5f,	0.5f), 1);
-	MetroStation m2 = MetroStation(Vec2f(0.25f, 0.25f), 2);
-	MetroStation m3 = MetroStation(Vec2f(0.75f, 0.75f), 3);
+	//MetroStation m1 = MetroStation(Vec2f(0.5f,	0.5f), 1);
+	//MetroStation m2 = MetroStation(Vec2f(0.25f, 0.25f), 2);
+	//MetroStation m3 = MetroStation(Vec2f(0.75f, 0.75f), 3);
 
-	//debug data
-	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } }, {m1,m2,m3});
-	train = new MetroTrain(cb, line);
-	handle = mg_gameLogic::allocate_line(RenderableLine(line->getLine(), LineType::Red));
+	////debug data
+	//line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } }, {m1,m2,m3});
+	//train = new MetroTrain(cb, line);
+	//handle = mg_gameLogic::allocate_line(RenderableLine(line->getLine(), LineType::Red));
 
-	line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } }, {m2});
-	train2 = new MetroTrain(cb, line2);
-	handle2 = mg_gameLogic::allocate_line(RenderableLine(line2->getLine(), LineType::Green));
+	//line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } }, {m2});
+	//train2 = new MetroTrain(cb, line2);
+	//handle2 = mg_gameLogic::allocate_line(RenderableLine(line2->getLine(), LineType::Green));
 
-	line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } }, {m3});
-	train3 = new MetroTrain(cb, line3);
-	handle3 = mg_gameLogic::allocate_line(RenderableLine(line3->getLine(), LineType::Blue));
+	//line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } }, {m3});
+	//train3 = new MetroTrain(cb, line3);
+	//handle3 = mg_gameLogic::allocate_line(RenderableLine(line3->getLine(), LineType::Blue));
 
-	line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } }, {m1});
-	train4 = new MetroTrain(cb, line4);
-	handle4 = mg_gameLogic::allocate_line(RenderableLine(line4->getLine(), LineType::Red));
+	//line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } }, {m1});
+	//train4 = new MetroTrain(cb, line4);
+	//handle4 = mg_gameLogic::allocate_line(RenderableLine(line4->getLine(), LineType::Red));
 
-	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, {m2});
-	train5 = new MetroTrain(cb, line5);
-	handle5 = mg_gameLogic::allocate_line(RenderableLine(line5->getLine(), LineType::Green));
-	std::list<Line*> lines = {line, line2, line3, line4, line5 };
-	std::vector<MetroStation> stations = { m1,m2,m3 };
-	Timetable t = Timetable(lines, stations);
+	//line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, {m2});
+	//train5 = new MetroTrain(cb, line5);
+	//handle5 = mg_gameLogic::allocate_line(RenderableLine(line5->getLine(), LineType::Green));
+	//std::list<Line*> lines = {line, line2, line3, line4, line5 };
+	//std::vector<MetroStation> stations = { m1,m2,m3 };
+	//Timetable t = Timetable(lines, stations);
 
 
 }
@@ -498,13 +498,13 @@ void GameScene3D::render2D() {
 
 void GameScene3D::update()
 {
-	//TIMETABLE AANMAKEN EN OPNIEUW ALLE PADEN BEREKENEN. 
-	//CALL UPDATE FOR EVERY STATION
-	train->Recalculate(deltaTime);
-	train2->Recalculate(deltaTime);
-	train3->Recalculate(deltaTime);
-	train4->Recalculate(deltaTime);
-	train5->Recalculate(deltaTime);
+	////TIMETABLE AANMAKEN EN OPNIEUW ALLE PADEN BEREKENEN. 
+	////CALL UPDATE FOR EVERY STATION
+	//train->Recalculate(deltaTime);
+	//train2->Recalculate(deltaTime);
+	//train3->Recalculate(deltaTime);
+	//train4->Recalculate(deltaTime);
+	//train5->Recalculate(deltaTime);
 }
 
 void GameScene3D::onEnter()
