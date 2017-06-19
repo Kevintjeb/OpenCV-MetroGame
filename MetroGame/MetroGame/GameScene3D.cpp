@@ -508,8 +508,13 @@ void GameScene3D::update()
 		if (green)
 			delete green;*/
 
+		//pass the list with metrostations
 		red = new Line(redlines, metroStations);
+
+		//pass an empty list because with the metrostations the program fails
 		green = new Line(greenlines, {});
+
+		//pass an empty list because with the metrostations the program fails
 		blue = new Line(bluelines, {});
 
 		vector<GameLogic::Vec2f> redLineVec{};

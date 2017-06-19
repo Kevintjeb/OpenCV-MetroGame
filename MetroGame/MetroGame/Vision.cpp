@@ -213,6 +213,7 @@ Vision::ColourSettings Vision::colourCalibrate()
 
 		if (debug)
 		{
+			//test image 2. with 2 stations
 			frame = imread("metro_test2.png");
 		}
 		else
@@ -291,6 +292,7 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 
 	if (debug)
 	{
+		//test image 2. with 2 stations
 		image = imread("metro_test2.png");
 	}
 
@@ -489,6 +491,7 @@ std::list<Vision::CV_Station> Vision::getStations()
 	cap >> frame;
 	if (debug)
 	{
+		//test image 2. with 2 stations
 		frame = imread("metro_test2.png");
 	}
 	Mat grey;
