@@ -2,7 +2,7 @@
 #include "RenderableOutput.h"
 using namespace mg_gameLogic;
 
-bool debug = false;
+bool debug = true;
 
 int low_v = 30, low_s = 30, low_h = 30;
 int high_v = 100, high_s = 100, high_h = 100;
