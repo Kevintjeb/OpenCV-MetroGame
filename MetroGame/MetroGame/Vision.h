@@ -31,7 +31,7 @@ public:
 	};
 	struct CV_Station
 	{
-		Vec2f location;
+		GameLogic::Vec2f location;
 		int id;
 	};
 	ColourSettings colourCalibrate();

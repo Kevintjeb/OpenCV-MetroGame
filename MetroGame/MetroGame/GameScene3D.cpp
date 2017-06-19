@@ -487,7 +487,16 @@ void GameScene3D::update()
 {
 	if(++frameCounter % 300 == 0)
 	{ 
-		vision.getStations();
+		std::list<Vision::CV_Station> cvStation = vision.getStations();
+		//vision metrostations to gamelogic metrostations
+		std::list<MetroStation> metroStations;
+		metroStations.clear();
+		for (Vision::CV_Station &cvs : cvStation)
+		{
+			metroStations.push_back(MetroStation(cvs.location, cvs.id));
+		}
+
+
 		std::list<GameLogic::Vec2f> redlines = vision.getLines(LINE_RED);
 		std::list<GameLogic::Vec2f> greenlines = vision.getLines(LINE_GREEN);
 		std::list<GameLogic::Vec2f> bluelines = vision.getLines(LINE_BLUE);
@@ -499,9 +508,9 @@ void GameScene3D::update()
 		if (green)
 			delete green;*/
 
-		red = new Line(redlines, {});
-		green = new Line(greenlines, {});
-		blue = new Line(bluelines, {});
+		red = new Line(redlines, metroStations);
+		green = new Line(greenlines, metroStations);
+		blue = new Line(bluelines, metroStations);
 
 		vector<GameLogic::Vec2f> redLineVec{};
 		for (auto l : redlines)

@@ -213,7 +213,7 @@ Vision::ColourSettings Vision::colourCalibrate()
 
 		if (debug)
 		{
-			frame = imread("metro_test.png");
+			frame = imread("metro_test2.png");
 		}
 		else
 		{
@@ -291,7 +291,7 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 
 	if (debug)
 	{
-		image = imread("metro_test.png");
+		image = imread("metro_test2.png");
 	}
 
 	Mat mask;
@@ -489,7 +489,7 @@ std::list<Vision::CV_Station> Vision::getStations()
 	cap >> frame;
 	if (debug)
 	{
-		frame = imread("metro_test.png");
+		frame = imread("metro_test2.png");
 	}
 	Mat grey;
 	cvtColor(frame, grey, CV_BGR2GRAY);
@@ -503,7 +503,8 @@ std::list<Vision::CV_Station> Vision::getStations()
 	{
 		vector<Point> vp;
 		Vision::CV_Station station;
-		station.location = Vec2f(symbol->get_location_x(0), symbol->get_location_y(0));
+		station.location = GameLogic::Vec2f((((symbol->get_location_x(0) - 260) / ((frame.cols - 500) / 2.0f)) - 1.0f), ((symbol->get_location_y(0) - 60) / ((frame.rows - 180) / 2.0f)) - 1.0f);
+		//station.location = GameLogic::Vec2f(symbol->get_location_x(0), symbol->get_location_y(0));
 		station.id = std::stoi(symbol->get_data());
 		qr_stations.push_back(station);
 		cout << "decoded " << symbol->get_type_name() << " symbol \"" << symbol->get_data() << '"' << " " << "x:" << symbol->get_location_x(0) << " y:" << symbol->get_location_y(0) << endl;
