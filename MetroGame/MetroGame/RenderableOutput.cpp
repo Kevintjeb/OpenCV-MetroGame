@@ -31,7 +31,7 @@ void mg_gameLogic::clear_lines()
 
 void mg_gameLogic::deallocate_renderable(RenderablePointer renderable)
 {
-		renderables.erase(renderable);
+	renderables.erase(renderable);
 	
 }
 
