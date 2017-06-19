@@ -10,10 +10,6 @@ MetroStation::MetroStation()
 	PPS = rand() % 5 + 1;		//Passenggers Per Second
 }
 
-mg_gameLogic::MetroStation::MetroStation(Vec2f pos, int id) :
-	position(pos), stationID(id),
-	pointer(allocate_renderable(Renderable("models/city/city.obj", {pos.x, -78, pos.y}, 0, {0, 1, 0}, {0.1f, 0.1f, 0.1f} )))
-{
 
 
 mg_gameLogic::MetroStation::MetroStation( Vec2f pos, int id) : 
