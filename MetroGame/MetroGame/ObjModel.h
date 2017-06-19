@@ -52,6 +52,9 @@ private:
 	std::vector<MaterialInfo*> materials;
 	std::vector<VertexClass> verts;
 
+	int windowCreated = -1;
+	std::string fileName;
+
 	void loadMaterialFile(const std::string &fileName, const std::string &dirName);
 public:
 	ObjModel(const std::string &filename);

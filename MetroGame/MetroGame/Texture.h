@@ -3,13 +3,16 @@
 #define TEXTUREHEADER
 #include <string>
 #include "GL/freeglut.h"
+#include <map>
 
 using std::string;
 
 class Texture
 {
 private:
-	GLuint textureId;
+	std::string fileName;
+	std::map<int, GLuint> textureIds;
+	unsigned char* data = nullptr;
 public:
 	Texture(const string &filename);
 	~Texture();
