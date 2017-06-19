@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 	//create in the whole project 1 soundmanager.
 	//use playSound() methode
 
-	Sound soundTrack = Sound("soundTrack", "sound\\Kedengkedeng.mp3");
+	Sound soundTrack = Sound("soundTrack", "sound\\Background.mp3");
 	SoundManager sm = SoundManager();
 	sm.playSound(soundTrack);
 
