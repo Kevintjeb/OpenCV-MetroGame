@@ -1,4 +1,5 @@
 #include "GameScene3D.h"
+#include "GameEndScene.h"
 
 #include "Vect.h"
 #include "Line.h"
@@ -29,74 +30,11 @@ using std::endl;
 #define STEP 0.2f
 
 Font* GameScene3D::largeFont3D = nullptr;
+IScene* GameScene3D::endScene = nullptr;
 
-ModelLoader modelLoader;
-Vision vision;
-std::map<std::string, int> modelsMap;
-std::map<std::string, int>::iterator it;
-
-GLuint window_db;
-
-LinePointer handle;
-Renderable testTrain;
-Line *pLine;
-MetroTrain *train;
-
-LinePointer handle2;
-Line *line2;
-MetroTrain *train2;
-
-LinePointer handle3;
-Line *line3;
-MetroTrain *train3;
-
-LinePointer handle4;
-Line *line4;
-MetroTrain *train4;
-
-LinePointer handle5;
-Line *line5;
-MetroTrain *train5;
-
-std::vector <VertexClass> TopPlane;
-std::vector <VertexClass> GroundPlane;
-std::vector <VertexClass> metroLines;
-std::vector <std::pair<int, int>> metroLinesPosition;
-std::vector <VertexClass> metroLines2D;
-std::vector <std::pair<int, int>> metroLinesPosition2D;
-std::vector<Texture*> textures;
-std::vector<RenderablePointer> renderablePointers;
-std::vector<Passengers> passengers;
-
-int oldTime = -1;
-
-int lastTime;
-float rotation;
-
-int speed = 25;
-bool keys[255];
-bool shiftActive = false;
-
-struct Camera
-{
-	float posX = 7.57;
-	float posY = -103.79;
-	float rotX = 0;
-	float rotY = 0;
-	float height = 41.07;
-} camera;
-
-struct Camera2D
-{
-	float posX = 0;
-	float posY = 0;
-	float rotX = 90;
-	float rotY = 0;
-	float height = -80;
-}camera2D;
 
 //Random scale factor for a city model
-float randScale(float standScale)
+float GameScene3D::randScale(float standScale)
 {
 	standScale += 0.1f;
 	
@@ -106,7 +44,7 @@ float randScale(float standScale)
 }
 
 //create the 3D city
-void createCityList()
+void GameScene3D::createCityList()
 {
 	srand(time(NULL));
 	GameLogic::Vec3f rot = GameLogic::Vec3f(0.0f, 1.0f, 0.0f);
@@ -181,7 +119,7 @@ void createCityList()
 }
 
 //create the groundplane.
-void initGroundPlane()
+void GameScene3D::initGroundPlane()
 {
 	//onderste vlak
 	GroundPlane.push_back(VertexClass(0, -50, 0, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f));
@@ -224,7 +162,7 @@ void initGroundPlane()
 
 //methode to draw a vertex array. 
 //GLenum mode -> Could be Quad, Line, Points.
-void drawVertexArray(std::vector<VertexClass> verts, GLenum mode, int start, int end)
+void GameScene3D::drawVertexArray(std::vector<VertexClass> verts, GLenum mode, int start, int end)
 {
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -246,21 +184,21 @@ void drawVertexArray(std::vector<VertexClass> verts, GLenum mode, int start, int
 }
 
 //Load a 3D model
-void prepareModel(std::string modelPath)
+void GameScene3D::prepareModel(std::string modelPath)
 {
 	modelLoader.insertModel(modelPath);
 	modelsMap.insert(std::pair<std::string, int>(modelPath, modelsMap.size()));
 }
 
 //Move the camera. 
-void move(float angle, float fac)
+void GameScene3D::move(float angle, float fac)
 {
 	camera.posX += (float)cos((camera.rotY + angle) / 180 * M_PI) * fac;
 	camera.posY += (float)sin((camera.rotY + angle) / 180 * M_PI) * fac;
 }
 
 //draw Renderables -> All 3D models.
-void drawRenderables()
+void GameScene3D::drawRenderables()
 {
 	for (Renderable &renderable : mg_gameLogic::get_renderables())
 	{
@@ -289,7 +227,7 @@ void drawRenderables()
 }
 
 //draw Renderables for 2D world -> Streetmap
-void draw2DRenderables()
+void GameScene3D::draw2DRenderables()
 {
 	for (Renderable &renderable : mg_gameLogic::get_renderables())
 	{
@@ -308,8 +246,8 @@ void draw2DRenderables()
 		}
 		else
 		{
+			glPopMatrix();
 			continue;
-			it = modelsMap.find(renderable.model);
 		}
 
 		modelLoader.getModel(it->second)->draw();
@@ -318,23 +256,23 @@ void draw2DRenderables()
 }
 
 //Get Color for metroline
-GameLogic::Vec3f getLineColor(LineType color)
+Color GameScene3D::getLineColor(LineType color)
 {
-	GameLogic::Vec3f lineColor;
+	Color lineColor = Color(0.0f, 0.0f, 0.0f);
 
 	switch (color)
 	{
 	case LineType::Red:
-		lineColor = GameLogic::Vec3f(1.0f, 0.0f, 0.0f);
+		lineColor = Color(1.0f, 0.0f, 0.0f);
 		break;
 	case LineType::Green:
-		lineColor = GameLogic::Vec3f(0.0f, 1.0f, 0.0f);
+		lineColor = Color(0.0f, 1.0f, 0.0f);
 		break;
 	case LineType::Blue:
-		lineColor = GameLogic::Vec3f(0.1f, 0.2f, 0.8f); //TODO
+		lineColor = Color(0.0f, 0.0f, 1.0f);
 		break;
 	default:
-		lineColor = GameLogic::Vec3f(1.0f, 1.0f, 0.0f);
+		lineColor = Color(0.0f, 0.0f, 0.0f);
 		break;
 	}
 
@@ -342,7 +280,7 @@ GameLogic::Vec3f getLineColor(LineType color)
 }
 
 //get the metrolines from gamelogic and convert them to vertexclass. So drawVertexArray can draw them in the 3D world.
-void prepare_lines()
+void GameScene3D::prepare_lines()
 {
 	int position = 0;
 	metroLines.clear();
@@ -350,17 +288,17 @@ void prepare_lines()
 	for (RenderableLine Rline : mg_gameLogic::get_lines())
 	{
 
-		GameLogic::Vec3f color = getLineColor(Rline.type);
+		Color color = getLineColor(Rline.type);
 
 		int start = position;
 		for (int index = 0; index < Rline.line.size(); index++)
 		{
 			if (index > 0 && index < Rline.line.size() - 1)
 			{
-				metroLines.push_back(VertexClass(Rline.line[index].x * 25, -50 + 3.1f, Rline.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+				metroLines.push_back(VertexClass(Rline.line[index].x * 25, -50 + 3.1f, Rline.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.r, color.g, color.b, 1.0f));
 				position++;
 			}
-			metroLines.push_back(VertexClass(Rline.line[index].x * 25, -50 + 3.1f, Rline.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+			metroLines.push_back(VertexClass(Rline.line[index].x * 25, -50 + 3.1f, Rline.line[index].y * 25, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.r, color.g, color.b, 1.0f));
 			position++;
 		}
 		metroLinesPosition.push_back(std::make_pair(start, position));
@@ -368,24 +306,24 @@ void prepare_lines()
 }
 
 //get the metrolines from gamelogic and convert them to vertexclass. So drawVertexArray can draw them in the 2D world.
-void prepare_lines2D()
+void GameScene3D::prepare_lines2D()
 {
 	int position = 0;
 	metroLines2D.clear();
 	metroLinesPosition2D.clear();
 	for (RenderableLine Rline : mg_gameLogic::get_lines())
 	{
-		GameLogic::Vec3f color = getLineColor(Rline.type);
+		Color color = getLineColor(Rline.type);
 
 		int start = position;
 		for (int index = 0; index < Rline.line.size(); index++)
 		{
 			if (index > 0 && index < Rline.line.size() - 1)
 			{
-				metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 10.0f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+				metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 4.5f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.r, color.g, color.b, 1.0f));
 				position++;
 			}
-			metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 10.0f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.x, color.y, color.z, 1.0f));
+			metroLines2D.push_back(VertexClass(Rline.line[index].x * 50, 4.5f, Rline.line[index].y * 50, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, color.r, color.g, color.b, 1.0f));
 			position++;
 		}
 		metroLinesPosition2D.push_back(std::make_pair(start, position));
@@ -394,12 +332,13 @@ void prepare_lines2D()
 
 GameScene3D::GameScene3D()
 {
+	
 	width = SceneManager::getInstance().getWidth();
 	height = SceneManager::getInstance().getHeight();
-	
+
 	SceneManager::getInstance().switchWindow3D();
 	largeFont3D = new Font("font_0.fnt");
-
+	endScene = new GameEndScene();
 	//init ground plane
 	initGroundPlane();
 
@@ -410,16 +349,18 @@ GameScene3D::GameScene3D()
 	prepareModel("models/Metro/metro.obj");
 	prepareModel("models/city/city.obj");
 	prepareModel("models/track/track_2.obj");
-	
+	prepareModel("models/station/station.obj");
+
 	SceneManager::getInstance().switchWindow2D();
 	prepareModel("models/city2/city2d.obj");
 
 
 	//debug data
 	passengers.clear();
-	passengers.push_back(Passengers(0, 0, Passengers::Priority::LOW, passengers.size(), 25, 25));
-	passengers.push_back(Passengers(-50, 0, Passengers::Priority::HIGH, passengers.size(), -25, -25));
-	passengers.push_back(Passengers(-5, -25, Passengers::Priority::EMERENCY, passengers.size(), -25, 50));
+	passengers.push_back(Passengers(50, 50, Passengers::Priority::LOW));
+	passengers.push_back(Passengers(-50, -50, Passengers::Priority::HIGH));
+	passengers.push_back(Passengers(-50, 50, Passengers::Priority::EMERENCY));
+	passengers.push_back(Passengers(50, -50, Passengers::Priority::EMERENCY));
 
 	SceneManager::getInstance().switchWindow3D();
 	//create city
@@ -510,7 +451,9 @@ void GameScene3D::render3D()
 
 	glColor4f(0, 0, 0, 1);
 	
-	largeFont3D->drawText(time, width - largeFont3D->textLength(time) - 10, 10);
+	largeFont3D->drawText(timeString, width - largeFont3D->textLength(timeString) - 10, 10);
+	largeFont3D->drawText(fps, width - largeFont3D->textLength(fps) - 10, 40);
+
 }
 
 void GameScene3D::render2D() {
@@ -521,7 +464,7 @@ void GameScene3D::render2D() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	glOrtho(-75, 75, -75, 75, -100, 100);
+	glOrtho(-75,75,-75,75,-100,100);
 	//gluPerspective(90.0f, WIDTH / (float)HEIGHT, 0.1f, 5000.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glMatrixMode(GL_MODELVIEW);
@@ -541,12 +484,12 @@ void GameScene3D::render2D() {
 	glDisable(GL_TEXTURE_2D);
 	//glRotatef(45, 0, 1, 0);
 	//prepare_lines2D();
-	glLineWidth(5.0);
+	//glLineWidth(5.0);
 	glScalef(1.4f, 1.0f, 1.4f);
-	if (metroLinesPosition2D.size() > 0)
+	/*if (metroLinesPosition2D.size() > 0)
 	{
-		//drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(0).first, metroLinesPosition2D.at(metroLinesPosition2D.size() - 1).second);
-	}
+		drawVertexArray(metroLines2D, GL_LINES, metroLinesPosition2D.at(0).first, metroLinesPosition2D.at(metroLinesPosition2D.size() - 1).second);
+	}*/
 
 	//draw passangers and their destination.
 	for (Passengers &p : passengers)
@@ -574,10 +517,10 @@ void GameScene3D::onEnter()
 	vision.start();
 	vision.calibrate();
 	lastTime = glutGet(GLUT_ELAPSED_TIME);
-
+	setAllKeysFalse();
 }
 
-void setAllKeysFalse() {
+void GameScene3D::setAllKeysFalse() {
 	for (size_t i = 0; i < 255; i++)
 	{
 		if (keys[i])
@@ -589,7 +532,6 @@ void GameScene3D::onExit()
 {
 	/*delete train;
 	delete line;*/
-	setAllKeysFalse();
 	clear_renderables();
 }
 
@@ -598,14 +540,15 @@ void GameScene3D::onKeyUP(unsigned char key)
 {
 	keys[key] = false;
 	/*if (key == ' ') {
-		SceneManager::getInstance().pauseScene();
+		SceneManager::getInstance().pauseSceneVar();
 	}*/
 }
 
 void GameScene3D::onKeyDown(unsigned char key)
 {
 	if (key == 27) {
-		exit(0);
+		SceneManager::getInstance().loadScene(endScene);
+		return;
 	}
 	keys[key] = true;
 }
@@ -618,11 +561,11 @@ void GameScene3D::prepareTime(float deltaTime) {
 	}
 
 	if (Time.minutes < 10 && Time.seconds < 10)
-		time = "0" + std::to_string(Time.minutes) + ":0" + std::to_string((int)Time.seconds);
+		timeString = "0" + std::to_string(Time.minutes) + ":0" + std::to_string((int)Time.seconds);
 	else if(Time.minutes < 10)
-		time = "0" + std::to_string(Time.minutes) + ":" + std::to_string((int)Time.seconds);
+		timeString = "0" + std::to_string(Time.minutes) + ":" + std::to_string((int)Time.seconds);
 	else
-		time = std::to_string(Time.minutes) + ":" + std::to_string((int)Time.seconds);
+		timeString = std::to_string(Time.minutes) + ":" + std::to_string((int)Time.seconds);
 
 	
 }
@@ -630,8 +573,9 @@ void GameScene3D::prepareTime(float deltaTime) {
 void GameScene3D::onIdle()
 {
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
-	float deltaTime = (currentTime - lastTime) / 1000.0f;
+	deltaTime = (currentTime - lastTime) / 1000.0f;
 	lastTime = currentTime;
+
 	rotation += deltaTime * 15;
 
 	prepareTime(deltaTime);
@@ -656,12 +600,18 @@ void GameScene3D::onIdle()
 	}
 	
 
-	if (keys['a']) move(0, deltaTime*speed);
+	/*if (keys['a']) move(0, deltaTime*speed);
 	if (keys['d']) move(180, deltaTime*speed);
 	if (keys['w']) move(90, deltaTime*speed);
-	if (keys['s']) move(270, deltaTime*speed);
+	if (keys['s']) move(270, deltaTime*speed);*/
 	if (keys['q']) {
-		SceneManager::getInstance().loadScene(new MainMenuScene());
+		SceneManager::getInstance().loadScene(endScene);
+		return;
+	}
+	
+	if (keys['p']) {
+		SceneManager::getInstance().pauseScene();
+		return;
 	}
 	if (keys['f']) {
 		glutFullScreen();
@@ -671,12 +621,11 @@ void GameScene3D::onIdle()
 		glutReshapeWindow(1200, 900);
 	}
 
-	if (keys[' ']) camera.height -= 25 * deltaTime;
+	/*if (keys[' ']) camera.height -= 25 * deltaTime;
 	if (shiftActive) {
 		camera.height += 5 * deltaTime;
-	}
-
-	
+	}*/
+	fps = std::to_string((int)(1 / deltaTime));
 }
 
 void GameScene3D::onSpecialFunc(int)

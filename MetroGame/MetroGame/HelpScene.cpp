@@ -1,27 +1,23 @@
-#include "PauseScene.h"
+#include "HelpScene.h"
 #include "SceneManager.h"
+Font* HelpScene::largeFont2D = nullptr;
 
-Font* PauseScene::smallFont3D = nullptr;
-Font* PauseScene::largeFont2D = nullptr;
-
-PauseScene::PauseScene()
+HelpScene::HelpScene()
 {
 	SceneManager::getInstance().switchWindow3D();
-	logoTexture = new Texture("logo.png");
-	if (!smallFont3D)
-		smallFont3D = new Font("font_0.fnt");
+	logoTexture = new Texture("helppage.png");
 	SceneManager::getInstance().switchWindow2D();
 	if (!largeFont2D)
 		largeFont2D = new Font("font_72.fnt");
 
 }
 
-PauseScene::~PauseScene()
+HelpScene::~HelpScene()
 {
 }
 
 
-void PauseScene::renderLogo()
+void HelpScene::renderLogo()
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -56,8 +52,18 @@ void PauseScene::renderLogo()
 	glDisable(GL_ALPHA_TEST);
 }
 
+IScene* HelpScene::getBackScene()
+{
+	return backScene;
+}
 
-void PauseScene::render2D()
+
+void HelpScene::setBackScene(IScene* back)
+{
+	backScene = back;
+}
+
+void HelpScene::render2D()
 {
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -71,32 +77,27 @@ void PauseScene::render2D()
 	glDisable(GL_DEPTH_TEST);
 
 	glColor4f(0, 0, 0, 1);
-	largeFont2D->drawText(pauseString, width / 2 - largeFont2D->textLength(pauseString) / 2, height - 200);
+	largeFont2D->drawText(sceneString, width / 2 - largeFont2D->textLength(sceneString) / 2, height - 200);
 
 	glEnable(GL_DEPTH_TEST);
 }
 
-void PauseScene::render3D()
+void HelpScene::render3D()
 {
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-	glMatrixMode(GL_PROJECTION); 
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, width, height, 0, -100, 100);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	glDisable(GL_DEPTH_TEST);
-
 	renderLogo();
-
-	glColor4f(0, 0, 0, 1);
-	smallFont3D->drawText(pauseString, textX, textY);
-	glEnable(GL_DEPTH_TEST);
 }
 
-void PauseScene::update()
+void HelpScene::update()
 {
 	if (textX >= 200 && textX <= 1400 && !reversing)
 	{
@@ -111,7 +112,7 @@ void PauseScene::update()
 	}
 }
 
-void PauseScene::onEnter()
+void HelpScene::onEnter()
 {
 	this->width = SceneManager::getInstance().getWidth();
 	this->height = SceneManager::getInstance().getHeight();
@@ -121,34 +122,34 @@ void PauseScene::onEnter()
 	textX = width;
 }
 
-void PauseScene::onExit()
+void HelpScene::onExit()
 {
 }
 
-void PauseScene::onKeyUP(unsigned char key)
+void HelpScene::onKeyUP(unsigned char key)
+{
+	SceneManager::getInstance().backFromHelp();
+}
+
+void HelpScene::onKeyDown(unsigned char)
 {
 }
 
-void PauseScene::onKeyDown(unsigned char)
-{
-	SceneManager::getInstance().unPauseScene();
-}
-
-void PauseScene::onIdle()
+void HelpScene::onIdle()
 {
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	deltaTime = (currentTime - lastTime) / 1000.0f;
 	lastTime = currentTime;
 }
 
-void PauseScene::onSpecialFunc(int)
+void HelpScene::onSpecialFunc(int)
 {
 }
 
-void PauseScene::onSpecialUpFunc(int)
+void HelpScene::onSpecialUpFunc(int)
 {
 }
 
-void PauseScene::reshapeFunc(int, int)
+void HelpScene::reshapeFunc(int, int)
 {
 }

@@ -1,54 +1,38 @@
-#include "MainMenuScene.h"
 #include <iostream>
 #include "SceneManager.h"
 #include "GameScene3D.h"
 #include "PauseScene.h"
+#include "GameEndScene.h"
 
-Font* MainMenuScene::largeFont2D = nullptr;
-Font* MainMenuScene::smallFont2D = nullptr;
-Font* MainMenuScene::largeFont3D = nullptr;
-Font* MainMenuScene::smallFont3D = nullptr;
-IScene* MainMenuScene::gameInstance = nullptr;
+Font* GameEndScene::largeFont2D = nullptr;
+Font* GameEndScene::smallFont3D = nullptr;
 
-
-void MainMenuScene::drawStrings()
+void GameEndScene::drawStrings()
 {
 
 }
 
-MainMenuScene::MainMenuScene()
+GameEndScene::GameEndScene()
 {
 	SceneManager::getInstance().switchWindow2D();
 	if (!largeFont2D)
 		largeFont2D = new Font("font_72.fnt");
-	if (!smallFont2D)
-		smallFont2D = new Font("font_0.fnt");
 	SceneManager::getInstance().switchWindow3D();
-	if (!largeFont3D)
-		largeFont3D = new Font("font_72.fnt");
+	logoTexture = new Texture("logo.png");
 	if (!smallFont3D)
 		smallFont3D = new Font("font_0.fnt");
-
-	if (!gameInstance)
-		gameInstance = new GameScene3D();
-
-	this->width = SceneManager::getInstance().getWidth();
-	this->height = SceneManager::getInstance().getHeight();
-
-	//appendText(Text(width/2 - largeFont3D->textLength("Main Menu")/2, height / 3, largeFont3D, "Main Menu"));
-	appendText(Text(width/2 - smallFont3D->textLength("Press any button to play!")/2, height - 200, smallFont3D, "Press any button to play!"));
 }
 
-MainMenuScene::~MainMenuScene()
+GameEndScene::~GameEndScene()
 {
 }
 
-void MainMenuScene::appendText(Text &string)
+void GameEndScene::appendText(Text &string)
 {
 	text.push_back(string);
 }
 
-void MainMenuScene::renderLogo()
+void GameEndScene::renderLogo()
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -66,10 +50,10 @@ void MainMenuScene::renderLogo()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glColor4f(1, 1, 1, 1); 
+	glColor4f(1, 1, 1, 1);
 
 	glEnable(GL_TEXTURE_2D);
-	logoTexture.Bind();
+	logoTexture->Bind();
 	glBegin(GL_QUADS);
 	glTexCoord2f(0, 0); glVertex3f(0, 0, 0);
 	glTexCoord2f(0, 1);	glVertex3f(0, height, 0);
@@ -83,7 +67,7 @@ void MainMenuScene::renderLogo()
 	glDisable(GL_ALPHA_TEST);
 }
 
-void MainMenuScene::render3D() {
+void GameEndScene::render3D() {
 
 
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -94,7 +78,7 @@ void MainMenuScene::render3D() {
 	glLoadIdentity();
 
 	glDisable(GL_DEPTH_TEST);
-	
+
 	renderLogo();
 
 	glColor4f(0, 0, 0, 1);
@@ -102,16 +86,16 @@ void MainMenuScene::render3D() {
 	for (Text& t : text) {
 		t.getFont()->drawText(t.getText(), t.getX(), t.getY());
 	}
-	glColor4f(1,1,1,1);
+	glColor4f(1, 1, 1, 1);
 
-/*
+	/*
 	largeFont3D->drawText(mainString, width / 2 - largeFont3D->textLength(mainString) / 2, height / 3);
 	smallFont3D->drawText(startString, width / 2 - smallFont3D->textLength(startString) / 2, height / 2);
-*/
+	*/
 	glEnable(GL_DEPTH_TEST);
 }
 
-void MainMenuScene::render2D()
+void GameEndScene::render2D()
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -125,17 +109,19 @@ void MainMenuScene::render2D()
 	glDisable(GL_DEPTH_TEST);
 
 	glColor4f(0, 0, 0, 1);
-	largeFont2D->drawText("2D view", width / 2 - largeFont2D->textLength("2D view") / 2, height / 2);
+	largeFont2D->drawText("Thanks for playing!", width / 2 - largeFont2D->textLength("Thanks for playing!") / 2, height / 2);
 	glEnable(GL_DEPTH_TEST);
 }
 
-void MainMenuScene::onEnter() {
-	//Do some onEnter stuff, maybe intro animation?
+void GameEndScene::onEnter() {
+	this->width = SceneManager::getInstance().getWidth();
+	this->height = SceneManager::getInstance().getHeight();
 	lastTime = glutGet(GLUT_ELAPSED_TIME);
 
+	appendText(Text(width, height - 200, smallFont3D, "Thanks for playing!"));
 }
 
-void MainMenuScene::update()
+void GameEndScene::update()
 {
 	if (this->text.at(0).getX() >= 200 && this->text.at(0).getX() <= 1400 && !reversing)
 	{
@@ -145,47 +131,45 @@ void MainMenuScene::update()
 	{
 		reversing = true;
 		this->text.at(0).setX(text.at(0).getX() - 100 * deltaTime);
-		if(this->text.at(0).getX() <= 800)
+		if (this->text.at(0).getX() <= 800)
 			reversing = false;
 	}
 }
 
-void MainMenuScene::onIdle()
+void GameEndScene::onIdle()
 {
+
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	deltaTime = (currentTime - lastTime) / 1000.0f;
 	lastTime = currentTime;
 }
 
-void MainMenuScene::onKeyUP(unsigned char key)
+void GameEndScene::onKeyUP(unsigned char key)
 {
 }
 
-void MainMenuScene::onKeyDown(unsigned char key)
+void GameEndScene::onKeyDown(unsigned char key)
 {
-	if (key == 27)
 		exit(0);
-	else
-		SceneManager::getInstance().loadScene(gameInstance);
 }
 
-void MainMenuScene::onSpecialFunc(int)
+void GameEndScene::onSpecialFunc(int)
 {
 }
 
-void MainMenuScene::onSpecialUpFunc(int)
+void GameEndScene::onSpecialUpFunc(int)
 {
 }
 
-void MainMenuScene::onExit() {
+void GameEndScene::onExit() {
 	//Do some onEnter stuff, maybe outro animation or sound.?
 	std::cout << "Exit MainMenuScene" << std::endl;
 }
 
-void MainMenuScene::reshapeFunc(int w, int h) {
+void GameEndScene::reshapeFunc(int w, int h) {
 	width = w;
 	height = h;
 	for (Text& t : text) {
-		t.setX(width/2 - t.getFont()->textLength(t.getText()) /2);
+		t.setX(width / 2 - t.getFont()->textLength(t.getText()) / 2);
 	}
 }

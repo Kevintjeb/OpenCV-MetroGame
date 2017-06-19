@@ -218,7 +218,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 	{
 		int diff = size - trains.size(); // we need 'diff' new trains
 		for (int i = 0; i < diff; ++i) // we allocate new Renderables 
-			trains.push_back(allocate_renderable(Renderable("models/Metro/metro.obj", GameLogic::Vec3f(0, -90.8f, 0), 0.0f, GameLogic::Vec3f(0, 1, 0), GameLogic::Vec3f(scale, scale, scale))));
+			trains.push_back(allocate_renderable(Renderable("models/Metro/metro.obj", GameLogic::Vec3f(0, -92.8f, 0), 0.0f, GameLogic::Vec3f(0, 1, 0), GameLogic::Vec3f(scale, scale, scale))));
 	}
 	else if (trains.size() > size) // if we have to many trains
 	{
