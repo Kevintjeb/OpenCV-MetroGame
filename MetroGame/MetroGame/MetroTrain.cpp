@@ -12,9 +12,9 @@ inline GameLogic::Vec2f MetroTrain::pos2d_from_pos1d(float pos)
 {
 	// since the position is on a vector between two points, we first get the points
 
-	int index = line->getIndexByPosition(pos); 
+	int index = line->getIndexByPosition(pos);
 
-	GameLogic::Vec2f far = line->operator[](index+1), close = line->operator[](index);
+	Vec2f far = line->operator[](index + 1), close = line->operator[](index);
 
 	// we then calculate the vector between them, and then normalize it
 	GameLogic::Vec2f normal(close.x - far.x, close.y - far.y);
@@ -41,7 +41,7 @@ inline float MetroTrain::checkAndSetPosRange(float pos)
 		{
 			state = State::BACKWARD; // we revert our direction
 			// and set our new position, base + total train length
-			return line->getDistance(line->size() - 1) - ((size)*(train_length+train_spacing) - train_spacing);
+			return line->getDistance(line->size() - 1) - ((size)*(train_length + train_spacing) - train_spacing);
 		}
 		break;
 	case State::BACKWARD:
@@ -49,7 +49,7 @@ inline float MetroTrain::checkAndSetPosRange(float pos)
 		{
 			state = State::FORWARD; // we revert our position
 			// and set our new psoition, base + total tran length
-			return (size)*(train_length+train_spacing) - train_spacing;
+			return (size)*(train_length + train_spacing) - train_spacing;
 		}
 		break;
 	}
@@ -61,33 +61,33 @@ inline float MetroTrain::checkAndSetPosRange(float pos)
 inline std::pair<GameLogic::Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositionAndDistance(float pos)
 {
 	int index = line->getIndexByPosition(pos) + (state == State::FORWARD ? 0 : +1);
-	
+
 	// some lamdas to ensure the rest of the code can ignore direction
-	const auto get_dist = [this](int i)->float {return state == State::FORWARD ? 
-												line->getDistance(i) : 
-												line->getDistance(line->size() - 1) - line->getDistance(i); 
-											};
+	const auto get_dist = [this](int i)->float {return state == State::FORWARD ?
+		line->getDistance(i) :
+		line->getDistance(line->size() - 1) - line->getDistance(i);
+	};
 	const auto con_pos = [this](float pos)->float {return state == State::FORWARD ?
-													pos :
-													line->getDistance(line->size()-1) - pos
-												; };
+		pos :
+		line->getDistance(line->size() - 1) - pos
+		; };
 	const auto next = [this](int c)->int {return state == State::FORWARD ? c + 1 : c - 1; };
 	const auto prev = [this](int c)->int {return state == State::FORWARD ? c - 1 : c + 1; };
 	const auto is_invalid = [this](int c)->bool {return state == State::FORWARD ?
-												c > line->size() - 1 || c < 0 :
-												c <= 0 || c > line->size()-1
-											; };
+		c > line->size() - 1 || c < 0 :
+	c <= 0 || c > line->size() - 1
+		; };
 	const auto back = [this]()->int {return state == State::FORWARD ? 0 : line->size() - 1; };
 
-	const GameLogic::Vec2f B = line->operator[](index);
-	const GameLogic::Vec2f A = line->operator[](next(index));
-	const GameLogic::Vec2f P = (A - B).unit() * (con_pos(pos) - get_dist(index)) + B;
-	
+	const Vec2f B = line->operator[](index);
+	const Vec2f A = line->operator[](next(index));
+	const Vec2f P = (A - B).unit() * (con_pos(pos) - get_dist(index)) + B;
+
 	if ((P - B).magnitude() >= train_length) // we check if P' is between P and line[index]
 	{
 		const float dist_from_B = con_pos(pos) - get_dist(index) - train_length;
-		const GameLogic::Vec2f P_comp((P - B).unit() * dist_from_B + B);
-		return pair<GameLogic::Vec2f, float>(P_comp, con_pos( dist_from_B + get_dist(index)));
+		const Vec2f P_comp((P - B).unit() * dist_from_B + B);
+		return pair<Vec2f, float>(P_comp, con_pos(dist_from_B + get_dist(index)));
 	}
 	else // we go over the previus line pieces
 	{
@@ -116,7 +116,7 @@ inline std::pair<GameLogic::Vec2f, float> mg_gameLogic::MetroTrain::findCompleme
 
 			// we calculate the x's of the intersection points
 			const float x_1 = (-b + sqrtf(b*b - 4 * a*c)) / (2 * a);
-			const float x_2 = (-b - sqrtf(b*b - 4 * a*c)) /( 2 * a);
+			const float x_2 = (-b - sqrtf(b*b - 4 * a*c)) / (2 * a);
 
 			// we calculate the y's of the intersection points
 			const float y_1 = s*(x_1 - L.x) + L.y;
@@ -147,10 +147,10 @@ inline std::pair<GameLogic::Vec2f, float> mg_gameLogic::MetroTrain::findCompleme
 	}
 }
 
-MetroTrain::MetroTrain(Line* line, float init_pos, State state, int size) :
-	line(line), line_pos(init_pos), state(state), size(size), trains(0)
+MetroTrain::MetroTrain(Callback cb, Line* line, float init_pos, State state, int size) :cb(cb),
+line(line), line_pos(init_pos), state(state), size(size), trains(0), passengers()
 {
-	
+	passengers = { 0 };
 }
 
 float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
@@ -175,10 +175,13 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 			stopState = 1;		//confirm that the train stopped
 			oldIndex = index;
 			speed = 0;
+
 		}
 		if (totalTimeSpend > 3 && stopState == 1)
 		{
+			unloadPassengers(p.second);
 			stopState = 2;		//Permission to continue
+
 		}
 		//Opstrekken
 		if (stopState == 2)
@@ -213,6 +216,8 @@ float mg_gameLogic::MetroTrain::getSpeed(float elapsedTime)
 
 void MetroTrain::Recalculate(float elapsedTime)
 {
+	cb.OnPointIncrease(1);
+
 	// ensuring we have the correct size
 	if (trains.size() < size) // if we have to little trains
 	{
@@ -278,8 +283,8 @@ void MetroTrain::resize(int nsize)
 
 void mg_gameLogic::MetroTrain::reposistion(Line* line)
 {
-	GameLogic::Vec2f trainPosition = pos2d_from_pos1d(line_pos);		//Get Vector for current position
-	int index = 0;		
+	Vec2f trainPosition = pos2d_from_pos1d(line_pos);		//Get Vector for current position
+	int index = 0;
 	float minimumDistance = 9999999;
 	float trainDistance;
 
@@ -292,35 +297,89 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 			minimumDistance = trainPosition.distance(line->operator[](i));
 		}
 	}
-	int secondIndex=0;
+	int secondIndex = 0;
 	if (index > 0)										//Zoek het op een na dichtsbijzijnde punt. (kon ff geen engels)
 	{
-		if (trainPosition.distance(line->operator[](index-1)) > trainPosition.distance(line->operator[](index+1)))
+		if (trainPosition.distance(line->operator[](index - 1)) > trainPosition.distance(line->operator[](index + 1)))
 		{
 			secondIndex = index + 1;
 		}
 		else { secondIndex = index - 1; }
 	}
 	//IF second index cannot be found it's zero.
-	else 
+	else
 	{
 		secondIndex = 1;
 	}
-	trainPosition = line->operator[](index)- trainPosition;					//Get the trainsposition in a local vector
-	GameLogic::Vec2f vectorB = line->operator[](index) - line->operator[](secondIndex); //Vector A is train Vector
-	GameLogic::Vec2f vectorA1((vectorB*(trainPosition.dotProduct(vectorB)))/(vectorB.dotProduct(vectorB)));
+	trainPosition = line->operator[](index) - trainPosition;					//Get the trainsposition in a local vector
+	Vec2f vectorB = line->operator[](index) - line->operator[](secondIndex); //Vector A is train Vector
+	Vec2f vectorA1((vectorB*(trainPosition.dotProduct(vectorB))) / (vectorB.dotProduct(vectorB)));
 
 	//Calculate the distance based on the length of the vector and the second point
-	if (secondIndex > index) 
+	if (secondIndex > index)
 	{
-		trainDistance +=  vectorA1.magnitude();
+		trainDistance += vectorA1.magnitude();
 	}
-	else 
+	else
 	{
-		trainDistance -=  vectorA1.magnitude();
+		trainDistance -= vectorA1.magnitude();
 	}
 	line_pos = trainDistance;
 
 	//set the new line.
 	this->line = line;
 }
+
+void mg_gameLogic::MetroTrain::unloadPassengers(MetroStation &station)
+{
+	cb.OnPointIncrease(passengers[station.stationID]);
+	passengers[station.stationID] = 0;
+	auto stationIndexes = line->getStationIndexes();
+	MetroStation &nextStation = station;
+
+	for (int i = 0; i < stationIndexes.size(); i++)
+	{
+		if (stationIndexes[i].second == station)
+		{
+			if (state == State::FORWARD)
+			{
+				if ((i + 1) < stationIndexes.size()) {
+					nextStation = stationIndexes[i + 1].second;
+				}
+				else if( i!=0) { nextStation = stationIndexes[i - 1].second; }
+			}
+			else
+			{
+				if (i != 0)
+				nextStation = stationIndexes[i - 1].second;
+				else if ((i + 1) < stationIndexes.size()) 
+					nextStation = stationIndexes[i + 1].second;
+			}
+		}
+
+	}
+	for (int i = 0; i<passengers.size(); i++) 
+	{
+		if (station.paths[i] != nextStation.stationID) 
+		{
+			station.passengers[i] += passengers[i];
+		}
+	}
+	int spots = maxPassengers - getAmountOfPassengers(passengers);
+	std::array<int,MetroStation::stationCount> newPassengers = station.getPassengers(nextStation.stationID, spots);
+	for (int i = 0; i < passengers.size(); i ++ )
+	{
+		passengers[i] += newPassengers[i];
+	}
+}
+
+int mg_gameLogic::MetroTrain::getAmountOfPassengers(std::array<int, MetroStation::stationCount> passengers)
+{
+	int amountOfPassengers = 0;
+	for (int i = 0; i < passengers.size(); i++) 
+	{
+		amountOfPassengers += passengers[i];
+	}
+	return amountOfPassengers;
+}
+

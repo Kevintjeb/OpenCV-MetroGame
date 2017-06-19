@@ -5,12 +5,15 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-mg_gameLogic::Line::Line(std::list<GameLogic::Vec2f> line, std::list<MetroStation> stations) : positions(line.size() + stations.size()), distances(line.size() + stations.size()), metroStations(stations)
+//TODO CREATE REPOSITION FUNCTION
+
+mg_gameLogic::Line::Line(std::list<Vec2f> line, std::list<MetroStation> stations): positions(line.size()+stations.size()), distances(line.size() + stations.size()), metroStations(stations)
 {
 
 	//Getting and Setting the index of every station. Each Station is stored with its index in stationIndex
 	for (MetroStation &station : stations) {
-		pair<int, MetroStation> currentStation = make_pair(-1, station);
+		station.connectedLines.push_back(this);
+		pair<int, MetroStation> currentStation =  make_pair(-1, station);
 		int i = 0;
 		float previousDistance = 999999;
 		list<GameLogic::Vec2f>::iterator itr = line.begin();
@@ -29,8 +32,14 @@ mg_gameLogic::Line::Line(std::list<GameLogic::Vec2f> line, std::list<MetroStatio
 			}
 		}
 
-		line.insert(itr, currentStation.second.position);
-		stationIndex.push_back(currentStation);
+
+		if (previousDistance < 0.5) {							//0.5 is the margin of a station distance minimum
+			line.insert(itr, currentStation.second.position);
+			stationIndex.push_back(currentStation);
+		}
+		else { 
+			stations.remove(currentStation.second); 
+		}
 	}
 
 	int index = 0;
@@ -104,9 +113,20 @@ int Line::getIndexByPosition(const float position) const
 }
 
 //Returns the list of pairs with statins and indexes
-const std::list<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationIndexes() const
+const std::vector<std::pair<int, MetroStation>> mg_gameLogic::Line::getStationIndexes() const
 {
 	return stationIndex;
+}
+
+float mg_gameLogic::Line::getStationDistance(MetroStation * station) const
+{
+	for (std::pair<int, MetroStation> p : stationIndex)
+	{
+		if (p.second.stationID == station->stationID) 
+		{
+			return getDistance(p.first);
+		}
+	}
 }
 
 

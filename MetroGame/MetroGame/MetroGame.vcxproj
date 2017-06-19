@@ -181,6 +181,7 @@
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Timetable.cpp" />
     <ClCompile Include="Vect.cpp" />
     <ClCompile Include="VertexClass.cpp" />
     <ClCompile Include="Vision.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="Test.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Timetable.h" />
     <ClInclude Include="Vect.h" />
     <ClInclude Include="VertexClass.h" />
     <ClInclude Include="Vision.h" />

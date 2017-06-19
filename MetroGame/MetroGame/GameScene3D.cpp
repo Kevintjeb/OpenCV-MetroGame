@@ -333,7 +333,8 @@ void GameScene3D::prepare_lines2D()
 
 GameScene3D::GameScene3D()
 {
-	
+	cb.OnPointIncrease = [this](size_t p) {this->score.points += p; };
+	cb.OnGameOver = [this]() {this->score.is_game_over = true; };
 	width = SceneManager::getInstance().getWidth();
 	height = SceneManager::getInstance().getHeight();
 
@@ -362,6 +363,8 @@ GameScene3D::GameScene3D()
 	passengers.push_back(Passengers(-50, -50, Passengers::Priority::HIGH));
 	passengers.push_back(Passengers(-50, 50, Passengers::Priority::EMERENCY));
 	passengers.push_back(Passengers(50, -50, Passengers::Priority::EMERENCY));
+
+
 
 	SceneManager::getInstance().switchWindow3D();
 	//create city
@@ -436,7 +439,7 @@ void GameScene3D::render3D()
 	
 	largeFont3D->drawText(timeString, width - largeFont3D->textLength(timeString) - 10, 10);
 	largeFont3D->drawText(fps, width - largeFont3D->textLength(fps) - 10, 40);
-
+	largeFont3D->drawText("score: " + std::to_string(this->score.points), width - 160, 70);
 }
 
 void GameScene3D::render2D() {

@@ -4,6 +4,7 @@
 #include "Line.h"
 #include "RenderableOutput.h"
 #include <vector>
+#include <array>
 #include <tuple>
 
 namespace mg_gameLogic
@@ -16,8 +17,13 @@ namespace mg_gameLogic
 			FORWARD,
 			BACKWARD
 		};
-
+		struct Callback
+		{
+			std::function<void(size_t)> OnPointIncrease;
+			std::function<void()>		OnGameOver;
+		};
 	private:
+		Callback cb;
 		Line *line;
 		float line_pos;
 		State state;
@@ -43,12 +49,15 @@ namespace mg_gameLogic
 		static constexpr float train_length = 0.2f*scale;
 		static constexpr float train_spacing = 0.025f*scale;
 		static constexpr bool __debug_output = false;
-		
-		explicit MetroTrain(Line* line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
+		std::array<int, MetroStation::stationCount > passengers{0};
+		int maxPassengers = 25;
+		explicit MetroTrain(Callback cb,  Line* line, float init_pos = 0.0f, State state = State::FORWARD, int size = 1);
 		float getSpeed(float);
 		void Recalculate(float elapsedTime);
 		int get_size() const;
 		void resize(int nsize);
 		void reposistion(Line* line);
+		void unloadPassengers(MetroStation &station);
+		int getAmountOfPassengers(std::array<int, MetroStation::stationCount> passengers);
 	};
 }

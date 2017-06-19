@@ -20,7 +20,7 @@ namespace mg_gameLogic
 		std::vector<float> distances;
 		std::vector<GameLogic::Vec2f> positions;
 		std::list<MetroStation> metroStations;
-		std::list<std::pair<int, MetroStation>> stationIndex;
+		std::vector<std::pair<int, MetroStation>> stationIndex;
 	public:
 		Line() = delete;
 		Line(const Line&) = delete;
@@ -29,8 +29,9 @@ namespace mg_gameLogic
 
 		std::size_t size() const;
 		int getIndexByPosition(float position) const;
-		const std::list<std::pair<int, MetroStation>>  getStationIndexes() const;
-		const GameLogic::Vec2f& operator[](int i) const;
+		const std::vector<std::pair<int, MetroStation>>  getStationIndexes() const;
+		float getStationDistance(MetroStation * station) const;
+		const Vec2f& operator[](int i) const;
 		float getDistance(int i) const;
 
 		const std::vector<GameLogic::Vec2f> &getLine() const;

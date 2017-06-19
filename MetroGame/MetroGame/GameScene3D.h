@@ -3,7 +3,7 @@
 #include "system.h"
 #include "iostream"
 #include "ModelLoader.h"
-
+#include "Timetable.h"
 #include "IScene.h"
 #include "Font.h"
 #include "Vect.h"
@@ -51,6 +51,13 @@ private:
 	void prepare_lines2D();
 	ModelLoader modelLoader;
 	void setAllKeysFalse();
+
+	struct {
+		size_t points;
+		bool is_game_over;
+	}score = { 0, false };
+
+	mg_gameLogic::MetroTrain::Callback cb;
 
 	std::map<std::string, int> modelsMap;
 	std::map<std::string, int>::iterator it;
