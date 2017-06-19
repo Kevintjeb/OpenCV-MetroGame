@@ -131,7 +131,8 @@ void MainMenuScene::render2D()
 
 void MainMenuScene::onEnter() {
 	//Do some onEnter stuff, maybe intro animation?
-	std::cout << "Entered MainMenuScene" << std::endl;
+	lastTime = glutGet(GLUT_ELAPSED_TIME);
+
 }
 
 void MainMenuScene::update()

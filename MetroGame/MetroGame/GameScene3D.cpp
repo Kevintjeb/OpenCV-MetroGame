@@ -590,6 +590,7 @@ void GameScene3D::onIdle()
 		SceneManager::getInstance().loadScene(endScene);
 		return;
 	}
+	
 	if (keys['p']) {
 		SceneManager::getInstance().pauseScene();
 		return;

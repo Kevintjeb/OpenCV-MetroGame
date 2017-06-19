@@ -15,6 +15,8 @@ public:
 	IScene& getCurrentScene();
 	int getWidth();
 	int getHeight();
+	void showHelp();
+	void backFromHelp();
 	void init();
 	static SceneManager& getInstance();
 	void switchWindow2D();
@@ -22,6 +24,7 @@ public:
 	GLuint getWindow3D();
 
 private:
+	bool inHelp = false;
 	int width, height;
 	GLuint window2D, window3D;
 	bool isInit = false;
@@ -43,6 +46,7 @@ private:
 	IScene* pausedScene;
 
 	static IScene* pauseSceneVar;
+	static IScene* helpScene;
 
 };
 
