@@ -31,6 +31,7 @@ using std::endl;
 
 Font* GameScene3D::largeFont3D = nullptr;
 IScene* GameScene3D::endScene = nullptr;
+Vision vision;
 
 
 //Random scale factor for a city model
@@ -365,24 +366,6 @@ GameScene3D::GameScene3D()
 	SceneManager::getInstance().switchWindow3D();
 	//create city
 	createCityList();
-
-	//debug data
-
-	//line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } }, {});
-	//train2 = new MetroTrain(line2);
-	//handle2 = mg_gameLogic::allocate_line(RenderableLine(line2->getLine(), LineType::Green));
-
-	//line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } }, {});
-	//train3 = new MetroTrain(line3);
-	//handle3 = mg_gameLogic::allocate_line(RenderableLine(line3->getLine(), LineType::Blue));
-
-	//line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } }, {});
-	//train4 = new MetroTrain(line4);
-	//handle4 = mg_gameLogic::allocate_line(RenderableLine(line4->getLine(), LineType::Red));
-
-	//line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, {});
-	//train5 = new MetroTrain(line5);
-	//handle5 = mg_gameLogic::allocate_line(RenderableLine(line5->getLine(), LineType::Green));
 }
 
 
@@ -505,11 +488,58 @@ void GameScene3D::update()
 	if(++frameCounter % 300 == 0)
 	{ 
 		vision.getStations();
-		vision.getLines(LINE_RED);
-		vision.getLines(LINE_GREEN);	
-		vision.getLines(LINE_BLUE);
+		std::list<GameLogic::Vec2f> redlines = vision.getLines(LINE_RED);
+		std::list<GameLogic::Vec2f> greenlines = vision.getLines(LINE_GREEN);
+		std::list<GameLogic::Vec2f> bluelines = vision.getLines(LINE_BLUE);
+		clear_lines();
+		/*if (red)
+			delete red;
+		if (blue)
+			delete blue;
+		if (green)
+			delete green;*/
+
+		red = new Line(redlines, {});
+		green = new Line(greenlines, {});
+		blue = new Line(bluelines, {});
+
+		vector<GameLogic::Vec2f> redLineVec{};
+		for (auto l : redlines)
+		{
+			redLineVec.push_back(l);
+		}
+		vector<GameLogic::Vec2f> blueLineVec{};
+		for (auto l : bluelines)
+		{
+			blueLineVec.push_back(l);
+		}
+		vector<GameLogic::Vec2f> greenLineVec{};
+		for (auto l : greenlines)
+		{
+			greenLineVec.push_back(l);
+		}
+		allocate_line(RenderableLine(redLineVec, mg_gameLogic::LineType::Red));
+		allocate_line(RenderableLine(blueLineVec, mg_gameLogic::LineType::Blue));
+		allocate_line(RenderableLine(greenLineVec, mg_gameLogic::LineType::Green));
+
+		if (!metroBlue)
+			metroBlue = new MetroTrain(blue);
+		if (!metroGreen)
+			metroGreen = new MetroTrain(green);
+		if (!metroRed)
+			metroRed = new MetroTrain(red);
+
+		metroBlue->reposistion(blue);
+		metroGreen->reposistion(green);
+		metroRed->reposistion(red);
+
 	}
-	
+	if (metroBlue) {
+		metroBlue->Recalculate(deltaTime);
+		metroGreen->Recalculate(deltaTime);
+		metroRed->Recalculate(deltaTime);
+	}
+
 }
 
 void GameScene3D::onEnter()

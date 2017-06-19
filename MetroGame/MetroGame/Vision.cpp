@@ -416,7 +416,6 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 			{
 				GameLogic::Vec2f vector = GameLogic::Vec2f((((coords[j][i]->x - 260) / ((image.cols - 500) / 2.0f)) - 1.0f), ((coords[j][i]->y - 60) / ((image.rows - 180) / 2.0f)) - 1.0f);
 				lines.push_back(vector);
-				test.push_back(vector);
 			}
 		}
 
@@ -440,47 +439,47 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 	}
 	allocate_line(pLine);
 	Mat redLines, greenLines, blueLines;
-	switch (linecolour)
-	{
-	case LINE_RED:
-		redLines = image.clone();
-		for (int i = 0; i < coords.size(); i++)
-		{
-			for (int y = 1; y < coords[i].size(); y++)
-			{
-				line(redLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
-			}
-		}
-		namedWindow("RedLines", WINDOW_AUTOSIZE);
-		imshow("RedLines", redLines);
-		break;
-	case LINE_GREEN:
-		greenLines = image.clone();
-		for (int i = 0; i < coords.size(); i++)
-		{
-			for (int y = 1; y < coords[i].size(); y++)
-			{
-				line(greenLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
-			}
-		}
-		namedWindow("GreenLines", WINDOW_AUTOSIZE);
-		imshow("GreenLines", greenLines);
-		break;
-	case LINE_BLUE:
-		blueLines = image.clone();
-		for (int i = 0; i < coords.size(); i++)
-		{
-			for (int y = 1; y < coords[i].size(); y++)
-			{
-				line(blueLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
-			}
-		}
-		namedWindow("BlueLines", WINDOW_AUTOSIZE);
-		imshow("BlueLines", blueLines);
-		break;
-	default:
-		break;
-	}
+	//switch (linecolour)
+	//{
+	//case LINE_RED:
+	//	redLines = image.clone();
+	//	for (int i = 0; i < coords.size(); i++)
+	//	{
+	//		for (int y = 1; y < coords[i].size(); y++)
+	//		{
+	//			line(redLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
+	//		}
+	//	}
+	//	namedWindow("RedLines", WINDOW_AUTOSIZE);
+	//	imshow("RedLines", redLines);
+	//	break;
+	//case LINE_GREEN:
+	//	greenLines = image.clone();
+	//	for (int i = 0; i < coords.size(); i++)
+	//	{
+	//		for (int y = 1; y < coords[i].size(); y++)
+	//		{
+	//			line(greenLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
+	//		}
+	//	}
+	//	namedWindow("GreenLines", WINDOW_AUTOSIZE);
+	//	imshow("GreenLines", greenLines);
+	//	break;
+	//case LINE_BLUE:
+	//	blueLines = image.clone();
+	//	for (int i = 0; i < coords.size(); i++)
+	//	{
+	//		for (int y = 1; y < coords[i].size(); y++)
+	//		{
+	//			line(blueLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
+	//		}
+	//	}
+	//	namedWindow("BlueLines", WINDOW_AUTOSIZE);
+	//	imshow("BlueLines", blueLines);
+	//	break;
+	//default:
+	//	break;
+	//}
 	return lines;
 }
 

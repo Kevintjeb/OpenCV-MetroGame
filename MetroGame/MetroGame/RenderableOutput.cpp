@@ -23,6 +23,11 @@ void mg_gameLogic::clear_renderables() {
 	lines.clear();
 }
 
+void mg_gameLogic::clear_lines()
+{
+	lines.clear();
+}
+
 
 void mg_gameLogic::deallocate_renderable(RenderablePointer renderable)
 {

@@ -38,11 +38,11 @@ void SceneManager::init() {
 	if (!isInit) {
 		window3D = createWindow(1920, 1080, "3D window", []() {SceneManager::getInstance().render3D(); });
 		HGLRC context3D = wglGetCurrentContext();
-		glutFullScreen();
+	//	glutFullScreen();
 
 		window2D = createWindow(1920, 1080, "2D window", []() {SceneManager::getInstance().render2D(); });
 		HGLRC context2D = wglGetCurrentContext();
-		glutFullScreen();
+	//	glutFullScreen();
 
 		if (!wglShareLists(context3D, context2D))
 		{

@@ -14,6 +14,7 @@ namespace mg_gameLogic
 	void deallocate_renderable(RenderablePointer);
 	void deallocate_line(LinePointer);
 	void clear_renderables();
+	void clear_lines();
 
 	std::list<Renderable>& get_renderables();
 	std::list<RenderableLine>& get_lines();

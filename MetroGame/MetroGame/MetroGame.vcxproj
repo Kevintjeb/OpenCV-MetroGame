@@ -113,7 +113,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>irrklang/lib/Winx64-visualStudio;freeglut/lib/x64</AdditionalLibraryDirectories>
       <AdditionalDependencies>freeglut.lib;opengl32.lib;glu32.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>freeglut/lib/x64;opencv\build\x64\vc14\lib;zbar\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>freeglut/lib/x64;opencv\build\x64\vc14\lib;zbar\lib;irrklang\lib\Winx64-visualStudio</AdditionalLibraryDirectories>
       <AdditionalDependencies>libzbar64-0.lib;opencv_world320d.lib;freeglut.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
