@@ -9,15 +9,15 @@ namespace mg_gameLogic
 	class Renderable
 	{
 	public:
-		Vec3f position, rotation, scale;
+		GameLogic::Vec3f position, rotation, scale;
 		float angle;
 		std::string model;
 
 		Renderable();
 		Renderable(const Renderable&);
 
-		Renderable(Vec3f pos, float angle, Vec3f rot, Vec3f scale = Vec3f(1, 1, 1));
-		Renderable(std::string model, Vec3f pos, float angle, Vec3f rot, Vec3f scale = Vec3f(1, 1, 1));
+		Renderable(GameLogic::Vec3f pos, float angle, GameLogic::Vec3f rot, GameLogic::Vec3f scale = GameLogic::Vec3f(1, 1, 1));
+		Renderable(std::string model, GameLogic::Vec3f pos, float angle, GameLogic::Vec3f rot, GameLogic::Vec3f scale = GameLogic::Vec3f(1, 1, 1));
 		~Renderable();
 	};
 
@@ -29,12 +29,12 @@ namespace mg_gameLogic
 	class RenderableLine
 	{
 	public:
-		std::vector<Vec3f> line;
+		std::vector<GameLogic::Vec3f> line;
 		LineType type;
 
 		RenderableLine();
 		RenderableLine(const RenderableLine&);
 
-		explicit RenderableLine(const std::vector<Vec2f>&, LineType);
+		explicit RenderableLine(const std::vector<GameLogic::Vec2f>&, LineType);
 	};
 }

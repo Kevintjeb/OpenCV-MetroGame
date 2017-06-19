@@ -1,11 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="bigimage.cpp" />
     <ClCompile Include="errors.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameEndScene.cpp" />
     <ClCompile Include="GameScene3D.cpp" />
+    <ClCompile Include="HelpScene.cpp" />
     <ClCompile Include="Line.cpp" />
+    <ClCompile Include="linedetection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuScene.cpp" />
     <ClCompile Include="Main_old.cpp" />
@@ -25,13 +28,16 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vect.cpp" />
     <ClCompile Include="VertexClass.cpp" />
-    <ClCompile Include="HelpScene.cpp" />
+    <ClCompile Include="Vision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameEndScene.h" />
     <ClInclude Include="GameScene3D.h" />
+    <ClInclude Include="HelpScene.h" />
+    <ClInclude Include="linedetection.h" />
+    <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="IScene.h" />
     <ClInclude Include="MetroStation.h" />
     <ClInclude Include="Line.h" />
@@ -52,6 +58,6 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vect.h" />
     <ClInclude Include="VertexClass.h" />
-    <ClInclude Include="HelpScene.h" />
+    <ClInclude Include="Vision.h" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #include "Vect.h"
 #include <math.h>
+using namespace GameLogic;
 
 Vec3f::Vec3f(float x, float y, float z)
 {
@@ -36,13 +37,13 @@ Vec2f::Vec2f()
 	this->y = 0;
 }
 
-Vec2f::Vec2f(const Vec2f & other)
+Vec2f::Vec2f(const GameLogic::Vec2f & other)
 {
 	this->x = other.x;
 	this->y = other.y;
 }
 
-float& Vec2f::operator [](int index)
+float& GameLogic::Vec2f::operator [](int index)
 {
 	return v[index];
 }

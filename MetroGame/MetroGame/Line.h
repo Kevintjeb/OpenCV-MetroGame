@@ -11,28 +11,28 @@
 
 namespace mg_gameLogic
 {
-	std::list<Vec2f> filterData(const std::list<Vec2f> &data);
-	bool compareVector(Vec2f &v1,Vec2f &v2);
+	std::list<GameLogic::Vec2f> filterData(const std::list<GameLogic::Vec2f> &data);
+	bool compareVector(GameLogic::Vec2f &v1, GameLogic::Vec2f &v2);
 
 	class Line
 	{
 	private:
 		std::vector<float> distances;
-		std::vector<Vec2f> positions;
+		std::vector<GameLogic::Vec2f> positions;
 		std::list<MetroStation> metroStations;
 		std::list<std::pair<int, MetroStation>> stationIndex;
 	public:
 		Line() = delete;
 		Line(const Line&) = delete;
-		explicit Line(std::list<Vec2f> line, std::list<MetroStation> stations);
+		explicit Line(std::list<GameLogic::Vec2f> line, std::list<MetroStation> stations);
 		~Line();
-		
+
 		std::size_t size() const;
 		int getIndexByPosition(float position) const;
 		const std::list<std::pair<int, MetroStation>>  getStationIndexes() const;
-		const Vec2f& operator[](int i) const;
+		const GameLogic::Vec2f& operator[](int i) const;
 		float getDistance(int i) const;
 
-		const std::vector<Vec2f> &getLine() const;
+		const std::vector<GameLogic::Vec2f> &getLine() const;
 	};
 }

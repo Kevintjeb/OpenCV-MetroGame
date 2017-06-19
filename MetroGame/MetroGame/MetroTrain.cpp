@@ -8,16 +8,16 @@
 using namespace mg_gameLogic;
 using namespace std;
 
-inline Vec2f MetroTrain::pos2d_from_pos1d(float pos)
+inline GameLogic::Vec2f MetroTrain::pos2d_from_pos1d(float pos)
 {
 	// since the position is on a vector between two points, we first get the points
 
 	int index = line->getIndexByPosition(pos); 
 
-	Vec2f far = line->operator[](index+1), close = line->operator[](index);
+	GameLogic::Vec2f far = line->operator[](index+1), close = line->operator[](index);
 
 	// we then calculate the vector between them, and then normalize it
-	Vec2f normal(close.x - far.x, close.y - far.y);
+	GameLogic::Vec2f normal(close.x - far.x, close.y - far.y);
 	float mag = sqrt(normal.x*normal.x + normal.y*normal.y);
 	normal.x /= mag;
 	normal.y /= mag;
@@ -27,8 +27,7 @@ inline Vec2f MetroTrain::pos2d_from_pos1d(float pos)
 	normal.x *= dist;
 	normal.y *= dist;
 
-	// we then add the vector the ther close point in order to get the position
-	Vec2f pos2d(close.x + normal.x, close.y + normal.y);
+	GameLogic::Vec2f pos2d(close.x + normal.x, close.y + normal.y);
 	return pos2d;
 }
 
@@ -59,7 +58,7 @@ inline float MetroTrain::checkAndSetPosRange(float pos)
 }
 
 // @TODO optimize away, this version is written for clarity and is not efficient in any way shape or form
-inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositionAndDistance(float pos)
+inline std::pair<GameLogic::Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositionAndDistance(float pos)
 {
 	int index = line->getIndexByPosition(pos) + (state == State::FORWARD ? 0 : +1);
 	
@@ -80,21 +79,21 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 											; };
 	const auto back = [this]()->int {return state == State::FORWARD ? 0 : line->size() - 1; };
 
-	const Vec2f B = line->operator[](index);
-	const Vec2f A = line->operator[](next(index));
-	const Vec2f P = (A - B).unit() * (con_pos(pos) - get_dist(index)) + B;
+	const GameLogic::Vec2f B = line->operator[](index);
+	const GameLogic::Vec2f A = line->operator[](next(index));
+	const GameLogic::Vec2f P = (A - B).unit() * (con_pos(pos) - get_dist(index)) + B;
 	
 	if ((P - B).magnitude() >= train_length) // we check if P' is between P and line[index]
 	{
 		const float dist_from_B = con_pos(pos) - get_dist(index) - train_length;
-		const Vec2f P_comp((P - B).unit() * dist_from_B + B);
-		return pair<Vec2f, float>(P_comp, con_pos( dist_from_B + get_dist(index)));
+		const GameLogic::Vec2f P_comp((P - B).unit() * dist_from_B + B);
+		return pair<GameLogic::Vec2f, float>(P_comp, con_pos( dist_from_B + get_dist(index)));
 	}
 	else // we go over the previus line pieces
 	{
 		for (index = prev(index); is_invalid(index) == false; index = prev(index))
 		{
-			const Vec2f L = line->operator[](index);
+			const GameLogic::Vec2f L = line->operator[](index);
 
 			// if L_i is with the circle then P' can't be on L_i L_i+1
 			if ((L - P).magnitude() < train_length) continue;
@@ -104,7 +103,7 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 				throw "Invalid line";
 #endif
 
-			const Vec2f LV(line->operator[](next(index)) - L);
+			const GameLogic::Vec2f LV(line->operator[](next(index)) - L);
 
 
 			// since we use the slope often we precompute it
@@ -124,15 +123,15 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 			const float y_2 = s*(x_2 - L.x) + L.y;
 
 			// we convert the intersection points to positions
-			const Vec2f I_1(x_1, y_1);
-			const Vec2f I_2(x_2, y_2);
+			const GameLogic::Vec2f I_1(x_1, y_1);
+			const GameLogic::Vec2f I_2(x_2, y_2);
 
 			// we callculate the distance between L and the intersection points
 			const float dist_1 = (I_1 - L).magnitude();
 			const float dist_2 = (I_2 - L).magnitude();
 
 			// we select the closest intersection point
-			using Ret = pair<Vec2f, float>;
+			using Ret = pair<GameLogic::Vec2f, float>;
 			Ret ret = dist_1 < dist_2 ? Ret(I_1, dist_1) : Ret(I_2, dist_2);
 			ret.second += get_dist(index);
 			ret.second = con_pos(ret.second);
@@ -144,7 +143,7 @@ inline std::pair<Vec2f, float> mg_gameLogic::MetroTrain::findComplementaryPositi
 		}
 
 		// if the point isn't on the line, we return a vector of [NaN, NaN] and a distance of NaN
-		return pair<Vec2f, float>({ NAN, NAN }, NAN);
+		return pair<GameLogic::Vec2f, float>({ NAN, NAN }, NAN);
 	}
 }
 
@@ -219,7 +218,7 @@ void MetroTrain::Recalculate(float elapsedTime)
 	{
 		int diff = size - trains.size(); // we need 'diff' new trains
 		for (int i = 0; i < diff; ++i) // we allocate new Renderables 
-			trains.push_back(allocate_renderable(Renderable("models/Metro/metro.obj", Vec3f(0, -92.8f, 0), 0.0f, Vec3f(0, 1, 0), Vec3f(scale, scale, scale))));
+			trains.push_back(allocate_renderable(Renderable("models/Metro/metro.obj", GameLogic::Vec3f(0, -92.8f, 0), 0.0f, GameLogic::Vec3f(0, 1, 0), GameLogic::Vec3f(scale, scale, scale))));
 	}
 	else if (trains.size() > size) // if we have to many trains
 	{
@@ -279,7 +278,7 @@ void MetroTrain::resize(int nsize)
 
 void mg_gameLogic::MetroTrain::reposistion(Line* line)
 {
-	Vec2f trainPosition = pos2d_from_pos1d(line_pos);		//Get Vector for current position
+	GameLogic::Vec2f trainPosition = pos2d_from_pos1d(line_pos);		//Get Vector for current position
 	int index = 0;		
 	float minimumDistance = 9999999;
 	float trainDistance;
@@ -308,8 +307,8 @@ void mg_gameLogic::MetroTrain::reposistion(Line* line)
 		secondIndex = 1;
 	}
 	trainPosition = line->operator[](index)- trainPosition;					//Get the trainsposition in a local vector
-	Vec2f vectorB = line->operator[](index) - line->operator[](secondIndex); //Vector A is train Vector
-	Vec2f vectorA1((vectorB*(trainPosition.dotProduct(vectorB)))/(vectorB.dotProduct(vectorB)));
+	GameLogic::Vec2f vectorB = line->operator[](index) - line->operator[](secondIndex); //Vector A is train Vector
+	GameLogic::Vec2f vectorA1((vectorB*(trainPosition.dotProduct(vectorB)))/(vectorB.dotProduct(vectorB)));
 
 	//Calculate the distance based on the length of the vector and the second point
 	if (secondIndex > index) 

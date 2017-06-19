@@ -29,12 +29,12 @@ namespace mg_gameLogic
 		std::vector<RenderablePointer> trains;
 		int size;
 
-		inline Vec2f pos2d_from_pos1d(float pos);
+		inline GameLogic::Vec2f pos2d_from_pos1d(float pos);
 		inline float checkAndSetPosRange(float pos);
 
 		// return: position and the position's distance
 		// error : [NaN, Nan], Nan
-		inline std::pair<Vec2f, float> findComplementaryPositionAndDistance(float pos);
+		inline std::pair<GameLogic::Vec2f, float> findComplementaryPositionAndDistance(float pos);
 
 	public:
 		static constexpr float scale = 0.60f;

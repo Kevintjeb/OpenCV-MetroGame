@@ -55,28 +55,38 @@ private:
 	std::map<std::string, int> modelsMap;
 	std::map<std::string, int>::iterator it;
 
+	Line* red = nullptr;
+	Line* green = nullptr;
+	Line* blue = nullptr;
+
+	MetroTrain* metroRed = nullptr;
+	MetroTrain* metroBlue = nullptr;
+	MetroTrain* metroGreen = nullptr;
+
+
+
 	GLuint window_db;
 
-	LinePointer handle;
-	Renderable testTrain;
-	Line *line;
-	MetroTrain *train;
+	//LinePointer handle;
+	//Renderable testTrain;
+	//Line *line;
+	//MetroTrain *train;
 
-	LinePointer handle2;
-	Line *line2;
-	MetroTrain *train2;
+	//LinePointer handle2;
+	//Line *line2;
+	//MetroTrain *train2;
 
-	LinePointer handle3;
-	Line *line3;
-	MetroTrain *train3;
+	//LinePointer handle3;
+	//Line *line3;
+	//MetroTrain *train3;
 
-	LinePointer handle4;
-	Line *line4;
-	MetroTrain *train4;
+	//LinePointer handle4;
+	//Line *line4;
+	//MetroTrain *train4;
 
-	LinePointer handle5;
-	Line *line5;
-	MetroTrain *train5;
+	//LinePointer handle5;
+	//Line *line5;
+	//MetroTrain *train5;
 
 	std::vector <VertexClass> TopPlane;
 	std::vector <VertexClass> GroundPlane;

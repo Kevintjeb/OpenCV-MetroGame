@@ -1,6 +1,25 @@
 #include "GameScene3D.h"
 #include "GameEndScene.h"
 
+#include "Vect.h"
+#include "Line.h"
+#include <math.h>
+#include <cstdio>
+#include <map>
+#include <time.h>
+
+#include "VertexClass.h"
+#include "Renderable.h"
+
+#include "Texture.h"
+
+#include "stb_image.h"
+#include "RenderableOutput.h"
+
+#include "SceneManager.h"
+#include "MainMenuScene.h"
+#include "Vision.h"
+
 using namespace mg_system;
 using namespace mg_gameLogic;
 using std::cout;
@@ -12,6 +31,7 @@ using std::endl;
 
 Font* GameScene3D::largeFont3D = nullptr;
 IScene* GameScene3D::endScene = nullptr;
+Vision vision;
 
 
 //Random scale factor for a city model
@@ -28,66 +48,66 @@ float GameScene3D::randScale(float standScale)
 void GameScene3D::createCityList()
 {
 	srand(time(NULL));
-	Vec3f rot = Vec3f(0.0f, 1.0f, 0.0f);
+	GameLogic::Vec3f rot = GameLogic::Vec3f(0.0f, 1.0f, 0.0f);
 	float angle = 45;
 	std::string model = "models/city/city.obj";
 
 	int layer = 0;
 	float standScale = 0.2f;
-	Vec3f pos, scale;
+	GameLogic::Vec3f pos, scale;
 
 	for (float z = 100.0f; z > -100.0f; z -= 25.0f)
 	{
 		switch (layer)
 		{
 		case 0:
-			pos = Vec3f(0.0f, 4.0f, 100.0f);
-			scale = Vec3f(standScale, randScale(standScale), standScale);
+			pos = GameLogic::Vec3f(0.0f, 4.0f, 100.0f);
+			scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 			renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			break;
 		case 1:
 			for (float x = 25.0f; x > -26.0f; x -= 50.0f)
 			{
-				pos = Vec3f(x, 4.0f, z);
-				scale = Vec3f(standScale, randScale(standScale), standScale);
+				pos = GameLogic::Vec3f(x, 4.0f, z);
+				scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 2:
 			for (float x = 50.0f; x > -51.0f; x -= 50.0f)
 			{
-				pos = Vec3f(x, 4.0f, z);
-				scale = Vec3f(standScale, randScale(standScale), standScale);
+				pos = GameLogic::Vec3f(x, 4.0f, z);
+				scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 3:
 			for (float x = 75.0f; x > -76.0f; x -= 50.0f)
 			{
-				pos = Vec3f(x, 4.0f, z);
-				scale = Vec3f(standScale, randScale(standScale), standScale);
+				pos = GameLogic::Vec3f(x, 4.0f, z);
+				scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 4:
 			for (float x = 50.0f; x > -51.0f; x -= 50.0f)
 			{
-				pos = Vec3f(x, 4.0f, z);
-				scale = Vec3f(standScale, randScale(standScale), standScale);
+				pos = GameLogic::Vec3f(x, 4.0f, z);
+				scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 5:
 			for (float x = 25.0f; x > -26.0f; x -= 50.0f)
 			{
-				pos = Vec3f(x, 4.0f, z);
-				scale = Vec3f(standScale, randScale(standScale), standScale);
+				pos = GameLogic::Vec3f(x, 4.0f, z);
+				scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 				renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			}
 			break;
 		case 6:
-			pos = Vec3f(0.0f, 4.0f, -50.0f);
-			scale = Vec3f(standScale, randScale(standScale), standScale);
+			pos = GameLogic::Vec3f(0.0f, 4.0f, -50.0f);
+			scale = GameLogic::Vec3f(standScale, randScale(standScale), standScale);
 			renderablePointers.push_back(mg_gameLogic::allocate_renderable(Renderable(model, pos, angle, rot, scale)));
 			break;
 
@@ -214,7 +234,7 @@ void GameScene3D::draw2DRenderables()
 	{
 		glPushMatrix();
 
-		glRotatef(45,0,1,0);
+		glRotatef(45, 0, 1, 0);
 
 		glTranslatef(renderable.position.x, renderable.position.y, renderable.position.z);
 		glRotatef(renderable.angle, renderable.rotation.x, renderable.rotation.y, renderable.rotation.z);
@@ -346,30 +366,6 @@ GameScene3D::GameScene3D()
 	SceneManager::getInstance().switchWindow3D();
 	//create city
 	createCityList();
-
-	//debug data
-	line = new Line({ { -1.0f, -1.0f },{ 0.0, -0.25f },{ 0.75f, 0.5f },{ 0.0f, 0.90f },{ -0.75f, 0.25f },{ -1.0f, -0.5f },{ -1.0f, 0.0f },{ 0.0f, 1.1f },{ 0.5f, 0.5f },{ 0.75f, 0.25f },{ -1.0f, -0.90f } }, {});
-	train = new MetroTrain(line, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 5);
-	handle = mg_gameLogic::allocate_line(RenderableLine(line->getLine(), LineType::Red));
-
-	line2 = new Line({ { 0.5f, 0.5f },{ -0.5, -0.5f } }, {});
-	train2 = new MetroTrain(line2, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 2);
-	handle2 = mg_gameLogic::allocate_line(RenderableLine(line2->getLine(), LineType::Green));
-
-	line3 = new Line({ { -0.5f, 0.5f },{ 0.5f, -0.5f } }, {});
-	train3 = new MetroTrain(line3, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 3);
-	handle3 = mg_gameLogic::allocate_line(RenderableLine(line3->getLine(), LineType::Blue));
-
-	line4 = new Line({ { -1.0f, 0.0f },{ 0.0f, -1.0f } }, {});
-	train4 = new MetroTrain(line4,0.0f,mg_gameLogic::MetroTrain::State::FORWARD, 4);
-	handle4 = mg_gameLogic::allocate_line(RenderableLine(line4->getLine(), LineType::Red));
-
-	line5 = new Line({ { 0.0f, 1.0f },{ 1.0f, 0.0f } }, {});
-	train5 = new MetroTrain(line5, 0.0f, mg_gameLogic::MetroTrain::State::FORWARD, 2);
-	handle5 = mg_gameLogic::allocate_line(RenderableLine(line5->getLine(), LineType::Green));
-
-
-	MetroStation* station = new MetroStation(Vec2f(20, 20), 20);
 }
 
 
@@ -486,18 +482,70 @@ void GameScene3D::render2D() {
 	glEnable(GL_TEXTURE_2D);
 
 }
-
+int frameCounter = 0;
 void GameScene3D::update()
 {
-	train->Recalculate(deltaTime);
-	train2->Recalculate(deltaTime);
-	train3->Recalculate(deltaTime);
-	train4->Recalculate(deltaTime);
-	train5->Recalculate(deltaTime);
+	if(++frameCounter % 300 == 0)
+	{ 
+		vision.getStations();
+		std::list<GameLogic::Vec2f> redlines = vision.getLines(LINE_RED);
+		std::list<GameLogic::Vec2f> greenlines = vision.getLines(LINE_GREEN);
+		std::list<GameLogic::Vec2f> bluelines = vision.getLines(LINE_BLUE);
+		clear_lines();
+		/*if (red)
+			delete red;
+		if (blue)
+			delete blue;
+		if (green)
+			delete green;*/
+
+		red = new Line(redlines, {});
+		green = new Line(greenlines, {});
+		blue = new Line(bluelines, {});
+
+		vector<GameLogic::Vec2f> redLineVec{};
+		for (auto l : redlines)
+		{
+			redLineVec.push_back(l);
+		}
+		vector<GameLogic::Vec2f> blueLineVec{};
+		for (auto l : bluelines)
+		{
+			blueLineVec.push_back(l);
+		}
+		vector<GameLogic::Vec2f> greenLineVec{};
+		for (auto l : greenlines)
+		{
+			greenLineVec.push_back(l);
+		}
+		allocate_line(RenderableLine(redLineVec, mg_gameLogic::LineType::Red));
+		allocate_line(RenderableLine(blueLineVec, mg_gameLogic::LineType::Blue));
+		allocate_line(RenderableLine(greenLineVec, mg_gameLogic::LineType::Green));
+
+		if (!metroBlue)
+			metroBlue = new MetroTrain(blue);
+		if (!metroGreen)
+			metroGreen = new MetroTrain(green);
+		if (!metroRed)
+			metroRed = new MetroTrain(red);
+
+		metroBlue->reposistion(blue);
+		metroGreen->reposistion(green);
+		metroRed->reposistion(red);
+
+	}
+	if (metroBlue) {
+		metroBlue->Recalculate(deltaTime);
+		metroGreen->Recalculate(deltaTime);
+		metroRed->Recalculate(deltaTime);
+	}
+
 }
 
 void GameScene3D::onEnter()
 {
+	vision.start();
+	vision.calibrate();
 	lastTime = glutGet(GLUT_ELAPSED_TIME);
 	setAllKeysFalse();
 }
@@ -594,6 +642,13 @@ void GameScene3D::onIdle()
 	if (keys['p']) {
 		SceneManager::getInstance().pauseScene();
 		return;
+	}
+	if (keys['f']) {
+		glutFullScreen();
+	}
+	if (keys['g']) {
+		glutPositionWindow(0, 0);
+		glutReshapeWindow(1200, 900);
 	}
 
 	/*if (keys[' ']) camera.height -= 25 * deltaTime;
