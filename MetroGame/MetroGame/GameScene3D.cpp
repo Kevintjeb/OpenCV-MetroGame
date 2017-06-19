@@ -502,41 +502,52 @@ void GameScene3D::update()
 		red = new Line(redlines, {});
 		green = new Line(greenlines, {});
 		blue = new Line(bluelines, {});
+		if (redlines.size() != 0) {
 
-		vector<GameLogic::Vec2f> redLineVec{};
-		for (auto l : redlines)
-		{
-			redLineVec.push_back(l);
+
+			vector<GameLogic::Vec2f> redLineVec{};
+			for (auto l : redlines)
+			{
+				redLineVec.push_back(l);
+			}
+			allocate_line(RenderableLine(redLineVec, mg_gameLogic::LineType::Red));
+			if (!metroRed)
+				metroRed = new MetroTrain(red);
+			metroRed->reposistion(red);
 		}
-		vector<GameLogic::Vec2f> blueLineVec{};
-		for (auto l : bluelines)
-		{
-			blueLineVec.push_back(l);
+		if (bluelines.size() != 0) {
+			vector<GameLogic::Vec2f> blueLineVec{};
+			for (auto l : bluelines)
+			{
+				blueLineVec.push_back(l);
+			}
+			allocate_line(RenderableLine(blueLineVec, mg_gameLogic::LineType::Blue));
+			if (!metroBlue)
+				metroBlue = new MetroTrain(blue);
+			metroBlue->reposistion(blue);
 		}
-		vector<GameLogic::Vec2f> greenLineVec{};
-		for (auto l : greenlines)
-		{
-			greenLineVec.push_back(l);
+		if (greenlines.size() != 0) {
+			vector<GameLogic::Vec2f> greenLineVec{};
+			for (auto l : greenlines)
+			{
+				greenLineVec.push_back(l);
+			}
+			allocate_line(RenderableLine(greenLineVec, mg_gameLogic::LineType::Green));
+			if (!metroGreen)
+				metroGreen = new MetroTrain(green);
+			metroGreen->reposistion(green);
 		}
-		allocate_line(RenderableLine(redLineVec, mg_gameLogic::LineType::Red));
-		allocate_line(RenderableLine(blueLineVec, mg_gameLogic::LineType::Blue));
-		allocate_line(RenderableLine(greenLineVec, mg_gameLogic::LineType::Green));
-
-		if (!metroBlue)
-			metroBlue = new MetroTrain(blue);
-		if (!metroGreen)
-			metroGreen = new MetroTrain(green);
-		if (!metroRed)
-			metroRed = new MetroTrain(red);
-
-		metroBlue->reposistion(blue);
-		metroGreen->reposistion(green);
-		metroRed->reposistion(red);
-
 	}
-	if (metroBlue) {
+	if (metroBlue) 
+	{
 		metroBlue->Recalculate(deltaTime);
+	}
+	if (metroGreen)
+	{
 		metroGreen->Recalculate(deltaTime);
+	}
+	if(metroRed)
+	{
 		metroRed->Recalculate(deltaTime);
 	}
 

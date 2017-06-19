@@ -156,7 +156,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bigimage.cpp" />
     <ClCompile Include="errors.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameEndScene.cpp" />

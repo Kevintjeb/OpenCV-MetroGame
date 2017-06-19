@@ -35,6 +35,126 @@ Vision::~Vision()
 
 }
 
+
+void cvShowManyImages(char* title, int nArgs, ...) {
+
+	// img - Used for getting the arguments 
+	IplImage *img;
+
+	// [[DispImage]] - the image in which input images are to be copied
+	IplImage *DispImage;
+
+	int size;
+	int i;
+	int m, n;
+	int x, y;
+	// w - Maximum number of images in a row 
+	// h - Maximum number of images in a column 
+	int w, h;
+
+	// scale - How much we have to resize the image
+	float scale;
+	int max;
+
+	// If the number of arguments is lesser than 0 or greater than 12
+	// return without displaying 
+	if (nArgs <= 0) {
+		printf("Number of arguments too small....\n");
+		return;
+	}
+	else if (nArgs > 12) {
+		printf("Number of arguments too large....\n");
+		return;
+	}
+	// Determine the size of the image, 
+	// and the number of rows/cols 
+	// from number of arguments 
+	else if (nArgs == 1) {
+		w = h = 1;
+		size = 300;
+	}
+	else if (nArgs == 2) {
+		w = 2; h = 1;
+		size = 300;
+	}
+	else if (nArgs == 3 || nArgs == 4) {
+		w = 2; h = 2;
+		size = 300;
+	}
+	else if (nArgs == 5 || nArgs == 6) {
+		w = 3; h = 2;
+		size = 200;
+	}
+	else if (nArgs == 7 || nArgs == 8) {
+		w = 4; h = 2;
+		size = 200;
+	}
+	else {
+		w = 4; h = 3;
+		size = 150;
+	}
+
+	// Create a new 3 channel image
+	DispImage = cvCreateImage(cvSize(100 + size*w, 60 + size*h), 8, 3);
+
+	// Used to get the arguments passed
+	va_list args;
+	va_start(args, nArgs);
+
+	// Loop for nArgs number of arguments
+	for (i = 0, m = 20, n = 20; i < nArgs; i++, m += (20 + size)) {
+
+		// Get the Pointer to the IplImage
+		img = va_arg(args, IplImage*);
+
+		// Check whether it is NULL or not
+		// If it is NULL, release the image, and return
+		if (img == 0) {
+			printf("Invalid arguments");
+			cvReleaseImage(&DispImage);
+			return;
+		}
+
+		// Find the width and height of the image
+		x = img->width;
+		y = img->height;
+
+		// Find whether height or width is greater in order to resize the image
+		max = (x > y) ? x : y;
+
+		// Find the scaling factor to resize the image
+		scale = (float)((float)max / size);
+
+		// Used to Align the images
+		if (i % w == 0 && m != 20) {
+			m = 20;
+			n += 20 + size;
+		}
+
+		// Set the image ROI to display the current image
+		cvSetImageROI(DispImage, cvRect(m, n, (int)(x / scale), (int)(y / scale)));
+
+		// Resize the input image and copy the it to the Single Big Image
+		cvResize(img, DispImage);
+
+		// Reset the ROI in order to display the next image
+		cvResetImageROI(DispImage);
+	}
+
+	// Create a new window, and show the Single Big Image
+	cvNamedWindow(title, 1);
+	cvShowImage(title, DispImage);
+
+	cvWaitKey();
+	cvDestroyWindow(title);
+
+	// End the number of arguments
+	va_end(args);
+
+	// Release the Image Memory
+	cvReleaseImage(&DispImage);
+}
+
 void Vision::start()
 {
 	cap.open(1);
@@ -63,13 +183,27 @@ void Vision::calibrate()
 		readFile.close();
 	}
 
-
+	int window_width = 1280/3;
+	int window_height = 720/3;
+	int space = 30;
 	namedWindow("Video Capture", WINDOW_NORMAL);
+	resizeWindow("Video Capture", window_width, window_height);
+	moveWindow("Video Capture", window_width + space, 0);
 	namedWindow("TrackBars", WINDOW_NORMAL);
+	resizeWindow("TrackBars", window_width, 800);
+	moveWindow("TrackBars", 0, 0);
 	namedWindow("RGB", WINDOW_NORMAL);
+	resizeWindow("RGB", window_width, window_height);
+	moveWindow("RGB", window_width + space, window_height + space);
 	namedWindow("HSV", WINDOW_NORMAL);
+	resizeWindow("HSV", window_width, window_height);
+	moveWindow("HSV", window_width * 2 + space * 2, window_height + space);
 	namedWindow("Cut out", WINDOW_NORMAL);
+	resizeWindow("Cut out", window_width, window_height);
+	moveWindow("Cut out", window_width * 2 + space * 2, 0);
 	namedWindow("Combined", WINDOW_NORMAL);
+	resizeWindow("Combined", window_width, window_height);
+	moveWindow("Combined", window_width + space, window_height * 2+ space * 2);
 	//-- Trackbars to set thresholds for RGB values
 	createTrackbar("Low Hue", "TrackBars", &low_h, 255, on_low_h_thresh_trackbar);
 	createTrackbar("High Hue", "TrackBars", &high_h, 255, on_high_h_thresh_trackbar);
@@ -242,7 +376,7 @@ Vision::ColourSettings Vision::colourCalibrate()
 			Size(2 * erosion_size + 1, 2 * erosion_size + 1),
 			Point(erosion_size, erosion_size));
 
-		imshow("Video Capture", hsv_image);
+		imshow("Video Capture", frame);
 		dilate(frame_threshold, frame_threshold, element);
 		erode(frame_threshold, frame_threshold, element2);
 		dilate(frame_rgb, frame_rgb, element);
@@ -256,7 +390,13 @@ Vision::ColourSettings Vision::colourCalibrate()
 		combined = frame_rgb.mul(frame_threshold);
 
 		//addWeighted(frame_rgb, 1.0, frame_threshold, 1.0, 0.0, combined);
-		imshow("Combined", combined);
+		imshow("Combined", combined);/*
+		IplImage Cutout = cutout;
+		IplImage Hsv = hsv_image;
+		IplImage Rgb = frame_rgb * 255;
+		IplImage Threshold = frame_threshold * 255;
+		IplImage Combined = combined * 255;
+		cvShowManyImages("Screen", 5, Cutout, Hsv, Rgb, Threshold, Combined);*/
 	}
 	Vision::ColourSettings coloursettings;
 	coloursettings.high_r = high_r;
@@ -364,8 +504,8 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 	combined_red = red_rgb_image.mul(red_hue_image);
 	combined_green = green_rgb_image.mul(green_hue_image);
 	combined_blue = blue_rgb_image.mul(blue_hue_image);
-	namedWindow("Combined Blue", WINDOW_AUTOSIZE);
-	imshow("LINE_Combined Blue", combined_red);
+	//namedWindow("Combined Blue", WINDOW_AUTOSIZE);
+	//imshow("LINE_Combined Blue", combined_red);
 	//imshow("LINE_HSV Blue", blue_hue_image);
 	//imshow("LINE_RGB Blue", blue_rgb_image);
 	//Threshold to get Binary image
@@ -410,7 +550,7 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 	std::vector<GameLogic::Vec2f> test;
 	if (coords.size() > 0)
 	{
-		for (int j = 0; j < coords.size() - 1; j++)
+		for (int j = 0; j <= coords.size() - 1; j++)
 		{
 			for (int i = 0; i < coords[j].size(); i++)
 			{
@@ -439,47 +579,47 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 	}
 	allocate_line(pLine);
 	Mat redLines, greenLines, blueLines;
-	//switch (linecolour)
-	//{
-	//case LINE_RED:
-	//	redLines = image.clone();
-	//	for (int i = 0; i < coords.size(); i++)
-	//	{
-	//		for (int y = 1; y < coords[i].size(); y++)
-	//		{
-	//			line(redLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
-	//		}
-	//	}
-	//	namedWindow("RedLines", WINDOW_AUTOSIZE);
-	//	imshow("RedLines", redLines);
-	//	break;
-	//case LINE_GREEN:
-	//	greenLines = image.clone();
-	//	for (int i = 0; i < coords.size(); i++)
-	//	{
-	//		for (int y = 1; y < coords[i].size(); y++)
-	//		{
-	//			line(greenLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
-	//		}
-	//	}
-	//	namedWindow("GreenLines", WINDOW_AUTOSIZE);
-	//	imshow("GreenLines", greenLines);
-	//	break;
-	//case LINE_BLUE:
-	//	blueLines = image.clone();
-	//	for (int i = 0; i < coords.size(); i++)
-	//	{
-	//		for (int y = 1; y < coords[i].size(); y++)
-	//		{
-	//			line(blueLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
-	//		}
-	//	}
-	//	namedWindow("BlueLines", WINDOW_AUTOSIZE);
-	//	imshow("BlueLines", blueLines);
-	//	break;
-	//default:
-	//	break;
-	//}
+	/*switch (linecolour)
+	{
+	case LINE_RED:
+		redLines = image.clone();
+		for (int i = 0; i < coords.size(); i++)
+		{
+			for (int y = 1; y < coords[i].size(); y++)
+			{
+				line(redLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
+			}
+		}
+		namedWindow("RedLines", WINDOW_AUTOSIZE);
+		imshow("RedLines", redLines);
+		break;
+	case LINE_GREEN:
+		greenLines = image.clone();
+		for (int i = 0; i < coords.size(); i++)
+		{
+			for (int y = 1; y < coords[i].size(); y++)
+			{
+				line(greenLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
+			}
+		}
+		namedWindow("GreenLines", WINDOW_AUTOSIZE);
+		imshow("GreenLines", greenLines);
+		break;
+	case LINE_BLUE:
+		blueLines = image.clone();
+		for (int i = 0; i < coords.size(); i++)
+		{
+			for (int y = 1; y < coords[i].size(); y++)
+			{
+				line(blueLines, *coords[i][y - 1], *coords[i][y], Scalar(150, 20, 20), 3, CV_AA);
+			}
+		}
+		namedWindow("BlueLines", WINDOW_AUTOSIZE);
+		imshow("BlueLines", blueLines);
+		break;
+	default:
+		break;
+	}*/
 	return lines;
 }
 
@@ -520,7 +660,7 @@ std::list<Vision::CV_Station> Vision::getStations()
 		//cout<<"Angle: "<<r.angle<<endl;  
 	}
 
-	imshow("MyVideo", frame);
+	//imshow("MyVideo", frame);
 	return qr_stations;
 }
 
@@ -585,3 +725,4 @@ void on_high_b_thresh_trackbar(int, void *)
 	high_b = max(high_b, low_b + 1);
 	setTrackbarPos("High B", "RGB", high_b);
 }
+
