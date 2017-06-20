@@ -485,7 +485,7 @@ void GameScene3D::render2D() {
 int frameCounter = 0;
 void GameScene3D::update()
 {
-	if(++frameCounter % 300 == 0)
+	if(cvButtonPressed)
 	{ 
 		std::list<Vision::CV_Station> cvStation = vision.getStations();
 		//vision metrostations to gamelogic metrostations
@@ -551,6 +551,8 @@ void GameScene3D::update()
 				metroGreen = new MetroTrain(green);
 			metroGreen->reposistion(green);
 		}
+
+		cvButtonPressed = false;
 	}
 	if (metroBlue) 
 	{
@@ -564,6 +566,8 @@ void GameScene3D::update()
 	{
 		metroRed->Recalculate(deltaTime);
 	}
+
+
 
 }
 
@@ -597,6 +601,7 @@ void GameScene3D::onKeyUP(unsigned char key)
 	/*if (key == ' ') {
 		SceneManager::getInstance().pauseSceneVar();
 	}*/
+	
 }
 
 void GameScene3D::onKeyDown(unsigned char key)
@@ -605,6 +610,8 @@ void GameScene3D::onKeyDown(unsigned char key)
 		SceneManager::getInstance().loadScene(endScene);
 		return;
 	}
+	else if (key == 'c')
+		cvButtonPressed = true;
 	keys[key] = true;
 }
 

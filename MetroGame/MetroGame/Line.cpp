@@ -35,7 +35,7 @@ mg_gameLogic::Line::Line(std::list<GameLogic::Vec2f> line, std::list<MetroStatio
 			stationIndex.push_back(currentStation);
 		}
 		else {
-			stations.remove(currentStation.second);
+			//stations.remove(currentStation.second);
 		}
 	}
 

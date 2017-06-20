@@ -55,6 +55,8 @@ private:
 	std::map<std::string, int> modelsMap;
 	std::map<std::string, int>::iterator it;
 
+	bool cvButtonPressed = false;
+
 	Line* red = nullptr;
 	Line* green = nullptr;
 	Line* blue = nullptr;
