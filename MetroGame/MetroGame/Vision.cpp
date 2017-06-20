@@ -2,7 +2,7 @@
 #include "RenderableOutput.h"
 using namespace mg_gameLogic;
 
-bool debug = true;
+bool debug = false;
 
 int low_v = 30, low_s = 30, low_h = 30;
 int high_v = 100, high_s = 100, high_h = 100;
@@ -348,7 +348,7 @@ Vision::ColourSettings Vision::colourCalibrate()
 		if (debug)
 		{
 			//test image 2. with 2 stations
-			frame = imread("metro_test2.png");
+			frame = imread("metro_test3.png");
 		}
 		else
 		{
@@ -433,7 +433,7 @@ std::list<GameLogic::Vec2f> Vision::getLines(int linecolour)
 	if (debug)
 	{
 		//test image 2. with 2 stations
-		image = imread("metro_test2.png");
+		image = imread("metro_test3.png");
 	}
 
 	Mat mask;
@@ -632,7 +632,7 @@ std::list<Vision::CV_Station> Vision::getStations()
 	if (debug)
 	{
 		//test image 2. with 2 stations
-		frame = imread("metro_test2.png");
+		frame = imread("metro_test3.png");
 	}
 	Mat grey;
 	cvtColor(frame, grey, CV_BGR2GRAY);
